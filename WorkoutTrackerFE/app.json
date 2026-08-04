@@ -40,6 +40,10 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "statusBar": {
+      "style": "auto",
+      "backgroundColor": "#0B0C0E"
     }
   }
 }

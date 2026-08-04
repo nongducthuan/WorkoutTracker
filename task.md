@@ -11,7 +11,7 @@
 - `[x]` Cài `react-native-svg` (cho MuscleMap + charts)
 - `[x]` Cài `expo-linear-gradient` (cho shimmer skeleton + gradients)
 - `[x]` Setup NativeWind v4 (`tailwind.config.js`, `global.css`, `babel.config.js`, `metro.config.js`)
-- `[ ]` Setup `.env` / `app.config.ts` với `EXPO_PUBLIC_API_BASE_URL`
+- `[x]` Setup `.env` / `app.config.ts` với `EXPO_PUBLIC_API_BASE_URL`
 
 ---
 
@@ -102,10 +102,10 @@
 
 ## Phase 6 — Polish & Config
 
-- `[ ]` **app.json / app.config.ts** — App name "PULSE", bundle ID, version
-- `[ ]` **Splash screen** — Dark `#0B0C0E` với PULSE logo `#C6F432`
-- `[ ]` **expo-status-bar** — Light/Dark reactive status bar
-- `[ ]` Kiểm tra TypeScript (`npx tsc --noEmit`)
+- `[x]` **app.json / app.config.ts** — App name "PULSE", bundle ID, version
+- `[x]` **Splash screen** — Dark `#0B0C0E` với PULSE logo `#C6F432`
+- `[x]` **expo-status-bar** — Light/Dark reactive status bar
+- `[x]` Kiểm tra TypeScript (`npx tsc --noEmit`)
 
 ---
 

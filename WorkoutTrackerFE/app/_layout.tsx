@@ -83,7 +83,7 @@ function RootLayoutNav() {
         <Stack.Screen name="profile" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
-      <StatusBar style="light" />
+      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
     </ThemeProvider>
   );
 }

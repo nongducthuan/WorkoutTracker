@@ -35,7 +35,9 @@ export const schedulesApi = {
       await new Promise(resolve => setTimeout(resolve, 300));
       return mockDb.updateWorkoutSchedule(id, date);
     }
-    await apiClient.put<string>(`/workout-schedules/${id}`, { scheduledDate: date, workoutId: workoutId ?? '00000000-0000-0000-0000-000000000000' });
+    const payload: any = { scheduledDate: date };
+    if (workoutId) payload.workoutId = workoutId;
+    await apiClient.put<string>(`/workout-schedules/${id}`, payload);
     return { id, scheduledDate: date, workoutId: workoutId ?? '', isCompleted: false };
   },
 

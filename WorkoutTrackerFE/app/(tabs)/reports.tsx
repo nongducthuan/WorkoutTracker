@@ -123,13 +123,13 @@ export default function ReportsScreen() {
     value: w.count,
     label: w.week,
     frontColor: '#C6F432',
-    labelTextStyle: { color: '#6B7280', fontSize: 10, fontWeight: 'bold' }
+    labelTextStyle: { color: '#6B7280', fontSize: 10, fontWeight: 'bold' as const }
   }));
 
   const lineData = (stats.weeklyWorkouts || []).map(w => ({
     value: w.volume,
     label: w.week,
-    labelTextStyle: { color: '#6B7280', fontSize: 10, fontWeight: 'bold' }
+    labelTextStyle: { color: '#6B7280', fontSize: 10, fontWeight: 'bold' as const }
   }));
 
   const chartWidth = screenWidth - 80; 

@@ -1,4 +1,4 @@
-﻿import { WorkoutPlan } from "@prisma/client";
+import { WorkoutPlan } from "@prisma/client";
 import {
   WorkoutPlanRepository,
   WorkoutPlanWithScheduledDate,
@@ -40,14 +40,18 @@ export class WorkoutPlanService {
       throw new AppError("WorkoutPlanNotFound", 404);
     }
 
-    if (plan.name !== dto.name) {
-      const existing = await this.repository.findByNameAndUserId(dto.name, userId, id);
+    const newName = dto.name ?? plan.name;
+    if (newName !== plan.name) {
+      const existing = await this.repository.findByNameAndUserId(newName, userId, id);
       if (existing) {
         throw new AppError("WorkoutPlanNameAlreadyExists", 409);
       }
     }
 
-    return this.repository.update(id, dto);
+    return this.repository.update(id, {
+      name: newName,
+      description: dto.description ?? plan.description,
+    });
   }
 
   async delete(id: string, userId: string): Promise<{ message: string }> {

@@ -34,7 +34,6 @@ export interface WorkoutComment {
   comment: string;
   userName?: string;
   userId?: string;
-  date?: string;
   createdAt?: string;
 }
 

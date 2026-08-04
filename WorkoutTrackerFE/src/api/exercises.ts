@@ -8,7 +8,7 @@ export const exercisesApi = {
       await new Promise(resolve => setTimeout(resolve, 400));
       return mockDb.getExercises();
     }
-    const res = await apiClient.get<Exercise[]>('/exercises');
-    return res.data;
+    const res = await apiClient.get<{ data: Exercise[]; total: number; page: number; pageSize: number }>('/exercises');
+    return res.data.data;
   }
 };

@@ -1,4 +1,4 @@
-﻿import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { UserRepository } from "../repositories/user.repository";
 import { generateToken } from "../utils/jwt.util";
 import { AppError } from "../errors/appError";
@@ -16,7 +16,7 @@ export class AuthService {
     this.userRepository = new UserRepository();
   }
 
-  async login(dto: LoginDto): Promise<{ token: string }> {
+  async login(dto: LoginDto): Promise<{ token: string; user: { id: string; fullName: string; email: string; userName: string } }> {
     const user = await this.userRepository.findByUserNameOrEmail(dto.userName);
     if (!user) {
       throw new AppError("UserNameNotExist", 400);
@@ -28,10 +28,13 @@ export class AuthService {
     }
 
     const token = generateToken(user);
-    return { token };
+    return {
+      token,
+      user: { id: user.id, fullName: user.fullName, email: user.email, userName: user.userName },
+    };
   }
 
-  async register(dto: RegisterDto): Promise<{ token: string }> {
+  async register(dto: RegisterDto): Promise<{ token: string; user: { id: string; fullName: string; email: string; userName: string } }> {
     const existingUserName = await this.userRepository.findByUserName(dto.userName);
     if (existingUserName) {
       throw new AppError("UserNameAlreadyExits", 400);
@@ -52,7 +55,10 @@ export class AuthService {
     });
 
     const token = generateToken(newUser);
-    return { token };
+    return {
+      token,
+      user: { id: newUser.id, fullName: newUser.fullName, email: newUser.email, userName: newUser.userName },
+    };
   }
 
   async changePassword(userId: string, dto: ChangePasswordDto): Promise<{ message: string }> {
@@ -72,7 +78,7 @@ export class AuthService {
     return { message: "Password updated successfully" };
   }
 
-  async updateProfile(userId: string, dto: UpdateProfileDto): Promise<{ token: string }> {
+  async updateProfile(userId: string, dto: UpdateProfileDto): Promise<{ token: string; user: { id: string; fullName: string; email: string; userName: string } }> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new AppError("UserNotFound", 404);
@@ -89,6 +95,9 @@ export class AuthService {
     });
 
     const token = generateToken(updatedUser);
-    return { token };
+    return {
+      token,
+      user: { id: updatedUser.id, fullName: updatedUser.fullName, email: updatedUser.email, userName: updatedUser.userName },
+    };
   }
 }

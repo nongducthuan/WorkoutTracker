@@ -7,20 +7,20 @@ import Svg, { Path } from 'react-native-svg';
 
 export default function LoginScreen() {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    if (!identifier || !password) {
       setError(t('login.login_failed'));
       return;
     }
     try {
       setIsLoading(true);
       setError('');
-      await authApi.login(email, password);
+      await authApi.login(identifier, password);
       router.replace('/(tabs)');
     } catch (err: any) {
       setError(err.message || t('login.login_failed'));
@@ -68,8 +68,8 @@ export default function LoginScreen() {
           <View>
             <Text className="text-muted-gray text-sm font-medium mb-2">{t('login.email_label')}</Text>
             <TextInput
-              value={email}
-              onChangeText={setEmail}
+              value={identifier}
+              onChangeText={setIdentifier}
               placeholder={t('login.email_hint')}
               placeholderTextColor="var(--muted-gray)"
               autoCapitalize="none"

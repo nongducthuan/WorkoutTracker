@@ -9,6 +9,8 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
   onCancel: () => void;
   isLoading?: boolean;
+  confirmText?: string;
+  isDanger?: boolean;
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -18,6 +20,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   onCancel,
   isLoading,
+  confirmText = 'Delete',
+  isDanger = true,
 }) => {
   return (
     <RNModal visible={isOpen} transparent={true} animationType="fade" onRequestClose={onCancel}>
@@ -38,12 +42,12 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             <TouchableOpacity 
               onPress={onConfirm}
               disabled={isLoading}
-              className="px-4 py-2 bg-error rounded-lg flex-row items-center justify-center min-w-[80px]"
+              className={`px-4 py-2 ${isDanger ? 'bg-error' : 'bg-electric'} rounded-lg flex-row items-center justify-center min-w-[80px]`}
             >
               {isLoading ? (
                 <ActivityIndicator color="white" size="small" />
               ) : (
-                <Text className="text-white font-bold">Delete</Text>
+                <Text className="text-white font-bold">{confirmText}</Text>
               )}
             </TouchableOpacity>
           </View>

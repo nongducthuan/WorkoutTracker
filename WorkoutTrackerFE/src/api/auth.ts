@@ -54,8 +54,18 @@ export const authApi = {
       await SecureStore.setItemAsync('pulse_user', JSON.stringify(response.user));
       return response;
     }
-    await apiClient.post<string>('/auth/register', { userName: username, email, fullName: name, password });
-    return { token: '', user: { id: '', name, email, username } };
+    const res = await apiClient.post<{ token: string; user: any }>('/auth/register', { userName: username, email, fullName: name, password });
+    const token = res.data.token;
+    const backendUser = res.data.user;
+    const user: User = {
+      id: backendUser?.id || '',
+      name: backendUser?.fullName || name,
+      email: backendUser?.email || email,
+      username: backendUser?.userName || username,
+    };
+    await SecureStore.setItemAsync('pulse_auth_token', token);
+    await SecureStore.setItemAsync('pulse_user', JSON.stringify(user));
+    return { token, user };
   },
 
   logout: async (): Promise<void> => {

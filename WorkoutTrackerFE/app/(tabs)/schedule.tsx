@@ -42,7 +42,7 @@ export default function ScheduleScreen() {
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
   const getSchedulesForDay = (day: Date) => {
-    return schedules.filter((s: Schedule) => {
+    return schedules.filter((s: WorkoutSchedule) => {
       const sDate = new Date(s.scheduledDate);
       return sDate.toDateString() === day.toDateString();
     });
@@ -159,7 +159,7 @@ export default function ScheduleScreen() {
                         {daySchedules.length > 0 && <View className="w-2 h-2 rounded-full bg-electric" />}
                       </View>
                       <View className="space-y-1">
-                        {daySchedules.slice(0, 2).map((s: Schedule) => (
+                        {daySchedules.slice(0, 2).map((s: WorkoutSchedule) => (
                           <TouchableOpacity
                             key={s.id}
                             onPress={() => handleOpenReschedule(s.id, s.scheduledDate)}
@@ -188,7 +188,7 @@ export default function ScheduleScreen() {
           <View className="space-y-4">
             {futureSchedules.length > 0 ? (
               <View className="space-y-4">
-                {futureSchedules.map((schedule: Schedule) => {
+                {futureSchedules.map((schedule: WorkoutSchedule) => {
                   const sDate = new Date(schedule.scheduledDate);
                   return (
                     <View key={schedule.id} className="bg-card border border-border-gray rounded-xl p-5 flex-row items-center justify-between shadow-lg mb-4">

@@ -29,7 +29,6 @@ export const commentsApi = {
       comment,
       userName: user.name,
       userId: user.id,
-      date: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
   },
@@ -43,7 +42,7 @@ export const commentsApi = {
       throw new Error('Comment not found');
     }
     await apiClient.put<string>(`/workout-comments/${id}`, { comment });
-    return { id, workoutId, comment, date: new Date().toISOString(), createdAt: new Date().toISOString() };
+    return { id, workoutId, comment, createdAt: new Date().toISOString() };
   },
 
   delete: async (id: string): Promise<void> => {
