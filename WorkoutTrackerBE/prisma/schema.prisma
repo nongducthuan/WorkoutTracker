@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(uuid()) @db.Char(36)
+  fullName        String
+  email           String           @unique
+  userName        String           @unique
+  password        String
+  workoutPlans    WorkoutPlan[]
+  workoutComments WorkoutComment[]
+
+  @@map("users")
+}
+
+enum Difficulty {
+  Beginner
+  Intermediate
+  Advanced
+}
+
+model Exercise {
+  id               Int               @id @default(autoincrement())
+  name             String
+  description      String            @db.Text
+  category         String
+  difficulty       Difficulty
+  workoutExercises WorkoutExercise[]
+
+  @@map("exercises")
+}
+
+model WorkoutPlan {
+  id               String            @id @default(uuid()) @db.Char(36)
+  name             String
+  description      String            @db.Text
+  userId           String            @db.Char(36)
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workoutExercises WorkoutExercise[]
+  scheduleWorkouts ScheduleWorkout[]
+  workoutComments  WorkoutComment[]
+
+  @@index([userId], map: "IX_WorkoutPlans_UserId")
+  @@map("workoutPlans")
+}
+
+model WorkoutExercise {
+  id          String      @id @default(uuid()) @db.Char(36)
+  exerciseId  Int
+  workoutId   String      @db.Char(36)
+  sets        Int
+  repetitions Int
+  weight      Float
+  exercise    Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  workout     WorkoutPlan @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@index([exerciseId], map: "IX_WorkoutExercises_ExerciseId")
+  @@index([workoutId], map: "IX_WorkoutExercises_WorkoutId")
+  @@map("workoutExercises")
+}
+
+model ScheduleWorkout {
+  id            String      @id @default(uuid()) @db.Char(36)
+  scheduledDate DateTime
+  workoutId     String      @db.Char(36)
+  isCompleted   Boolean     @default(false)
+  workout       WorkoutPlan @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@index([scheduledDate], map: "IX_ScheduleWorkouts_ScheduledDate")
+  @@index([workoutId], map: "IX_ScheduleWorkouts_WorkoutId")
+  @@map("scheduleWorkouts")
+}
+
+model WorkoutComment {
+  id        String      @id @default(uuid()) @db.Char(36)
+  workoutId String      @db.Char(36)
+  userId    String      @db.Char(36)
+  comment   String      @db.Text
+  createdAt DateTime    @default(now()) @map("Date")
+  workout   WorkoutPlan @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  @@index([userId], map: "IX_WorkoutComments_UserId")
+  @@index([workoutId], map: "IX_WorkoutComments_WorkoutId")
+  @@map("workoutComments")
+}
