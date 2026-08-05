@@ -1,19 +1,19 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 import en from './locales/en.json';
 import vi from './locales/vi.json';
 
 const resources = {
-  en: { translation: (en as any).translation || en },
-  vi: { translation: (vi as any).translation || vi },
+  en: { translation: en.translation || en },
+  vi: { translation: vi.translation || vi },
 };
 
 const initI18n = async () => {
   let language = 'en';
   try {
-    const savedLang = await AsyncStorage.getItem('pulse_language');
+    const savedLang = await SecureStore.getItemAsync('pulse_language');
     if (savedLang) {
       language = savedLang;
     }

@@ -1,0 +1,19 @@
+export type AuthStackParamList = {
+  Login: undefined;
+  Register: undefined;
+};
+
+export type MainTabParamList = {
+  Dashboard: undefined;
+  Workouts: undefined;
+  Schedule: undefined;
+  Exercises: undefined;
+  Reports: undefined;
+};
+
+export type RootStackParamList = {
+  Auth: undefined;
+  Main: undefined;
+  WorkoutDetail: { id: string };
+  Profile: undefined;
+};

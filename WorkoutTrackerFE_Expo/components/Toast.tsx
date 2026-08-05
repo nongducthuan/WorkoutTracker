@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
 import { View, Text, Animated, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import { Colors } from '../src/theme/colors';
+import { Feather } from '@expo/vector-icons';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -28,16 +27,31 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const showToast = useCallback((msg: string, toastType: ToastType) => {
     setMessage(msg);
     setType(toastType);
-
+    
     Animated.parallel([
-      Animated.timing(opacity, { toValue: 1, duration: 300, useNativeDriver: true }),
-      Animated.spring(translateY, { toValue: 0, useNativeDriver: true }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(translateY, {
+        toValue: 0,
+        useNativeDriver: true,
+      })
     ]).start();
 
     setTimeout(() => {
       Animated.parallel([
-        Animated.timing(opacity, { toValue: 0, duration: 300, useNativeDriver: true }),
-        Animated.timing(translateY, { toValue: -20, duration: 300, useNativeDriver: true }),
+        Animated.timing(opacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateY, {
+          toValue: -20,
+          duration: 300,
+          useNativeDriver: true,
+        })
       ]).start();
     }, 3000);
   }, [opacity, translateY]);
@@ -53,14 +67,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         style={[
           styles.container,
           { opacity, transform: [{ translateY }] },
-          type === 'success' ? styles.success : type === 'error' ? styles.error : styles.info,
+          type === 'success' ? styles.success : type === 'error' ? styles.error : styles.info
         ]}
         pointerEvents="none"
       >
-        <Icon
-          name={type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}
-          size={16}
-          color="white"
+        <Feather 
+          name={type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'} 
+          size={16} 
+          color="white" 
         />
         <Text style={styles.text}>{message}</Text>
       </Animated.View>
@@ -80,14 +94,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     gap: 8,
     zIndex: 9999,
-    elevation: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+    elevation: 5,
   },
-  text: { color: 'white', fontSize: 14, fontWeight: 'bold' },
-  success: { backgroundColor: Colors.electricDim },
-  error: { backgroundColor: Colors.electricOrange },
-  info: { backgroundColor: Colors.mutedGray },
+  text: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  success: {
+    backgroundColor: '#8BB300', // darker electric
+  },
+  error: {
+    backgroundColor: '#FF6B35', // orange
+  },
+  info: {
+    backgroundColor: '#6B7280', // gray
+  }
 });
