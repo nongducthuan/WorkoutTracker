@@ -48,5 +48,8 @@
 - [x] `index.js`
 
 ## Phase 8: Assets & Config
-- [ ] Copy fonts/images from old project
-- [ ] `android/` config tweaks (Skipped temporarily per user request)
+- [x] Copy fonts/images from old project
+- [x] Fix Android package name (`com.tempnative` -> `com.pulsemobile` in Java/Kotlin files)
+- [x] Fix `getMainComponentName()` in `MainActivity.kt` ("TempNative" -> "PulseMobile")
+- [x] Link `react-native-vector-icons` fonts in `android/app/build.gradle`
+
