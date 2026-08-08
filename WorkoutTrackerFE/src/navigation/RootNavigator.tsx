@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainerRef } from '@react-navigation/native';
+import { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 import { RootStackParamList } from './types';
 import { Colors } from '../theme/colors';
 import { setNavigateToLogin } from '../api/client';
@@ -13,7 +13,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 interface RootNavigatorProps {
   isAuthenticated: boolean;
-  navigationRef: React.RefObject<NavigationContainerRef<RootStackParamList>>;
+  navigationRef: NavigationContainerRefWithCurrent<any>;
 }
 
 export default function RootNavigator({ isAuthenticated, navigationRef }: RootNavigatorProps) {
@@ -25,6 +25,7 @@ export default function RootNavigator({ isAuthenticated, navigationRef }: RootNa
 
   return (
     <Stack.Navigator
+      id="RootNavigator"
       screenOptions={{ headerShown: false }}
       initialRouteName={isAuthenticated ? 'Main' : 'Auth'}
     >

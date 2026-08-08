@@ -231,7 +231,7 @@ export const useSchedules = () => {
   });
 
   const completeMutation = useMutation({
-    mutationFn: schedulesApi.complete,
+    mutationFn: schedulesApi.markCompleted,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['schedules'] });
       queryClient.invalidateQueries({ queryKey: ['reports'] });
@@ -311,7 +311,7 @@ export const useWorkoutSchedules = (workoutId: string) => {
   });
 
   const completeMutation = useMutation({
-    mutationFn: schedulesApi.complete,
+    mutationFn: schedulesApi.markCompleted,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['workout-schedules', workoutId] });
       queryClient.invalidateQueries({ queryKey: ['schedules'] });

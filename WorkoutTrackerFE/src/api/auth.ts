@@ -1,23 +1,54 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { apiClient } from './client';
 
 const AUTH_TOKEN_KEY = 'workout_tracker_auth_token';
+const AUTH_USER_KEY = 'pulse_user';
 
 export const authApi = {
   isAuthenticated: async (): Promise<boolean> => {
     try {
       const token = await AsyncStorage.getItem(AUTH_TOKEN_KEY);
-      // For now, let's return true by default for testing, 
-      // or check if token exists if you have a login flow.
-      // return !!token;
-      return true; // Bypass login for development
+      return !!token;
     } catch (e) {
       return false;
     }
   },
-  login: async (token: string) => {
-    await AsyncStorage.setItem(AUTH_TOKEN_KEY, token);
+  login: async (identifier?: string, password?: string) => {
+    const res = await apiClient.post('/auth/login', { email: identifier, password });
+    if (res.data.token) {
+      await AsyncStorage.setItem(AUTH_TOKEN_KEY, res.data.token);
+      await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data.user));
+    }
+    return res.data;
+  },
+  register: async (name?: string, email?: string, password?: string) => {
+    const res = await apiClient.post('/auth/register', { name, email, password });
+    if (res.data.token) {
+      await AsyncStorage.setItem(AUTH_TOKEN_KEY, res.data.token);
+      await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data.user));
+    }
+    return res.data;
+  },
+  getCurrentUser: async () => {
+    try {
+      const userStr = await AsyncStorage.getItem(AUTH_USER_KEY);
+      if (userStr) return JSON.parse(userStr);
+      return null;
+    } catch {
+      return null;
+    }
+  },
+  updateProfile: async (name: string, email: string) => {
+    const res = await apiClient.put('/auth/profile', { name });
+    await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data));
+    return res.data;
+  },
+  changePassword: async (oldPw: string, newPw: string) => {
+    const res = await apiClient.put('/auth/change-password', { currentPassword: oldPw, newPassword: newPw });
+    return res.data;
   },
   logout: async () => {
     await AsyncStorage.removeItem(AUTH_TOKEN_KEY);
+    await AsyncStorage.removeItem(AUTH_USER_KEY);
   }
 };

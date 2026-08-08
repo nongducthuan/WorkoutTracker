@@ -7,7 +7,8 @@ import {
   TextInput, 
   KeyboardAvoidingView, 
   Platform,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useForm, Controller } from 'react-hook-form';
@@ -17,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { authApi } from '../api/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { Colors } from '../theme/colors';
 import { globalStyles } from '../theme/styles';
 
@@ -46,9 +47,10 @@ type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export default function ProfileScreen() {
   const { t, i18n } = useTranslation();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'settings'>('profile');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -73,12 +75,15 @@ export default function ProfileScreen() {
 
   const onSubmitProfile = async (data: ProfileFormValues) => {
     try {
+      setIsLoading(true);
       await authApi.updateProfile(data.fullName, currentUser?.email || '');
       const updated = await authApi.getCurrentUser();
       setCurrentUser(updated);
-      alert(t('profile.update_success', 'Profile updated successfully!'));
+      Alert.alert(t('profile.update_success', 'Profile updated successfully!'));
     } catch (err: any) {
-      alert(err.message || t('profile.update_failed', 'Failed to update profile'));
+      Alert.alert(err.message || t('profile.update_failed', 'Failed to update profile'));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -94,11 +99,14 @@ export default function ProfileScreen() {
 
   const onSubmitPassword = async (data: PasswordFormValues) => {
     try {
+      setIsLoading(true);
       await authApi.changePassword(data.oldPassword, data.newPassword);
-      alert(t('profile.password_success', 'Password changed successfully!'));
+      Alert.alert(t('profile.password_success', 'Password changed successfully!'));
       resetPassword();
     } catch (err: any) {
-      alert(err.message || t('profile.password_failed', 'Failed to change password'));
+      Alert.alert(err.message || t('profile.password_failed', 'Failed to change password'));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -116,7 +124,7 @@ export default function ProfileScreen() {
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={globalStyles.container}
+      style={globalStyles.screen}
     >
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {/* Background glow */}

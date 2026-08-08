@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Colors } from './colors';
+export { Colors };
 
-// Common StyleSheet patterns reused across screens
 export const globalStyles = StyleSheet.create({
   // Layout
   flex1: { flex: 1 },

@@ -46,11 +46,11 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/rnasyncstorage_autolinked_build/cmake_install.cmake")
   include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/rnreanimated_autolinked_build/cmake_install.cmake")
-  include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/rnworklets_autolinked_build/cmake_install.cmake")
   include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/safeareacontext_autolinked_build/cmake_install.cmake")
   include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/rnscreens_autolinked_build/cmake_install.cmake")
   include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/rnsvg_autolinked_build/cmake_install.cmake")
   include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/RNVectorIconsSpec_autolinked_build/cmake_install.cmake")
+  include("C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a/rnworklets_autolinked_build/cmake_install.cmake")
 
 endif()
 

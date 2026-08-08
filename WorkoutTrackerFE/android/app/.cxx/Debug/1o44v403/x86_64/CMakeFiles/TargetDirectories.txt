@@ -7,9 +7,6 @@ C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/De
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnreanimated_autolinked_build/CMakeFiles/react_codegen_rnreanimated.dir
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnreanimated_autolinked_build/CMakeFiles/edit_cache.dir
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnreanimated_autolinked_build/CMakeFiles/rebuild_cache.dir
-C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnworklets_autolinked_build/CMakeFiles/react_codegen_rnworklets.dir
-C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnworklets_autolinked_build/CMakeFiles/edit_cache.dir
-C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnworklets_autolinked_build/CMakeFiles/rebuild_cache.dir
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/safeareacontext_autolinked_build/CMakeFiles/react_codegen_safeareacontext.dir
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/safeareacontext_autolinked_build/CMakeFiles/edit_cache.dir
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/safeareacontext_autolinked_build/CMakeFiles/rebuild_cache.dir
@@ -22,3 +19,6 @@ C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/De
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/RNVectorIconsSpec_autolinked_build/CMakeFiles/react_codegen_RNVectorIconsSpec.dir
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/RNVectorIconsSpec_autolinked_build/CMakeFiles/edit_cache.dir
 C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/RNVectorIconsSpec_autolinked_build/CMakeFiles/rebuild_cache.dir
+C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnworklets_autolinked_build/CMakeFiles/react_codegen_rnworklets.dir
+C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnworklets_autolinked_build/CMakeFiles/edit_cache.dir
+C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64/rnworklets_autolinked_build/CMakeFiles/rebuild_cache.dir

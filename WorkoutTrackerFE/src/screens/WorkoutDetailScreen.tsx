@@ -23,11 +23,11 @@ import {
   useComments, 
   useWorkoutSchedules 
 } from '../hooks/useFitnessData';
-import { Modal } from '../components/Modal';
-import { ConfirmDialog } from '../components/ConfirmDialog';
-import { DashboardSkeleton as Skeleton } from '../components/LoadingSkeleton';
-import { EmptyState } from '../components/EmptyState';
-import { MuscleMap } from '../components/MuscleMap';
+import { Modal } from '../../components/Modal';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { DashboardSkeleton as Skeleton } from '../../components/LoadingSkeleton';
+import { EmptyState } from '../../components/EmptyState';
+import { MuscleMap } from '../../components/MuscleMap';
 import { getExerciseMuscleGroup, getMuscleLabel, MuscleId } from '../lib/muscleMap';
 import { globalStyles } from '../theme/styles';
 import { Colors } from '../theme/colors';

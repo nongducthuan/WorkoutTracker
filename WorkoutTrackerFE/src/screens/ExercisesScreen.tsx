@@ -3,11 +3,11 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, Platfo
 import Feather from 'react-native-vector-icons/Feather';
 import { useTranslation } from 'react-i18next';
 import { useExercises } from '../hooks/useFitnessData';
-import { DashboardSkeleton as Skeleton } from '../components/LoadingSkeleton';
-import { EmptyState } from '../components/EmptyState';
-import { MuscleMap } from '../components/MuscleMap';
+import { DashboardSkeleton as Skeleton } from '../../components/LoadingSkeleton';
+import { EmptyState } from '../../components/EmptyState';
+import { MuscleMap } from '../../components/MuscleMap';
 import { getExerciseMuscleGroup, MuscleId, getMuscleLabel } from '../lib/muscleMap';
-import { Modal } from '../components/Modal';
+import { Modal } from '../../components/Modal';
 import { Colors } from '../theme/colors';
 import { globalStyles } from '../theme/styles';
 

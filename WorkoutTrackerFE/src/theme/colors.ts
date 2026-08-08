@@ -1,6 +1,3 @@
-// PULSE Design System - Color tokens
-// Bám sát theo PULSE Mobile.html
-
 export const Colors = {
   // Backgrounds
   background: '#0B0C0E',
@@ -21,8 +18,14 @@ export const Colors = {
 
   // Status
   success: '#22C55E',
+  warning: '#F59E0B',
   error: '#EF4444',
   errorDim: '#7F1D1D',
+
+  // Aliases for compatibility
+  text: '#F1F3F5',
+  primary: '#C6F432',
+  borderGray: '#2A2D35',
 
   // Transparent helpers
   electricBg: 'rgba(198, 244, 50, 0.10)',

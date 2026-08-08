@@ -28,7 +28,7 @@ export default function WorkoutsScreen() {
 
   const handleCreate = async () => {
     if (!name.trim()) return;
-    await createWorkout({ name, description: desc, id: '' });
+    await createWorkout({ name, description: desc });
     setName(''); setDesc(''); setIsCreateOpen(false);
   };
 

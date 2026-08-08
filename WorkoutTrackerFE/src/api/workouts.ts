@@ -1,11 +1,12 @@
 import { apiClient, isMockMode } from './client';
 import { mockDb } from './mockDb';
 import { Workout, WorkoutExercise } from '../types';
+import { delay } from './utils';
 
 export const workoutsApi = {
   getAll: async (): Promise<Workout[]> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await delay(500);
       return mockDb.getWorkouts();
     }
     const res = await apiClient.get<Workout[]>('/workouts');
@@ -14,7 +15,7 @@ export const workoutsApi = {
 
   getById: async (id: string): Promise<Workout> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await delay(300);
       const workout = mockDb.getWorkouts().find(w => w.id === id);
       if (!workout) throw new Error('Workout not found');
       return workout;
@@ -25,7 +26,7 @@ export const workoutsApi = {
 
   create: async (workout: Omit<Workout, 'id'>): Promise<Workout> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 400));
+      await delay(400);
       return mockDb.saveWorkout(workout);
     }
     const res = await apiClient.post<Workout>('/workouts', { name: workout.name, description: workout.description });
@@ -34,7 +35,7 @@ export const workoutsApi = {
 
   update: async (id: string, data: Partial<Workout>): Promise<Workout> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await delay(300);
       return mockDb.updateWorkout(id, data);
     }
     await apiClient.put<string>(`/workouts/${id}`, { name: data.name, description: data.description });
@@ -43,7 +44,7 @@ export const workoutsApi = {
 
   delete: async (id: string): Promise<void> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 400));
+      await delay(400);
       return mockDb.deleteWorkout(id);
     }
     await apiClient.delete<string>(`/workouts/${id}`);
@@ -51,7 +52,7 @@ export const workoutsApi = {
 
   getExercises: async (workoutId: string): Promise<WorkoutExercise[]> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 400));
+      await delay(400);
       return mockDb.getWorkoutExercises(workoutId);
     }
     const res = await apiClient.get<WorkoutExercise[]>(`/workout-exercises/${workoutId}`);
@@ -60,7 +61,7 @@ export const workoutsApi = {
 
   addExercise: async (data: Omit<WorkoutExercise, 'id'>): Promise<WorkoutExercise> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await delay(300);
       return mockDb.addWorkoutExercise(data);
     }
     await apiClient.post<string>('/workout-exercises', data);
@@ -69,16 +70,16 @@ export const workoutsApi = {
 
   updateExercise: async (id: string, data: Partial<WorkoutExercise>): Promise<WorkoutExercise> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await delay(300);
       return mockDb.updateWorkoutExercise(id, data);
     }
     await apiClient.put<string>(`/workout-exercises/${id}`, data);
-    return { id, sets: data.sets ?? 0, repetitions: data.repetitions ?? 0, weight: data.weight ?? 0, exerciseId: data.exerciseId ?? 0, workoutId: data.workoutId ?? '', exerciseName: data.exerciseName };
+    return { id, sets: data.sets ?? 0, repetitions: data.repetitions ?? 0, weight: data.weight ?? 0, exerciseId: data.exerciseId ?? 0 };
   },
 
   deleteExercise: async (id: string): Promise<void> => {
     if (isMockMode) {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await delay(300);
       return mockDb.deleteWorkoutExercise(id);
     }
     await apiClient.delete(`/workout-exercises/${id}`);

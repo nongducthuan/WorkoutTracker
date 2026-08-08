@@ -23,6 +23,7 @@ const headerStyle = {
 export default function MainTabs() {
   return (
     <Tab.Navigator
+      id="MainTabs"
       screenOptions={{
         headerShown: true,
         headerStyle,

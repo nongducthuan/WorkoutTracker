@@ -235,10 +235,6 @@
 		},
 		{
 			"isExternal" : true,
-			"path" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/CMakeLists.txt"
-		},
-		{
-			"isExternal" : true,
 			"path" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt"
 		},
 		{
@@ -260,6 +256,10 @@
 		{
 			"isExternal" : true,
 			"path" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/node_modules/react-native-vector-icons/android/build/generated/source/codegen/jni/CMakeLists.txt"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/node_modules/react-native-worklets/android/build/generated/source/codegen/jni/CMakeLists.txt"
 		}
 	],
 	"kind" : "cmakeFiles",

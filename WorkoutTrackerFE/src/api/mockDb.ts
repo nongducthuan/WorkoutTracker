@@ -124,17 +124,17 @@ export const mockDb = {
     const all = getStorageItem<WorkoutExercise[]>('mock_workout_exercises', INITIAL_WORKOUT_EXERCISES);
     const exercises = mockDb.getExercises();
     return all
-      .filter(we => we.workoutId === workoutId)
-      .map(we => ({ ...we, exerciseName: exercises.find(e => e.id === we.exerciseId)?.name || 'Unknown Exercise' }));
+      .filter((we: any) => we.workoutId === workoutId)
+      .map(we => ({ ...we, exerciseName: exercises.find(e => e.id === we.exerciseId)?.name }));
   },
 
   addWorkoutExercise: (we: Omit<WorkoutExercise, 'id'>): WorkoutExercise => {
     const all = getStorageItem<WorkoutExercise[]>('mock_workout_exercises', INITIAL_WORKOUT_EXERCISES);
     const newWe = { ...we, id: 'we_' + Math.random().toString(36).substr(2, 9) };
-    all.push(newWe);
+    all.push(newWe as any);
     setStorageItem('mock_workout_exercises', all);
     const exercises = mockDb.getExercises();
-    return { ...newWe, exerciseName: exercises.find(e => e.id === we.exerciseId)?.name || 'Unknown Exercise' };
+    return { ...newWe, exerciseName: exercises.find(e => e.id === we.exerciseId)?.name } as any;
   },
 
   updateWorkoutExercise: (id: string, updatedData: Partial<WorkoutExercise>): WorkoutExercise => {
@@ -144,7 +144,7 @@ export const mockDb = {
     all[index] = { ...all[index], ...updatedData };
     setStorageItem('mock_workout_exercises', all);
     const exercises = mockDb.getExercises();
-    return { ...all[index], exerciseName: exercises.find(e => e.id === all[index].exerciseId)?.name || 'Unknown Exercise' };
+    return { ...all[index], exerciseName: exercises.find(e => e.id === all[index].exerciseId)?.name } as any;
   },
 
   deleteWorkoutExercise: (id: string): void => {
@@ -214,7 +214,7 @@ export const mockDb = {
     const pastSchedules = schedules.filter(s => new Date(s.scheduledDate).getTime() < Date.now());
     let totalVolume = 0;
     const allExercises = getStorageItem<WorkoutExercise[]>('mock_workout_exercises', INITIAL_WORKOUT_EXERCISES);
-    allExercises.forEach(we => { totalVolume += we.sets * we.repetitions * we.weight; });
+    allExercises.forEach(we => { totalVolume += we.sets * we.repetitions * (we.weight || 0); });
     const weeklyWorkouts = [
       { week: 'Wk 19', count: 3, volume: totalVolume * 0.8 },
       { week: 'Wk 20', count: 4, volume: totalVolume * 0.95 },

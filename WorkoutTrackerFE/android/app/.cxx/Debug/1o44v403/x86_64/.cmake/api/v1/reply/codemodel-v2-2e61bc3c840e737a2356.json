@@ -59,21 +59,6 @@
 					]
 				},
 				{
-					"build" : "rnworklets_autolinked_build",
-					"jsonFile" : "directory-rnworklets_autolinked_build-Debug-737f1f437e1f6af3dc7a.json",
-					"minimumCMakeVersion" : 
-					{
-						"string" : "3.13"
-					},
-					"parentIndex" : 0,
-					"projectIndex" : 0,
-					"source" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/node_modules/react-native-worklets/android/build/generated/source/codegen/jni",
-					"targetIndexes" : 
-					[
-						6
-					]
-				},
-				{
 					"build" : "safeareacontext_autolinked_build",
 					"jsonFile" : "directory-safeareacontext_autolinked_build-Debug-4dd6533bc6f768911c73.json",
 					"minimumCMakeVersion" : 
@@ -132,6 +117,21 @@
 					[
 						1
 					]
+				},
+				{
+					"build" : "rnworklets_autolinked_build",
+					"jsonFile" : "directory-rnworklets_autolinked_build-Debug-737f1f437e1f6af3dc7a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/node_modules/react-native-worklets/android/build/generated/source/codegen/jni",
+					"targetIndexes" : 
+					[
+						6
+					]
 				}
 			],
 			"name" : "Debug",
@@ -168,12 +168,12 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "appmodules::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-appmodules-Debug-b8056a98c99d6f89d58b.json",
+					"jsonFile" : "target-appmodules-Debug-c28e998db35ff46589ef.json",
 					"name" : "appmodules",
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 7,
+					"directoryIndex" : 6,
 					"id" : "react_codegen_RNVectorIconsSpec::@479809fae146501fd34d",
 					"jsonFile" : "target-react_codegen_RNVectorIconsSpec-Debug-b114ac1b523b39ed89bb.json",
 					"name" : "react_codegen_RNVectorIconsSpec",
@@ -194,30 +194,30 @@
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 5,
+					"directoryIndex" : 4,
 					"id" : "react_codegen_rnscreens::@25bcbd507e98d3a854ad",
-					"jsonFile" : "target-react_codegen_rnscreens-Debug-0c4ddb91845cc2db980e.json",
+					"jsonFile" : "target-react_codegen_rnscreens-Debug-a27a6759441bb047a437.json",
 					"name" : "react_codegen_rnscreens",
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 6,
+					"directoryIndex" : 5,
 					"id" : "react_codegen_rnsvg::@4f40eb209d0c0b4a3b65",
-					"jsonFile" : "target-react_codegen_rnsvg-Debug-3d8bf8902803a274c898.json",
+					"jsonFile" : "target-react_codegen_rnsvg-Debug-901b3ae0b133d3b1c8e0.json",
 					"name" : "react_codegen_rnsvg",
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 3,
+					"directoryIndex" : 7,
 					"id" : "react_codegen_rnworklets::@68f58d84d4754f193387",
 					"jsonFile" : "target-react_codegen_rnworklets-Debug-b5c74efe7f5dd43548ce.json",
 					"name" : "react_codegen_rnworklets",
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 4,
+					"directoryIndex" : 3,
 					"id" : "react_codegen_safeareacontext::@7984cd80db47aa7b952a",
-					"jsonFile" : "target-react_codegen_safeareacontext-Debug-78ce7fee9f4e1de194f5.json",
+					"jsonFile" : "target-react_codegen_safeareacontext-Debug-a2830c014035d21882bd.json",
 					"name" : "react_codegen_safeareacontext",
 					"projectIndex" : 0
 				}
@@ -227,7 +227,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/arm64-v8a",
+		"build" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/android/app/.cxx/Debug/1o44v403/x86_64",
 		"source" : "C:/Users/HP/Documents/GitHub/WorkoutTracker/WorkoutTrackerFE/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup"
 	},
 	"version" : 
