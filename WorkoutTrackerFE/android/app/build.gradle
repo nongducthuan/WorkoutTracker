@@ -73,6 +73,7 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
+    buildDir = file("C:/tmp/WTFE/app")
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
@@ -86,7 +87,7 @@ android {
         versionName "1.0"
         externalNativeBuild {
             cmake {
-                arguments "-DCMAKE_OBJECT_PATH_MAX=250"
+                arguments "-DCMAKE_OBJECT_PATH_MAX=260"
             }
         }
         ndk {

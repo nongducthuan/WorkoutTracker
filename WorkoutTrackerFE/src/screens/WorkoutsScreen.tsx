@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors, globalStyles } from '../theme/styles';
 import { useWorkouts } from '../hooks/useFitnessData';
 import { DashboardSkeleton } from '../../components/LoadingSkeleton';
@@ -12,7 +12,7 @@ import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { EmptyState } from '../../components/EmptyState';
 import { RootStackParamList } from '../navigation/types';
 
-type WorkoutsNav = StackNavigationProp<RootStackParamList>;
+type WorkoutsNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function WorkoutsScreen() {
   const { t } = useTranslation();

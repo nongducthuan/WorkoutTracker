@@ -1,6 +1,11 @@
+# Android build artifacts
+android/app/build/
+android/build/
+android/.gradle/
+android/app/.cxx/
+android/app/src/main/jniLibs/
+*.iml
+.idea/
+
+# Node
 node_modules/
-.gradle/
-build/
-*.keystore
-!debug.keystore
-.env

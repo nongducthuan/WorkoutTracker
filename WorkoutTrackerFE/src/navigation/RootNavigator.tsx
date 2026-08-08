@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 import { RootStackParamList } from './types';
-import { Colors } from '../theme/colors';
 import { setNavigateToLogin } from '../api/client';
 import AuthStack from './AuthStack';
 import MainTabs from './MainTabs';
 import WorkoutDetailScreen from '../screens/WorkoutDetailScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 interface RootNavigatorProps {
   isAuthenticated: boolean;

@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { authApi } from '../api/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors } from '../theme/colors';
 import { globalStyles } from '../theme/styles';
 
@@ -47,7 +47,7 @@ type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export default function ProfileScreen() {
   const { t, i18n } = useTranslation();
-  const navigation = useNavigation<StackNavigationProp<any>>();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'settings'>('profile');
   const [isLoading, setIsLoading] = useState(false);

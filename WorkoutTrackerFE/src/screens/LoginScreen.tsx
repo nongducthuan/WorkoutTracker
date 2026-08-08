@@ -10,14 +10,14 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import Svg, { Path } from 'react-native-svg';
 import { authApi } from '../api/auth';
 import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/types';
 
-type LoginNav = StackNavigationProp<RootStackParamList>;
+type LoginNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function LoginScreen() {
   const { t } = useTranslation();

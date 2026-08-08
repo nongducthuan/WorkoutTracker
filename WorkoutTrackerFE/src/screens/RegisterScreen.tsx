@@ -11,14 +11,14 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import Svg, { Path } from 'react-native-svg';
 import { authApi } from '../api/auth';
 import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/types';
 
-type RegisterNav = StackNavigationProp<RootStackParamList>;
+type RegisterNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function RegisterScreen() {
   const { t } = useTranslation();

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors, globalStyles } from '../theme/styles';
 import { useWorkouts, useSchedules, useExercises, useReports } from '../hooks/useFitnessData';
 import { DashboardSkeleton } from '../../components/LoadingSkeleton';
@@ -11,7 +11,7 @@ import { MuscleMap } from '../../components/MuscleMap';
 import { RootStackParamList } from '../navigation/types';
 import { authApi } from '../api/auth';
 
-type DashboardNav = StackNavigationProp<RootStackParamList>;
+type DashboardNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
