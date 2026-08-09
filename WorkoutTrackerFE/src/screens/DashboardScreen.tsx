@@ -16,12 +16,12 @@ type DashboardNav = NativeStackNavigationProp<RootStackParamList>;
 export default function DashboardScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation<DashboardNav>();
-  
+
   const { workouts, isLoading: wLoading } = useWorkouts();
   const { schedules, isLoading: sLoading } = useSchedules();
   const { exercises, isLoading: eLoading } = useExercises();
   const { stats, isLoading: rLoading } = useReports();
-  
+
   const [currentUser, setCurrentUser] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -82,7 +82,7 @@ export default function DashboardScreen() {
             <Text style={[globalStyles.bodyText, { marginBottom: 24 }]}>
               {t('dashboard.first_workout_desc')}
             </Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={globalStyles.btnPrimary}
               onPress={() => (navigation.getParent() as any)?.navigate('Workouts')}
             >
@@ -92,7 +92,7 @@ export default function DashboardScreen() {
           </View>
         ) : !todaySchedule ? (
           <View style={globalStyles.card}>
-             <View style={[globalStyles.tagElectric, { backgroundColor: 'rgba(107,114,128,0.1)' }]}>
+            <View style={[globalStyles.tagElectric, { backgroundColor: 'rgba(107,114,128,0.1)' }]}>
               <Text style={[globalStyles.tagElectricText, { color: Colors.mutedGray }]}>{t('dashboard.reminders')}</Text>
             </View>
             <Text style={[globalStyles.heading, { fontSize: 24, marginTop: 12, marginBottom: 8 }]}>
@@ -101,7 +101,7 @@ export default function DashboardScreen() {
             <Text style={[globalStyles.bodyText, { marginBottom: 24 }]}>
               {t('dashboard.schedule_today_desc')}
             </Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={globalStyles.btnSecondary}
               onPress={() => (navigation.getParent() as any)?.navigate('Schedule')}
             >
@@ -116,7 +116,7 @@ export default function DashboardScreen() {
             <Text style={[globalStyles.heading, { fontSize: 24, marginTop: 12, marginBottom: 8 }]}>
               {t('dashboard.today_label')} <Text style={globalStyles.textElectric}>{todaySchedule.workoutName}</Text>
             </Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={globalStyles.btnPrimary}
               onPress={() => navigation.navigate('WorkoutDetail', { id: todaySchedule.workoutId })}
             >
@@ -129,17 +129,11 @@ export default function DashboardScreen() {
 
       {/* Quick Actions */}
       <View style={{ marginBottom: 24 }}>
-        <Text style={globalStyles.label}>{t('dashboard.quick_actions')}</Text>
-        <View style={{ flexDirection: 'row', gap: 12 }}>
-          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Profile')}>
-             <View style={styles.actionIcon}><Icon name="user" size={20} color={Colors.onSurface} /></View>
-             <Text style={styles.actionText}>{t('dashboard.profile')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard} onPress={() => (navigation.getParent() as any)?.navigate('Reports')}>
-             <View style={styles.actionIcon}><Icon name="pie-chart" size={20} color={Colors.onSurface} /></View>
-             <Text style={styles.actionText}>{t('dashboard.stats')}</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={globalStyles.label}>{t('dashboard.quick_action')}</Text>
+        <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Profile')}>
+          <View style={styles.actionIcon}><Icon name="user" size={20} color={Colors.onSurface} /></View>
+          <Text style={styles.actionText}>{t('dashboard.profile')}</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Muscle Map Placeholder */}

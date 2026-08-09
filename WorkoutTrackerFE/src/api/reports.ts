@@ -7,7 +7,7 @@ export const reportsApi = {
   getStats: async (): Promise<ReportStats> => {
     if (isMockMode) {
       await delay(300);
-      return { weeklyWorkouts: [], recentActivity: [] };
+      return mockDb.getReports();
     }
     const res = await apiClient.get<ReportStats>('/reports');
     return res.data;

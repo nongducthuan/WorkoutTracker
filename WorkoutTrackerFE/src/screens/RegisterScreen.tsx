@@ -23,7 +23,8 @@ type RegisterNav = NativeStackNavigationProp<RootStackParamList>;
 export default function RegisterScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation<RegisterNav>();
-  const [name, setName] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -31,7 +32,7 @@ export default function RegisterScreen() {
   const [error, setError] = useState('');
 
   const handleRegister = async () => {
-    if (!name || !email || !password) {
+    if (!fullName || !userName || !email || !password) {
       setError('Vui lòng điền đầy đủ thông tin');
       return;
     }
@@ -42,7 +43,7 @@ export default function RegisterScreen() {
     try {
       setIsLoading(true);
       setError('');
-      await authApi.register(name, email, password);
+      await authApi.register(fullName, userName, email, password);
       navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
     } catch (err: any) {
       setError(err.message || 'Đăng ký thất bại');
@@ -78,10 +79,20 @@ export default function RegisterScreen() {
         <View style={styles.form}>
           <Text style={styles.label}>Họ và Tên</Text>
           <TextInput
-            value={name}
-            onChangeText={setName}
+            value={fullName}
+            onChangeText={setFullName}
             placeholder="Nhập họ và tên"
             placeholderTextColor={Colors.mutedGray}
+            style={styles.input}
+          />
+
+          <Text style={[styles.label, { marginTop: 16 }]}>Tên đăng nhập</Text>
+          <TextInput
+            value={userName}
+            onChangeText={setUserName}
+            placeholder="Nhập tên đăng nhập"
+            placeholderTextColor={Colors.mutedGray}
+            autoCapitalize="none"
             style={styles.input}
           />
 

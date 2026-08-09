@@ -7,10 +7,6 @@ import { reportsApi } from '../api/reports';
 import { useToast } from '../../components/Toast';
 import { Workout, WorkoutExercise } from '../types';
 
-
-
-
-
 export const useWorkouts = () => {
   const queryClient = useQueryClient();
   const { success, error } = useToast();

@@ -46,6 +46,10 @@ export const exerciseMuscleMap: Record<string, MuscleMapping> = {
 
 
 export const getExerciseMuscleGroup = (exerciseName: string): MuscleMapping => {
+  if (!exerciseName || typeof exerciseName !== 'string') {
+    return { primary: [], secondary: [] };
+  }
+
   const normalized = exerciseName.toLowerCase();
   
   

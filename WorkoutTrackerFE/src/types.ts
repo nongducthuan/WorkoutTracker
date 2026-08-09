@@ -3,6 +3,7 @@ export interface Exercise {
   name: string;
   category?: string;
   difficulty?: string;
+  description?: string;
 }
 
 export interface WorkoutExercise {

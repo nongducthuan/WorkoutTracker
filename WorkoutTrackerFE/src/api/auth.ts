@@ -13,22 +13,25 @@ export const authApi = {
       return false;
     }
   },
+
   login: async (identifier?: string, password?: string) => {
-    const res = await apiClient.post('/auth/login', { email: identifier, password });
+    const res = await apiClient.post('/auth/login', { userName: identifier, password });
     if (res.data.token) {
       await AsyncStorage.setItem(AUTH_TOKEN_KEY, res.data.token);
       await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data.user));
     }
     return res.data;
   },
-  register: async (name?: string, email?: string, password?: string) => {
-    const res = await apiClient.post('/auth/register', { name, email, password });
+
+  register: async (fullName?: string, userName?: string, email?: string, password?: string) => {
+    const res = await apiClient.post('/auth/register', { fullName, userName, email, password });
     if (res.data.token) {
       await AsyncStorage.setItem(AUTH_TOKEN_KEY, res.data.token);
       await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data.user));
     }
     return res.data;
   },
+
   getCurrentUser: async () => {
     try {
       const userStr = await AsyncStorage.getItem(AUTH_USER_KEY);
@@ -38,17 +41,21 @@ export const authApi = {
       return null;
     }
   },
-  updateProfile: async (name: string, email: string) => {
-    const res = await apiClient.put('/auth/profile', { name });
-    await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data));
+
+  // Backend UpdateProfileSchema expects: { fullName, email }
+  updateProfile: async (fullName: string, email: string) => {
+    const res = await apiClient.put('/auth/profile', { fullName, email });
+    await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data.user));
     return res.data;
   },
+
   changePassword: async (oldPw: string, newPw: string) => {
-    const res = await apiClient.put('/auth/change-password', { currentPassword: oldPw, newPassword: newPw });
+    const res = await apiClient.put('/auth/change-password', { oldPassword: oldPw, newPassword: newPw });
     return res.data;
   },
+
   logout: async () => {
     await AsyncStorage.removeItem(AUTH_TOKEN_KEY);
     await AsyncStorage.removeItem(AUTH_USER_KEY);
-  }
+  },
 };

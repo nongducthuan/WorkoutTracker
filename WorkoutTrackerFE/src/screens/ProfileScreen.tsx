@@ -59,7 +59,7 @@ export default function ProfileScreen() {
   useEffect(() => {
     authApi.getCurrentUser().then((user) => {
       setCurrentUser(user);
-      resetProfile({ fullName: user?.name || '' });
+      resetProfile({ fullName: user?.fullName || '' });
     });
   }, []);
 
@@ -197,15 +197,15 @@ export default function ProfileScreen() {
               <View style={styles.profileHeader}>
                 <View style={styles.avatarContainer}>
                   <Text style={styles.avatarText}>
-                    {currentUser?.name ? currentUser.name.substring(0, 2) : 'US'}
+                    {currentUser?.fullName ? currentUser.fullName.substring(0, 2) : 'US'}
                   </Text>
                 </View>
                 <View>
                   <Text style={styles.userName}>
-                    {currentUser?.name}
+                    {currentUser?.fullName}
                   </Text>
                   <Text style={styles.userHandle}>
-                    @{currentUser?.username || 'athlete'}
+                    @{currentUser?.userName || 'athlete'}
                   </Text>
                 </View>
               </View>
