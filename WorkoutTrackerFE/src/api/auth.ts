@@ -42,7 +42,6 @@ export const authApi = {
     }
   },
 
-  // Backend UpdateProfileSchema expects: { fullName, email }
   updateProfile: async (fullName: string, email: string) => {
     const res = await apiClient.put('/auth/profile', { fullName, email });
     await AsyncStorage.setItem(AUTH_USER_KEY, JSON.stringify(res.data.user));
