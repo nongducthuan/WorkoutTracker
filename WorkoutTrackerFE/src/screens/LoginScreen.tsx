@@ -1,175 +1,177 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator,
-  StyleSheet,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import { useTranslation } from 'react-i18next';
-import Svg, { Path } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { authApi } from '../api/auth';
-import { Colors } from '../theme/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from '../navigation/types';
+import { Colors } from '../theme/colors';
 
-type LoginNav = NativeStackNavigationProp<RootStackParamList>;
+type SettingsNav = NativeStackNavigationProp<RootStackParamList>;
 
-export default function LoginScreen() {
-  const { t } = useTranslation();
-  const navigation = useNavigation<LoginNav>();
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+export default function SettingsScreen() {
+  const { t, i18n } = useTranslation();
+  const navigation = useNavigation<SettingsNav>();
 
-  const handleLogin = async () => {
-    if (!identifier || !password) {
-      setError(t('login.login_failed'));
-      return;
-    }
-    try {
-      setIsLoading(true);
-      setError('');
-      await authApi.login(identifier, password);
-      navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
-    } catch (err: any) {
-      setError(err.message || t('login.login_failed'));
-    } finally {
-      setIsLoading(false);
-    }
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === 'en' ? 'vi' : 'en';
+    i18n.changeLanguage(nextLang);
+    AsyncStorage.setItem('language', nextLang);
   };
 
   return (
-    <SafeAreaView style={styles.keyboardView} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-      >
-      <View style={styles.inner}>
-        <View style={styles.logoSection}>
-          <View style={styles.logoRow}>
-            <Svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={Colors.electric} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <Path d="M6 18h12M6 6h12M12 6v12M2 12h4M18 12h4" />
-            </Svg>
-            <Text style={styles.logoText}>PULSE</Text>
+    <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
+            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>{t('profile.settings_title', 'CÀI ĐẶT')}</Text>
+          <View style={styles.iconButton} />
+        </View>
+
+        <View style={styles.group}>
+          <View style={styles.settingItem}>
+            <View style={styles.settingItemLeft}>
+              <Feather name="globe" size={18} color={Colors.mutedGray} />
+              <Text style={styles.settingItemText}>{t('settings.language', 'Ngôn ngữ')}</Text>
+            </View>
+            <TouchableOpacity onPress={toggleLanguage} style={styles.settingActionBtn}>
+              <Text style={styles.settingActionText}>{i18n.language === 'en' ? 'English' : 'Tiếng Việt'}</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.logoSub}>{t('login.subtitle')}</Text>
-        </View>
 
-        <Text style={styles.title}>{t('login.title')}</Text>
-
-        {!!error && (
-          <View style={styles.errorBox}>
-            <Text style={styles.errorText}>{error}</Text>
+          <View style={[styles.settingItem, styles.settingItemLast]}>
+            <View style={styles.settingItemLeft}>
+              <Feather name="moon" size={18} color={Colors.mutedGray} />
+              <Text style={styles.settingItemText}>{t('settings.theme', 'Giao diện')}</Text>
+            </View>
+            <View style={[styles.settingActionBtn, styles.settingActionBtnDisabled]}>
+              <Text style={styles.settingActionTextDisabled}>{t('settings.dark_mode_fixed', 'Dark Mode (Fixed)')}</Text>
+            </View>
           </View>
-        )}
+        </View>
 
-        <View style={styles.form}>
-          <Text style={styles.label}>{t('login.email_label')}</Text>
-          <TextInput
-            value={identifier}
-            onChangeText={setIdentifier}
-            placeholder={t('login.email_hint')}
-            placeholderTextColor={Colors.mutedGray}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            style={styles.input}
-          />
-
-          <Text style={[styles.label, { marginTop: 16 }]}>{t('login.password_label')}</Text>
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            placeholder={t('login.password_hint')}
-            placeholderTextColor={Colors.mutedGray}
-            secureTextEntry
-            style={styles.input}
-          />
-
+        <View style={styles.group}>
           <TouchableOpacity
-            onPress={() => (navigation as any).navigate('ForgotPassword')}
-            style={styles.forgotPasswordLink}
+            style={[styles.settingItem, styles.settingItemLast]}
+            onPress={() => navigation.navigate('ChangePassword')}
           >
-            <Text style={styles.forgotPasswordText}>{t('login.forgot_password', 'Quên mật khẩu?')}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handleLogin}
-            disabled={isLoading}
-            style={[styles.btn, isLoading && { backgroundColor: Colors.electricDim }]}
-          >
-            {isLoading ? (
-              <ActivityIndicator color={Colors.black} />
-            ) : (
-              <Text style={styles.btnText}>{t('login.submit')}</Text>
-            )}
+            <View style={styles.settingItemLeft}>
+              <Feather name="lock" size={18} color={Colors.mutedGray} />
+              <Text style={styles.settingItemText}>{t('profile.change_password_title', 'Đổi mật khẩu')}</Text>
+            </View>
+            <Feather name="chevron-right" size={18} color={Colors.mutedGray} />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>{t('login.no_account')} </Text>
-          <TouchableOpacity onPress={() => (navigation as any).navigate('Register')}>
-            <Text style={styles.footerLink}>{t('login.sign_up')}</Text>
+        <View style={styles.group}>
+          <TouchableOpacity
+            style={[styles.settingItem, styles.settingItemLast]}
+            onPress={() => navigation.navigate('About')}
+          >
+            <View style={styles.settingItemLeft}>
+              <Feather name="info" size={18} color={Colors.mutedGray} />
+              <Text style={styles.settingItemText}>{t('about.title', 'Về ứng dụng')}</Text>
+            </View>
+            <Text style={styles.versionInline}>2.1.0</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  keyboardView: { flex: 1, backgroundColor: Colors.background },
-  inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 32 },
-  logoSection: { alignItems: 'center', marginBottom: 40 },
-  logoRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
-  logoText: { fontSize: 36, fontWeight: '900', color: Colors.onSurface, letterSpacing: -1 },
-  logoSub: { color: Colors.electricOrange, fontSize: 12, fontWeight: '700', letterSpacing: 3, textTransform: 'uppercase' },
-  title: { fontSize: 24, fontWeight: '700', color: Colors.onSurface, textAlign: 'center', marginBottom: 32 },
-  errorBox: {
-    backgroundColor: 'rgba(239,68,68,0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(239,68,68,0.4)',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 16,
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.background,
   },
-  errorText: { color: '#FC8181', textAlign: 'center', fontWeight: '600' },
-  form: { gap: 4 },
-  forgotPasswordLink: { alignSelf: 'flex-end', marginTop: 10 },
-  forgotPasswordText: { color: Colors.electric, fontSize: 12, fontWeight: '700' },
-  label: { color: Colors.mutedGray, fontSize: 13, fontWeight: '700', marginBottom: 8 },
-  input: {
+  scrollContent: {
+    padding: 20,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  iconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: Colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 15,
-    color: Colors.onSurface,
-    marginBottom: 4,
-  },
-  btn: {
-    backgroundColor: Colors.electric,
-    borderRadius: 12,
-    paddingVertical: 16,
+    borderColor: Colors.borderGray,
     alignItems: 'center',
-    marginTop: 24,
-    elevation: 5,
-    shadowColor: Colors.electric,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
+    justifyContent: 'center',
   },
-  btnText: { color: Colors.black, fontWeight: '900', fontSize: 16 },
-  footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 32 },
-  footerText: { color: Colors.mutedGray },
-  footerLink: { color: Colors.electric, fontWeight: '700' },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 1.5,
+    color: Colors.onSurface,
+    textTransform: 'uppercase',
+  },
+  group: {
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.borderGray,
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  settingItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.borderGray,
+  },
+  settingItemLast: {
+    borderBottomWidth: 0,
+  },
+  settingItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  settingItemText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  settingActionBtn: {
+    backgroundColor: Colors.background,
+    borderWidth: 1,
+    borderColor: Colors.borderGray,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  settingActionBtnDisabled: {
+    opacity: 0.5,
+  },
+  settingActionText: {
+    color: Colors.electric,
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  settingActionTextDisabled: {
+    color: Colors.mutedGray,
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  versionInline: {
+    fontSize: 12,
+    color: Colors.mutedGray,
+  },
 });

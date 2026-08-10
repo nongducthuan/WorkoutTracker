@@ -14,6 +14,7 @@ import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import OnboardingGoalScreen from '../screens/OnboardingGoalScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import AchievementsScreen from '../screens/AchievementsScreen';
+import AboutScreen from '../screens/AboutScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -80,6 +81,11 @@ export default function RootNavigator({ isAuthenticated, navigationRef }: RootNa
       <Stack.Screen
         name="Achievements"
         component={AchievementsScreen}
+        options={{ presentation: 'card' }}
+      />
+      <Stack.Screen
+        name="About"
+        component={AboutScreen}
         options={{ presentation: 'card' }}
       />
     </Stack.Navigator>

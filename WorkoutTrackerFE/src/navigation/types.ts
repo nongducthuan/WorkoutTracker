@@ -1,6 +1,9 @@
 export type AuthStackParamList = {
+  Welcome: undefined;
   Login: undefined;
   Register: undefined;
+  ForgotPassword: undefined;
+  OtpVerify: { email: string };
 };
 
 export type MainTabParamList = {
@@ -23,4 +26,5 @@ export type RootStackParamList = {
   OnboardingGoal: undefined;
   Notifications: undefined;
   Achievements: undefined;
+  About: undefined;
 };

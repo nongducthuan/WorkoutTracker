@@ -67,7 +67,18 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.versionText}>{t('settings.version', 'Phiên bản')} 2.1.0</Text>
+        <View style={styles.group}>
+          <TouchableOpacity
+            style={[styles.settingItem, styles.settingItemLast]}
+            onPress={() => navigation.navigate('About')}
+          >
+            <View style={styles.settingItemLeft}>
+              <Feather name="info" size={18} color={Colors.mutedGray} />
+              <Text style={styles.settingItemText}>{t('about.title', 'Về ứng dụng')}</Text>
+            </View>
+            <Text style={styles.versionInline}>2.1.0</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -159,10 +170,8 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     textTransform: 'uppercase',
   },
-  versionText: {
-    textAlign: 'center',
-    color: Colors.mutedGray,
+  versionInline: {
     fontSize: 12,
-    marginTop: 8,
+    color: Colors.mutedGray,
   },
 });
