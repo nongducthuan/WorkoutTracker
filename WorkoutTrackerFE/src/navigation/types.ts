@@ -20,5 +20,7 @@ export type RootStackParamList = {
   WeeklyGoal: undefined;
   Settings: undefined;
   ChangePassword: undefined;
+  OnboardingGoal: undefined;
+  Notifications: undefined;
+  Achievements: undefined;
 };
- 

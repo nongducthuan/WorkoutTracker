@@ -97,10 +97,6 @@ export const useWorkout = (id: string) => {
   };
 };
 
-
-
-
-
 export const useWorkoutExercises = (workoutId: string) => {
   const queryClient = useQueryClient();
   const { success, error } = useToast();

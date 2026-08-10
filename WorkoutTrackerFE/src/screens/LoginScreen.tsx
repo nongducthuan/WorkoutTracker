@@ -93,6 +93,13 @@ export default function LoginScreen() {
           />
 
           <TouchableOpacity
+            onPress={() => (navigation as any).navigate('ForgotPassword')}
+            style={styles.forgotPasswordLink}
+          >
+            <Text style={styles.forgotPasswordText}>{t('login.forgot_password', 'Quên mật khẩu?')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             onPress={handleLogin}
             disabled={isLoading}
             style={[styles.btn, isLoading && { backgroundColor: Colors.electricDim }]}
@@ -135,6 +142,8 @@ const styles = StyleSheet.create({
   },
   errorText: { color: '#FC8181', textAlign: 'center', fontWeight: '600' },
   form: { gap: 4 },
+  forgotPasswordLink: { alignSelf: 'flex-end', marginTop: 10 },
+  forgotPasswordText: { color: Colors.electric, fontSize: 12, fontWeight: '700' },
   label: { color: Colors.mutedGray, fontSize: 13, fontWeight: '700', marginBottom: 8 },
   input: {
     backgroundColor: Colors.card,

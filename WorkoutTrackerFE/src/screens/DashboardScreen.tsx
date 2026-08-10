@@ -130,10 +130,20 @@ export default function DashboardScreen() {
       {/* Quick Actions */}
       <View style={{ marginBottom: 24 }}>
         <Text style={globalStyles.label}>{t('dashboard.quick_action')}</Text>
-        <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Profile')}>
-          <View style={styles.actionIcon}><Icon name="user" size={20} color={Colors.onSurface} /></View>
-          <Text style={styles.actionText}>{t('dashboard.profile')}</Text>
-        </TouchableOpacity>
+        <View style={styles.quickActionsRow}>
+          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Profile')}>
+            <View style={styles.actionIcon}><Icon name="user" size={20} color={Colors.onSurface} /></View>
+            <Text style={styles.actionText}>{t('dashboard.profile')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Notifications')}>
+            <View style={styles.actionIcon}><Icon name="bell" size={20} color={Colors.onSurface} /></View>
+            <Text style={styles.actionText}>{t('dashboard.notifications', 'Thông báo')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Achievements')}>
+            <View style={styles.actionIcon}><Icon name="award" size={20} color={Colors.onSurface} /></View>
+            <Text style={styles.actionText}>{t('dashboard.achievements', 'Thành tích')}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Muscle Map Placeholder */}
@@ -158,6 +168,11 @@ const styles = StyleSheet.create({
     color: Colors.electric,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
+  },
+  quickActionsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
   },
   actionCard: {
     flex: 1,

@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import { BarChart, LineChart } from 'react-native-gifted-charts';
 import { useTranslation } from 'react-i18next';
-
 import { useReports } from '../hooks/useFitnessData';
 import { DashboardSkeleton } from '../../components/LoadingSkeleton';
 import { EmptyState } from '../../components/EmptyState';
