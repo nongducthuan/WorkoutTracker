@@ -16,4 +16,9 @@ export type RootStackParamList = {
   Main: undefined;
   WorkoutDetail: { id: string };
   Profile: undefined;
+  EditProfile: undefined;
+  WeeklyGoal: undefined;
+  Settings: undefined;
+  ChangePassword: undefined;
 };
+ 

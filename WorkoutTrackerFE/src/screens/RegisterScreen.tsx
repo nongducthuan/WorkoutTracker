@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import Svg, { Path } from 'react-native-svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { authApi } from '../api/auth';
 import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/types';
@@ -53,11 +54,18 @@ export default function RegisterScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.keyboardView}
-    >
+    <SafeAreaView style={styles.keyboardView} edges={['top', 'bottom']}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
       <ScrollView contentContainerStyle={styles.scrollInner}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={Colors.onSurface} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <Path d="M15 18l-6-6 6-6" />
+          </Svg>
+        </TouchableOpacity>
+
         <View style={styles.logoSection}>
           <View style={styles.logoRow}>
             <Svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={Colors.electric} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -147,13 +155,25 @@ export default function RegisterScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   keyboardView: { flex: 1, backgroundColor: Colors.background },
   scrollInner: { flexGrow: 1, justifyContent: 'center', paddingHorizontal: 32, paddingVertical: 40 },
+  backButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
   logoSection: { alignItems: 'center', marginBottom: 24 },
   logoRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
   logoText: { fontSize: 36, fontWeight: '900', color: Colors.onSurface, letterSpacing: -1 },

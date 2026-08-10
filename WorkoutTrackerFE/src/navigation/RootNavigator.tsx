@@ -7,6 +7,10 @@ import AuthStack from './AuthStack';
 import MainTabs from './MainTabs';
 import WorkoutDetailScreen from '../screens/WorkoutDetailScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import WeeklyGoalScreen from '../screens/WeeklyGoalScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -39,6 +43,26 @@ export default function RootNavigator({ isAuthenticated, navigationRef }: RootNa
         name="Profile"
         component={ProfileScreen}
         options={{ presentation: 'modal' }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{ presentation: 'card' }}
+      />
+      <Stack.Screen
+        name="WeeklyGoal"
+        component={WeeklyGoalScreen}
+        options={{ presentation: 'card' }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ presentation: 'card' }}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{ presentation: 'card' }}
       />
     </Stack.Navigator>
   );

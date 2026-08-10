@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { RootStackParamList } from '../navigation/types';
 import { 
@@ -311,19 +312,19 @@ export default function WorkoutDetailScreen() {
 
   if (!workout) {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top']}>
         <EmptyState
           title="Workout Split Not Found"
           description="This profile does not exist or has been deleted from the catalog."
           actionText="Back to Routines"
           onAction={() => navigation.navigate('Main')}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.backgroundGlow} pointerEvents="none" />
 
       <ScrollView style={styles.flex1} contentContainerStyle={styles.scrollContent}>
@@ -867,7 +868,7 @@ export default function WorkoutDetailScreen() {
         confirmText="Remove"
         isDanger={true}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
