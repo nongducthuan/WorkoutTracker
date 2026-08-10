@@ -1,118 +1,97 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Switch, StyleSheet } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSchedules } from '../hooks/useFitnessData';
 import { RootStackParamList } from '../navigation/types';
 import { Colors } from '../theme/colors';
 
-type OnboardingGoalNav = NativeStackNavigationProp<RootStackParamList>;
+const REMINDER_KEY = 'reminderBefore30Min';
 
-const GOALS = [
-  { key: 'muscle', icon: 'trending-up', label: 'Tăng cơ', desc: 'Xây dựng khối lượng cơ bắp' },
-  { key: 'fat_loss', icon: 'activity', label: 'Giảm mỡ', desc: 'Cải thiện vóc dáng và sức khỏe' },
-  { key: 'endurance', icon: 'wind', label: 'Sức bền', desc: 'Duy trì thể lực bền vững' },
-];
+type NotificationsNav = NativeStackNavigationProp<RootStackParamList>;
 
-const LEVELS = [
-  { key: 'beginner', label: 'Mới bắt đầu' },
-  { key: 'intermediate', label: 'Trung cấp' },
-  { key: 'advanced', label: 'Nâng cao' },
-];
+export default function NotificationsScreen() {
+  const { t } = useTranslation();
+  const navigation = useNavigation<NotificationsNav>();
+  const { schedules } = useSchedules();
+  const [reminderEnabled, setReminderEnabled] = useState(true);
 
-export default function OnboardingGoalScreen() {
-  const navigation = useNavigation<OnboardingGoalNav>();
-  const [goal, setGoal] = useState('muscle');
-  const [level, setLevel] = useState('beginner');
-  const [daysPerWeek, setDaysPerWeek] = useState(3);
-  const [isSaving, setIsSaving] = useState(false);
+  useEffect(() => {
+    AsyncStorage.getItem(REMINDER_KEY).then((val) => {
+      if (val !== null) setReminderEnabled(val === 'true');
+    });
+  }, []);
 
-  const handleContinue = async () => {
-    try {
-      setIsSaving(true);
-      await AsyncStorage.setItem(
-        'onboardingGoal',
-        JSON.stringify({ goal, level, daysPerWeek })
-      );
-      navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
-    } finally {
-      setIsSaving(false);
-    }
+  const toggleReminder = (value: boolean) => {
+    setReminderEnabled(value);
+    AsyncStorage.setItem(REMINDER_KEY, String(value));
   };
+
+  // Notification feed derived from real upcoming schedules, no fake data.
+  const upcoming = [...schedules]
+    .sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime())
+    .slice(0, 5);
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>Mục tiêu của bạn là gì?</Text>
-        <Text style={styles.subtitle}>Chọn 1 mục tiêu chính, bạn có thể đổi sau</Text>
-
-        <View style={{ gap: 12, marginBottom: 28 }}>
-          {GOALS.map((g) => {
-            const active = goal === g.key;
-            return (
-              <TouchableOpacity
-                key={g.key}
-                onPress={() => setGoal(g.key)}
-                style={[styles.goalCard, active && styles.goalCardActive]}
-              >
-                <View style={[styles.goalIcon, active && styles.goalIconActive]}>
-                  <Feather name={g.icon as any} size={20} color={active ? Colors.black : Colors.mutedGray} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.goalLabel, active && styles.goalLabelActive]}>{g.label}</Text>
-                  <Text style={styles.goalDesc}>{g.desc}</Text>
-                </View>
-                {active && <Feather name="check-circle" size={20} color={Colors.electric} />}
-              </TouchableOpacity>
-            );
-          })}
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
+            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>{t('notifications.title', 'THÔNG BÁO')}</Text>
+          <View style={styles.iconButton} />
         </View>
 
-        <Text style={styles.sectionLabel}>Trình độ hiện tại</Text>
-        <View style={styles.levelRow}>
-          {LEVELS.map((l) => {
-            const active = level === l.key;
-            return (
-              <TouchableOpacity
-                key={l.key}
-                onPress={() => setLevel(l.key)}
-                style={[styles.levelChip, active && styles.levelChipActive]}
-              >
-                <Text style={[styles.levelChipText, active && styles.levelChipTextActive]}>
-                  {l.label}
+        <View style={styles.reminderCard}>
+          <View style={styles.reminderLeft}>
+            <Feather name="bell" size={18} color={Colors.electric} />
+            <Text style={styles.reminderText}>
+              {t('notifications.remind_before_30', 'Nhắc trước 30 phút')}
+            </Text>
+          </View>
+          <Switch
+            value={reminderEnabled}
+            onValueChange={toggleReminder}
+            trackColor={{ false: Colors.borderGray, true: Colors.electric }}
+            thumbColor="#FFFFFF"
+          />
+        </View>
+
+        <Text style={styles.sectionLabel}>{t('notifications.upcoming', 'Sắp tới')}</Text>
+
+        {upcoming.length === 0 ? (
+          <View style={styles.emptyBox}>
+            <Feather name="inbox" size={32} color={Colors.mutedGray} />
+            <Text style={styles.emptyText}>
+              {t('notifications.empty', 'Chưa có lịch tập nào sắp tới.')}
+            </Text>
+          </View>
+        ) : (
+          upcoming.map((s) => (
+            <View key={s.id} style={styles.notifCard}>
+              <View style={styles.notifIcon}>
+                <Feather name="calendar" size={16} color={Colors.electric} />
+              </View>
+              <View style={styles.notifBody}>
+                <Text style={styles.notifTitle}>{s.workoutName || t('notifications.workout', 'Buổi tập')}</Text>
+                <Text style={styles.notifSubtitle}>
+                  {new Date(s.scheduledDate).toLocaleString('vi-VN', {
+                    weekday: 'short',
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        <Text style={styles.sectionLabel}>Số buổi tập mỗi tuần</Text>
-        <View style={styles.stepperCard}>
-          <TouchableOpacity
-            onPress={() => setDaysPerWeek((d) => Math.max(1, d - 1))}
-            style={styles.stepperButton}
-          >
-            <Feather name="minus" size={18} color={Colors.onSurface} />
-          </TouchableOpacity>
-          <Text style={styles.stepperValue}>{daysPerWeek}</Text>
-          <TouchableOpacity
-            onPress={() => setDaysPerWeek((d) => Math.min(7, d + 1))}
-            style={styles.stepperButton}
-          >
-            <Feather name="plus" size={18} color={Colors.onSurface} />
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity
-          onPress={handleContinue}
-          disabled={isSaving}
-          style={[styles.continueButton, isSaving && styles.continueButtonDisabled]}
-        >
-          <Text style={styles.continueButtonText}>{isSaving ? 'Đang lưu...' : 'Tiếp tục'}</Text>
-        </TouchableOpacity>
+              </View>
+            </View>
+          ))
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -125,56 +104,50 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingTop: 32,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '900',
-    color: Colors.onSurface,
-    marginBottom: 6,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: Colors.mutedGray,
-    marginBottom: 24,
-  },
-  goalCard: {
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  iconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.borderGray,
-    borderRadius: 14,
-    padding: 16,
-  },
-  goalCardActive: {
-    borderColor: Colors.electric,
-    backgroundColor: 'rgba(198,244,50,0.06)',
-  },
-  goalIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: Colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  goalIconActive: {
-    backgroundColor: Colors.electric,
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    letterSpacing: 1.5,
+    color: Colors.onSurface,
+    textTransform: 'uppercase',
   },
-  goalLabel: {
-    fontSize: 14,
+  reminderCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.borderGray,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 24,
+  },
+  reminderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  reminderText: {
+    fontSize: 13,
     fontWeight: 'bold',
     color: Colors.onSurface,
-  },
-  goalLabelActive: {
-    color: Colors.electric,
-  },
-  goalDesc: {
-    fontSize: 11,
-    color: Colors.mutedGray,
-    marginTop: 2,
   },
   sectionLabel: {
     fontSize: 12,
@@ -184,74 +157,46 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     marginBottom: 12,
   },
-  levelRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 28,
-  },
-  levelChip: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: Colors.borderGray,
-    backgroundColor: Colors.card,
-    alignItems: 'center',
-  },
-  levelChipActive: {
-    backgroundColor: Colors.electric,
-    borderColor: 'transparent',
-  },
-  levelChipText: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: Colors.mutedGray,
-    textTransform: 'uppercase',
-  },
-  levelChipTextActive: {
-    color: Colors.black,
-  },
-  stepperCard: {
+  notifCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 24,
+    gap: 12,
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.borderGray,
-    borderRadius: 14,
-    paddingVertical: 16,
-    marginBottom: 32,
-  },
-  stepperButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.surface,
-    borderWidth: 1,
-    borderColor: Colors.borderGray,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  stepperValue: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: Colors.electric,
-    minWidth: 40,
-    textAlign: 'center',
-  },
-  continueButton: {
-    backgroundColor: Colors.electric,
     borderRadius: 12,
-    paddingVertical: 16,
+    padding: 14,
+    marginBottom: 10,
+  },
+  notifIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: Colors.surface,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  continueButtonDisabled: {
-    backgroundColor: 'rgba(204, 255, 0, 0.5)',
+  notifBody: {
+    flex: 1,
   },
-  continueButtonText: {
-    color: Colors.black,
-    fontWeight: '900',
-    fontSize: 15,
+  notifTitle: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: Colors.onSurface,
+  },
+  notifSubtitle: {
+    fontSize: 11,
+    color: Colors.mutedGray,
+    marginTop: 2,
+  },
+  emptyBox: {
+    alignItems: 'center',
+    paddingVertical: 40,
+    gap: 12,
+  },
+  emptyText: {
+    color: Colors.mutedGray,
+    fontSize: 13,
+    textAlign: 'center',
   },
 });
