@@ -10,36 +10,60 @@ import {
   StyleSheet,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp, CommonActions } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../theme/colors';
 import { AuthStackParamList } from '../navigation/types';
 import { authApi } from '../api/auth';
 
-type ForgotPasswordNav = NativeStackNavigationProp<AuthStackParamList>;
+type ResetPasswordNav = NativeStackNavigationProp<AuthStackParamList>;
+type ResetPasswordRoute = RouteProp<AuthStackParamList, 'ResetPassword'>;
 
-export default function ForgotPasswordScreen() {
-  const navigation = useNavigation<ForgotPasswordNav>();
-  const [email, setEmail] = useState('');
+export default function ResetPasswordScreen() {
+  const navigation = useNavigation<ResetPasswordNav>();
+  const route = useRoute<ResetPasswordRoute>();
+  const resetToken = route.params?.resetToken || '';
+
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSend = async () => {
-    if (!email.trim()) {
-      setError('Vui lòng nhập email');
+  const handleReset = async () => {
+    if (!newPassword.trim() || !confirmPassword.trim()) {
+      setError('Vui lòng nhập đầy đủ thông tin');
       return;
     }
+    if (newPassword.length < 6) {
+      setError('Mật khẩu phải có ít nhất 6 ký tự');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setError('Mật khẩu xác nhận không khớp');
+      return;
+    }
+
     setError('');
     setIsLoading(true);
     try {
-      await authApi.forgotPassword(email.trim());
-      navigation.navigate('OtpVerify', { email: email.trim() });
+      await authApi.resetPassword(resetToken, newPassword);
+      // Reset xong, đưa thẳng về Login, xóa hết stack Auth cũ
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        })
+      );
     } catch (e: any) {
       const message =
-        e?.response?.data?.message === 'EmailNotExist'
-          ? 'Email chưa được đăng ký'
-          : 'Gửi mã xác thực thất bại, vui lòng thử lại';
+        e?.response?.data?.message === 'ResetTokenExpired'
+          ? 'Mã đã hết hạn, vui lòng thực hiện lại'
+          : e?.response?.data?.message === 'ResetTokenInvalid' ||
+            e?.response?.data?.message === 'ResetTokenAlreadyUsed'
+          ? 'Yêu cầu không hợp lệ, vui lòng thực hiện lại'
+          : 'Đặt lại mật khẩu thất bại, vui lòng thử lại';
       setError(message);
     } finally {
       setIsLoading(false);
@@ -58,12 +82,12 @@ export default function ForgotPasswordScreen() {
           </TouchableOpacity>
 
           <View style={styles.lockIconWrap}>
-            <Feather name="lock" size={28} color={Colors.electric} />
+            <Feather name="key" size={28} color={Colors.electric} />
           </View>
 
-          <Text style={styles.title}>QUÊN MẬT KHẨU</Text>
+          <Text style={styles.title}>ĐẶT LẠI MẬT KHẨU</Text>
           <Text style={styles.subtitle}>
-            Nhập email đã đăng ký. Chúng tôi sẽ gửi mã xác thực để bạn đặt lại mật khẩu.
+            Nhập mật khẩu mới cho tài khoản của bạn.
           </Text>
 
           {!!error && (
@@ -72,35 +96,48 @@ export default function ForgotPasswordScreen() {
             </View>
           )}
 
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            value={email}
-            onChangeText={setEmail}
-            placeholder="quy@example.com"
-            placeholderTextColor={Colors.mutedGray}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            style={styles.input}
-          />
+          <Text style={styles.label}>Mật khẩu mới</Text>
+          <View style={styles.inputWrap}>
+            <TextInput
+              value={newPassword}
+              onChangeText={setNewPassword}
+              placeholder="••••••••"
+              placeholderTextColor={Colors.mutedGray}
+              secureTextEntry={!showPassword}
+              style={styles.inputField}
+            />
+            <TouchableOpacity onPress={() => setShowPassword((s) => !s)} style={styles.eyeBtn}>
+              <Feather
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={18}
+                color={Colors.mutedGray}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.label}>Xác nhận mật khẩu</Text>
+          <View style={styles.inputWrap}>
+            <TextInput
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="••••••••"
+              placeholderTextColor={Colors.mutedGray}
+              secureTextEntry={!showPassword}
+              style={styles.inputField}
+            />
+          </View>
 
           <TouchableOpacity
-            onPress={handleSend}
+            onPress={handleReset}
             disabled={isLoading}
             style={[styles.btn, isLoading && { backgroundColor: Colors.electricDim }]}
           >
             {isLoading ? (
               <ActivityIndicator color={Colors.black} />
             ) : (
-              <Text style={styles.btnText}>Gửi mã xác thực</Text>
+              <Text style={styles.btnText}>Đặt lại mật khẩu</Text>
             )}
           </TouchableOpacity>
-
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>Đã có tài khoản? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.footerLink}>Đăng nhập</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -147,26 +184,29 @@ const styles = StyleSheet.create({
   },
   errorText: { color: '#FC8181', textAlign: 'center', fontWeight: '600' },
   label: { color: Colors.mutedGray, fontSize: 13, fontWeight: '700', marginBottom: 8 },
-  input: {
+  inputWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Colors.card,
     borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: 12,
+    marginBottom: 16,
+  },
+  inputField: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
     color: Colors.onSurface,
-    marginBottom: 4,
   },
+  eyeBtn: { paddingHorizontal: 14 },
   btn: {
     backgroundColor: Colors.electric,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 8,
   },
   btnText: { color: Colors.black, fontWeight: '900', fontSize: 16 },
-  footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 32 },
-  footerText: { color: Colors.mutedGray },
-  footerLink: { color: Colors.electric, fontWeight: '700' },
 });

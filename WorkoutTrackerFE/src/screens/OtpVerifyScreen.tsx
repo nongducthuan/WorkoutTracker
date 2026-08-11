@@ -13,6 +13,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../theme/colors';
 import { AuthStackParamList } from '../navigation/types';
+import { authApi } from '../api/auth';
 
 type OtpVerifyNav = NativeStackNavigationProp<AuthStackParamList>;
 type OtpVerifyRoute = RouteProp<AuthStackParamList, 'OtpVerify'>;
@@ -24,7 +25,7 @@ export default function OtpVerifyScreen() {
   const navigation = useNavigation<OtpVerifyNav>();
   const route = useRoute<OtpVerifyRoute>();
   const email = route.params?.email || '';
-
+  const [error, setError] = useState('');
   const [digits, setDigits] = useState<string[]>(Array(CODE_LENGTH).fill(''));
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,14 +55,25 @@ export default function OtpVerifyScreen() {
   const code = digits.join('');
   const isComplete = code.length === CODE_LENGTH;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsSubmitting(true);
-    // NOTE: backend chưa có endpoint xác thực OTP — đây là luồng UI mẫu.
-    // Khi API sẵn sàng, thay đoạn dưới bằng: await authApi.verifyResetCode(email, code)
-    setTimeout(() => {
+    setError('');
+    try {
+      const result = await authApi.verifyOtp(email, code);
+      navigation.navigate('ResetPassword', { resetToken: result.resetToken });
+    } catch (e: any) {
+      const message =
+        e?.response?.data?.message === 'OtpExpired'
+          ? 'Mã đã hết hạn, vui lòng gửi lại'
+          : e?.response?.data?.message === 'OtpIncorrect'
+            ? 'Mã không chính xác'
+            : e?.response?.data?.message === 'OtpAlreadyUsed'
+              ? 'Mã đã được sử dụng, vui lòng gửi lại'
+              : 'Xác thực thất bại, vui lòng thử lại';
+      setError(message);
+    } finally {
       setIsSubmitting(false);
-      navigation.navigate('Login');
-    }, 600);
+    }
   };
 
   const handleResend = () => {

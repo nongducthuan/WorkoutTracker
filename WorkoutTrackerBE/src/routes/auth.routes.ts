@@ -7,6 +7,9 @@ import {
   RegisterSchema,
   ChangePasswordSchema,
   UpdateProfileSchema,
+  ForgotPasswordSchema,
+  VerifyOtpSchema,
+  ResetPasswordSchema,
 } from "../dtos/auth.dto";
 
 const router = Router();
@@ -26,5 +29,8 @@ router.put(
   validate(UpdateProfileSchema),
   authController.updateProfile
 );
+router.post("/forgot-password", validate(ForgotPasswordSchema), authController.forgotPassword);
+router.post("/verify-otp", validate(VerifyOtpSchema), authController.verifyOtp);
+router.put("/reset-password", validate(ResetPasswordSchema), authController.resetPassword);
 
 export default router;

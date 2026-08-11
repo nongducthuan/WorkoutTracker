@@ -69,6 +69,24 @@ CREATE TABLE `workoutComments` (
 
     INDEX `IX_WorkoutComments_UserId`(`userId`),
     INDEX `IX_WorkoutComments_WorkoutId`(`workoutId`),
+    INDEX `IX_WorkoutComments_CreatedAt`(`Date`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `passwordResets` (
+    `id` CHAR(36) NOT NULL,
+    `userId` CHAR(36) NOT NULL,
+    `otpCode` VARCHAR(10) NOT NULL,
+    `otpExpiresAt` DATETIME(3) NOT NULL,
+    `isVerified` BOOLEAN NOT NULL DEFAULT false,
+    `resetToken` VARCHAR(255) NULL,
+    `tokenExpiresAt` DATETIME(3) NULL,
+    `isUsed` BOOLEAN NOT NULL DEFAULT false,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `IX_PasswordResets_UserId`(`userId`),
+    INDEX `IX_PasswordResets_ResetToken`(`resetToken`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -88,4 +106,7 @@ ALTER TABLE `scheduleWorkouts` ADD CONSTRAINT `scheduleWorkouts_workoutId_fkey` 
 ALTER TABLE `workoutComments` ADD CONSTRAINT `workoutComments_workoutId_fkey` FOREIGN KEY (`workoutId`) REFERENCES `workoutPlans`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `workoutComments` ADD CONSTRAINT `workoutComments_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `workoutComments` ADD CONSTRAINT `workoutComments_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `passwordResets` ADD CONSTRAINT `passwordResets_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

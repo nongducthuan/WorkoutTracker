@@ -57,4 +57,19 @@ export const authApi = {
     await AsyncStorage.removeItem(AUTH_TOKEN_KEY);
     await AsyncStorage.removeItem(AUTH_USER_KEY);
   },
+
+  forgotPassword: async (email: string) => {
+    const res = await apiClient.post('/auth/forgot-password', { email });
+    return res.data; 
+  },
+
+  verifyOtp: async (email: string, otpCode: string) => {
+    const res = await apiClient.post('/auth/verify-otp', { email, otpCode });
+    return res.data; 
+  },
+
+  resetPassword: async (resetToken: string, newPassword: string) => {
+    const res = await apiClient.put('/auth/reset-password', { resetToken, newPassword });
+    return res.data; 
+  },
 };

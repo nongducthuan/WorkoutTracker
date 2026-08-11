@@ -15,6 +15,7 @@ model User {
   password        String
   workoutPlans    WorkoutPlan[]
   workoutComments WorkoutComment[]
+  passwordResets  PasswordReset[]
 
   @@map("users")
 }
@@ -84,9 +85,27 @@ model WorkoutComment {
   comment   String      @db.Text
   createdAt DateTime    @default(now()) @map("Date")
   workout   WorkoutPlan @relation(fields: [workoutId], references: [id], onDelete: Cascade)
-  user      User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "IX_WorkoutComments_UserId")
   @@index([workoutId], map: "IX_WorkoutComments_WorkoutId")
+  @@index([createdAt], map: "IX_WorkoutComments_CreatedAt")
   @@map("workoutComments")
+}
+
+model PasswordReset {
+  id             String    @id @default(uuid()) @db.Char(36)
+  userId         String    @db.Char(36)
+  otpCode        String    @db.VarChar(10)
+  otpExpiresAt   DateTime
+  isVerified     Boolean   @default(false)
+  resetToken     String?   @db.VarChar(255)
+  tokenExpiresAt DateTime?
+  isUsed         Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "IX_PasswordResets_UserId")
+  @@index([resetToken], map: "IX_PasswordResets_ResetToken")
+  @@map("passwordResets")
 }

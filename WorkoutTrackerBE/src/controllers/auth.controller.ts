@@ -45,4 +45,33 @@ export class AuthController {
       next(error);
     }
   };
+
+  // ===== Thêm mới =====
+
+  forgotPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const result = await this.authService.forgotPassword(req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  verifyOtp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const result = await this.authService.verifyOtp(req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const result = await this.authService.resetPassword(req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
