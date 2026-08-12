@@ -18,7 +18,7 @@ export default function WorkoutsScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation<WorkoutsNav>();
   const { workouts, isLoading, createWorkout, deleteWorkout } = useWorkouts();
-  
+
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [name, setName] = useState('');
@@ -42,17 +42,26 @@ export default function WorkoutsScreen() {
   return (
     <View style={globalStyles.screen}>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <View style={globalStyles.sectionHeader}>
-          <Text style={globalStyles.heading}>{t('workouts.title')}</Text>
-          <TouchableOpacity onPress={() => setIsCreateOpen(true)} style={globalStyles.btnSmall}>
+        <View style={[globalStyles.sectionHeader, { flexWrap: 'wrap' }]}>
+          <Text
+            style={[globalStyles.heading, { flexShrink: 1, marginRight: 8 }]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
+            {t('workouts.title')}
+          </Text>
+          <TouchableOpacity
+            onPress={() => setIsCreateOpen(true)}
+            style={[globalStyles.btnSmall, { flexShrink: 0 }]}
+          >
             <Icon name="plus" size={16} color={Colors.black} />
             <Text style={globalStyles.btnSmallText}>{t('workouts.create_new')}</Text>
           </TouchableOpacity>
         </View>
 
         {workouts.length === 0 ? (
-          <EmptyState 
-            title="No Workouts Found" 
+          <EmptyState
+            title="No Workouts Found"
             description="Create your first workout routine to get started."
             actionText="Create Workout"
             onAction={() => setIsCreateOpen(true)}
@@ -61,8 +70,8 @@ export default function WorkoutsScreen() {
         ) : (
           <View style={{ gap: 16 }}>
             {workouts.map(w => (
-              <TouchableOpacity 
-                key={w.id} 
+              <TouchableOpacity
+                key={w.id}
                 style={globalStyles.card}
                 onPress={() => navigation.navigate('WorkoutDetail', { id: w.id })}
               >
@@ -96,12 +105,12 @@ export default function WorkoutsScreen() {
         </View>
       </Modal>
 
-      <ConfirmDialog 
-        isOpen={!!deleteId} 
-        title="Delete Workout" 
-        message="Are you sure? This will remove all associated schedules and exercises." 
-        onCancel={() => setDeleteId(null)} 
-        onConfirm={handleDelete} 
+      <ConfirmDialog
+        isOpen={!!deleteId}
+        title="Delete Workout"
+        message="Are you sure? This will remove all associated schedules and exercises."
+        onCancel={() => setDeleteId(null)}
+        onConfirm={handleDelete}
       />
     </View>
   );

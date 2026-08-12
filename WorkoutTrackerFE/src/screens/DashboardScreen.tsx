@@ -137,11 +137,11 @@ export default function DashboardScreen() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Notifications')}>
             <View style={styles.actionIcon}><Icon name="bell" size={20} color={Colors.onSurface} /></View>
-            <Text style={styles.actionText}>{t('dashboard.notifications', 'Thông báo')}</Text>
+            <Text style={styles.actionText}>{t('dashboard.notifications')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Achievements')}>
             <View style={styles.actionIcon}><Icon name="award" size={20} color={Colors.onSurface} /></View>
-            <Text style={styles.actionText}>{t('dashboard.achievements', 'Thành tích')}</Text>
+            <Text style={styles.actionText}>{t('dashboard.achievements')}</Text>
           </TouchableOpacity>
         </View>
       </View>
