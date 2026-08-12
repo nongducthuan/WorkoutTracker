@@ -55,15 +55,15 @@ export default function WorkoutsScreen() {
             style={[globalStyles.btnSmall, { flexShrink: 0 }]}
           >
             <Icon name="plus" size={16} color={Colors.black} />
-            <Text style={globalStyles.btnSmallText}>{t('workouts.create_new')}</Text>
+            <Text style={globalStyles.btnSmallText}>{t('workouts.new_workout')}</Text>
           </TouchableOpacity>
         </View>
 
         {workouts.length === 0 ? (
           <EmptyState
-            title="No Workouts Found"
-            description="Create your first workout routine to get started."
-            actionText="Create Workout"
+            title={t('workouts.empty_title')}
+            description={t('workouts.empty_desc')}
+            actionText={t('workouts.new_workout')}
             onAction={() => setIsCreateOpen(true)}
             icon={<Icon name="list" size={48} color={Colors.mutedGray} />}
           />
@@ -89,26 +89,26 @@ export default function WorkoutsScreen() {
       </ScrollView>
 
       {/* Create Modal */}
-      <Modal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} title="Create Workout">
+      <Modal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} title={t('workouts.modal_create_title')}>
         <View style={{ gap: 16 }}>
           <View>
-            <Text style={globalStyles.label}>Name</Text>
+            <Text style={globalStyles.label}>{t('workouts.name_label')}</Text>
             <TextInput style={globalStyles.input} value={name} onChangeText={setName} placeholder="Push Day, Leg Day..." placeholderTextColor={Colors.mutedGray} />
           </View>
           <View>
-            <Text style={globalStyles.label}>Description</Text>
+            <Text style={globalStyles.label}>{t('workouts.desc_label')}</Text>
             <TextInput style={globalStyles.input} value={desc} onChangeText={setDesc} placeholder="Optional description" placeholderTextColor={Colors.mutedGray} />
           </View>
           <TouchableOpacity style={globalStyles.btnPrimary} onPress={handleCreate}>
-            <Text style={globalStyles.btnPrimaryText}>Save</Text>
+            <Text style={globalStyles.btnPrimaryText}>{t('workouts.save_workout')}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
 
       <ConfirmDialog
         isOpen={!!deleteId}
-        title="Delete Workout"
-        message="Are you sure? This will remove all associated schedules and exercises."
+        title={t('workouts.delete_title')}
+        message={t('workouts.delete_confirm')}
         onCancel={() => setDeleteId(null)}
         onConfirm={handleDelete}
       />

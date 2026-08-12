@@ -45,7 +45,7 @@ export function OverviewHeader({
     <View style={styles.header}>
       <TouchableOpacity onPress={onGoBack} style={styles.backButton}>
         <Feather name="arrow-left" size={14} color={Colors.white} />
-        <Text style={styles.backText}>Back</Text>
+        <Text style={styles.backText}>{t('workout_detail.back')}</Text>
       </TouchableOpacity>
 
       {isEditing ? (
@@ -55,7 +55,7 @@ export function OverviewHeader({
             onChangeText={onChangeEditName}
             style={styles.editNameInput}
             placeholderTextColor={Colors.mutedGray}
-            placeholder="Workout Name"
+            placeholder={t('workouts.name_label')}
           />
           <TextInput
             value={editDescription}
@@ -64,14 +64,14 @@ export function OverviewHeader({
             numberOfLines={3}
             style={styles.editDescInput}
             placeholderTextColor={Colors.mutedGray}
-            placeholder="Description"
+            placeholder={t('workouts.desc_label')}
           />
           <View style={styles.editActionRow}>
             <TouchableOpacity onPress={onCancelEdit} style={styles.cancelButton}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>{t('common.cancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onSaveEdit} style={styles.saveButton}>
-              <Text style={styles.saveText}>Save Split</Text>
+              <Text style={styles.saveText}>{t('workout_detail.save_split')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -82,7 +82,7 @@ export function OverviewHeader({
               <Text style={styles.splitStudioText}>Split Studio</Text>
             </View>
             <Text style={styles.workoutName}>{workoutName}</Text>
-            <Text style={styles.workoutDesc}>{workoutDescription || 'No description provided.'}</Text>
+            <Text style={styles.workoutDesc}>{workoutDescription || t('workout_detail.no_description')}</Text>
           </View>
 
           <View style={styles.headerActionRow}>
@@ -94,14 +94,14 @@ export function OverviewHeader({
               >
                 <Feather name="check" size={14} color={Colors.black} />
                 <Text style={styles.completeText}>
-                  {isFinishing ? t('workout_detail.finishing', 'Finishing...') : t('workout_detail.finish_workout', 'Finish Workout')}
+                  {isFinishing ? t('workout_detail.finishing') : t('workout_detail.finish_workout')}
                 </Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity onPress={onStartEdit} style={styles.editButton}>
               <Feather name="edit-2" size={14} color={Colors.white} />
               <Text style={styles.editText}>
-                {t('workout_detail.edit_overview', 'Edit Details')}
+                {t('workout_detail.edit_overview')}
               </Text>
             </TouchableOpacity>
           </View>

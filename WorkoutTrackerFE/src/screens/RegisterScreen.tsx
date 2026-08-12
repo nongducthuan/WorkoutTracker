@@ -34,11 +34,11 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     if (!fullName || !userName || !email || !password) {
-      setError('Vui lòng điền đầy đủ thông tin');
+      setError(t('register.fill_all'));
       return;
     }
     if (password !== confirmPassword) {
-      setError('Mật khẩu không trùng khớp');
+      setError(t('register.password_mismatch'));
       return;
     }
     try {
@@ -47,7 +47,7 @@ export default function RegisterScreen() {
       await authApi.register(fullName, userName, email, password);
       navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
     } catch (err: any) {
-      setError(err.message || 'Đăng ký thất bại');
+      setError(err.message || t('register.register_failed'));
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +76,7 @@ export default function RegisterScreen() {
           <Text style={styles.logoSub}>{t('login.subtitle')}</Text>
         </View>
 
-        <Text style={styles.title}>Đăng Ký Tài Khoản</Text>
+        <Text style={styles.title}>{t('register.title_screen')}</Text>
 
         {!!error && (
           <View style={styles.errorBox}>
@@ -85,20 +85,20 @@ export default function RegisterScreen() {
         )}
 
         <View style={styles.form}>
-          <Text style={styles.label}>Họ và Tên</Text>
+          <Text style={styles.label}>{t('register.name_label')}</Text>
           <TextInput
             value={fullName}
             onChangeText={setFullName}
-            placeholder="Nhập họ và tên"
+            placeholder={t('register.name_placeholder')}
             placeholderTextColor={Colors.mutedGray}
             style={styles.input}
           />
 
-          <Text style={[styles.label, { marginTop: 16 }]}>Tên đăng nhập</Text>
+          <Text style={[styles.label, { marginTop: 16 }]}>{t('register.username_label')}</Text>
           <TextInput
             value={userName}
             onChangeText={setUserName}
-            placeholder="Nhập tên đăng nhập"
+            placeholder={t('register.username_placeholder')}
             placeholderTextColor={Colors.mutedGray}
             autoCapitalize="none"
             style={styles.input}
@@ -125,11 +125,11 @@ export default function RegisterScreen() {
             style={styles.input}
           />
 
-          <Text style={[styles.label, { marginTop: 16 }]}>Xác nhận mật khẩu</Text>
+          <Text style={[styles.label, { marginTop: 16 }]}>{t('register.confirm_password_label')}</Text>
           <TextInput
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-            placeholder="Nhập lại mật khẩu"
+            placeholder={t('register.confirm_password_hint')}
             placeholderTextColor={Colors.mutedGray}
             secureTextEntry
             style={styles.input}
@@ -143,15 +143,15 @@ export default function RegisterScreen() {
             {isLoading ? (
               <ActivityIndicator color={Colors.black} />
             ) : (
-              <Text style={styles.btnText}>Đăng Ký</Text>
+              <Text style={styles.btnText}>{t('register.sign_up')}</Text>
             )}
           </TouchableOpacity>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Đã có tài khoản? </Text>
+          <Text style={styles.footerText}>{t('register.already_account')} </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login' as any)}>
-            <Text style={styles.footerLink}>Đăng nhập</Text>
+            <Text style={styles.footerLink}>{t('register.log_in')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

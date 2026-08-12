@@ -28,7 +28,7 @@ export default function SettingsScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
             <Feather name="chevron-left" size={20} color={Colors.onSurface} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('profile.settings_title', 'CÀI ĐẶT')}</Text>
+          <Text style={styles.headerTitle}>{t('profile.settings_title')}</Text>
           <View style={styles.iconButton} />
         </View>
 
@@ -36,7 +36,7 @@ export default function SettingsScreen() {
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <Feather name="globe" size={18} color={Colors.mutedGray} />
-              <Text style={styles.settingItemText}>{t('settings.language', 'Ngôn ngữ')}</Text>
+              <Text style={styles.settingItemText}>{t('settings.language')}</Text>
             </View>
             <TouchableOpacity onPress={toggleLanguage} style={styles.settingActionBtn}>
               <Text style={styles.settingActionText}>{i18n.language === 'en' ? 'English' : 'Tiếng Việt'}</Text>
@@ -46,10 +46,10 @@ export default function SettingsScreen() {
           <View style={[styles.settingItem, styles.settingItemLast]}>
             <View style={styles.settingItemLeft}>
               <Feather name="moon" size={18} color={Colors.mutedGray} />
-              <Text style={styles.settingItemText}>{t('settings.theme', 'Giao diện')}</Text>
+              <Text style={styles.settingItemText}>{t('settings.theme')}</Text>
             </View>
             <View style={[styles.settingActionBtn, styles.settingActionBtnDisabled]}>
-              <Text style={styles.settingActionTextDisabled}>{t('settings.dark_mode_fixed', 'Dark Mode (Fixed)')}</Text>
+              <Text style={styles.settingActionTextDisabled}>{t('settings.dark_mode_fixed')}</Text>
             </View>
           </View>
         </View>
@@ -61,7 +61,7 @@ export default function SettingsScreen() {
           >
             <View style={styles.settingItemLeft}>
               <Feather name="lock" size={18} color={Colors.mutedGray} />
-              <Text style={styles.settingItemText}>{t('profile.change_password_title', 'Đổi mật khẩu')}</Text>
+              <Text style={styles.settingItemText}>{t('profile.change_password_title')}</Text>
             </View>
             <Feather name="chevron-right" size={18} color={Colors.mutedGray} />
           </TouchableOpacity>
@@ -74,7 +74,7 @@ export default function SettingsScreen() {
           >
             <View style={styles.settingItemLeft}>
               <Feather name="info" size={18} color={Colors.mutedGray} />
-              <Text style={styles.settingItemText}>{t('about.title', 'Về ứng dụng')}</Text>
+              <Text style={styles.settingItemText}>{t('about.title')}</Text>
             </View>
             <Text style={styles.versionInline}>2.1.0</Text>
           </TouchableOpacity>

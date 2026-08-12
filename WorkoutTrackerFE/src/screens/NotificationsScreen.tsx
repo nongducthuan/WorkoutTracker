@@ -43,7 +43,7 @@ export default function NotificationsScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
             <Feather name="chevron-left" size={20} color={Colors.onSurface} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('notifications.title', 'THÔNG BÁO')}</Text>
+          <Text style={styles.headerTitle}>{t('notifications.title')}</Text>
           <View style={styles.iconButton} />
         </View>
 
@@ -51,7 +51,7 @@ export default function NotificationsScreen() {
           <View style={styles.reminderLeft}>
             <Feather name="bell" size={18} color={Colors.electric} />
             <Text style={styles.reminderText}>
-              {t('notifications.remind_before_30', 'Nhắc trước 30 phút')}
+              {t('notifications.remind_before_30')}
             </Text>
           </View>
           <Switch
@@ -62,13 +62,13 @@ export default function NotificationsScreen() {
           />
         </View>
 
-        <Text style={styles.sectionLabel}>{t('notifications.upcoming', 'Sắp tới')}</Text>
+        <Text style={styles.sectionLabel}>{t('notifications.upcoming')}</Text>
 
         {upcoming.length === 0 ? (
           <View style={styles.emptyBox}>
             <Feather name="inbox" size={32} color={Colors.mutedGray} />
             <Text style={styles.emptyText}>
-              {t('notifications.empty', 'Chưa có lịch tập nào sắp tới.')}
+              {t('notifications.empty')}
             </Text>
           </View>
         ) : (
@@ -78,7 +78,7 @@ export default function NotificationsScreen() {
                 <Feather name="calendar" size={16} color={Colors.electric} />
               </View>
               <View style={styles.notifBody}>
-                <Text style={styles.notifTitle}>{s.workoutName || t('notifications.workout', 'Buổi tập')}</Text>
+                <Text style={styles.notifTitle}>{s.workoutName || t('notifications.workout')}</Text>
                 <Text style={styles.notifSubtitle}>
                   {new Date(s.scheduledDate).toLocaleString('vi-VN', {
                     weekday: 'short',

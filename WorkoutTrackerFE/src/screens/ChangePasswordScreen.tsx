@@ -76,13 +76,13 @@ export default function ChangePasswordScreen() {
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
               <Feather name="chevron-left" size={20} color={Colors.onSurface} />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>{t('profile.change_password_title', 'ĐỔI MẬT KHẨU')}</Text>
+            <Text style={styles.headerTitle}>{t('profile.change_password_title')}</Text>
             <View style={styles.iconButton} />
           </View>
 
           <View style={styles.formCard}>
             <View style={styles.fieldGroup}>
-              <Text style={styles.inputLabel}>{t('profile.current_password', 'Mật khẩu hiện tại')}</Text>
+              <Text style={styles.inputLabel}>{t('profile.current_password')}</Text>
               <Controller
                 control={control}
                 name="oldPassword"
@@ -107,7 +107,7 @@ export default function ChangePasswordScreen() {
             </View>
 
             <View style={styles.fieldGroup}>
-              <Text style={styles.inputLabel}>{t('profile.new_password', 'Mật khẩu mới')}</Text>
+              <Text style={styles.inputLabel}>{t('profile.new_password')}</Text>
               <Controller
                 control={control}
                 name="newPassword"
@@ -119,7 +119,7 @@ export default function ChangePasswordScreen() {
                       onChangeText={onChange}
                       secureTextEntry={!showNew}
                       style={styles.input}
-                      placeholder="•••••••• (Min 6)"
+                      placeholder="••••••••"
                       placeholderTextColor={Colors.mutedGray}
                     />
                     <TouchableOpacity onPress={() => setShowNew(!showNew)} style={styles.eyeButton}>
@@ -132,7 +132,7 @@ export default function ChangePasswordScreen() {
             </View>
 
             <View style={styles.fieldGroup}>
-              <Text style={styles.inputLabel}>{t('profile.confirm_new_password', 'Nhập lại mật khẩu mới')}</Text>
+              <Text style={styles.inputLabel}>{t('profile.confirm_new_password')}</Text>
               <Controller
                 control={control}
                 name="confirmPassword"
@@ -164,7 +164,7 @@ export default function ChangePasswordScreen() {
           >
             <Feather name="check-circle" size={16} color="#000000" />
             <Text style={styles.saveButtonText}>
-              {isSubmitting ? t('profile.updating', 'Updating...') : t('profile.update_password', 'Cập nhật mật khẩu')}
+              {isSubmitting ? t('profile.updating') : t('profile.update_password')}
             </Text>
           </TouchableOpacity>
         </ScrollView>

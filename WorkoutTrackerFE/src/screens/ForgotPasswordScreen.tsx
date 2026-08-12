@@ -12,6 +12,7 @@ import {
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../theme/colors';
 import { AuthStackParamList } from '../navigation/types';
@@ -20,6 +21,7 @@ import { authApi } from '../api/auth';
 type ForgotPasswordNav = NativeStackNavigationProp<AuthStackParamList>;
 
 export default function ForgotPasswordScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<ForgotPasswordNav>();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +29,7 @@ export default function ForgotPasswordScreen() {
 
   const handleSend = async () => {
     if (!email.trim()) {
-      setError('Vui lòng nhập email');
+      setError(t('forgot_password.enter_email_error'));
       return;
     }
     setError('');
@@ -38,8 +40,8 @@ export default function ForgotPasswordScreen() {
     } catch (e: any) {
       const message =
         e?.response?.data?.message === 'EmailNotExist'
-          ? 'Email chưa được đăng ký'
-          : 'Gửi mã xác thực thất bại, vui lòng thử lại';
+          ? t('forgot_password.email_not_registered')
+          : t('forgot_password.send_failed');
       setError(message);
     } finally {
       setIsLoading(false);
@@ -61,9 +63,9 @@ export default function ForgotPasswordScreen() {
             <Feather name="lock" size={28} color={Colors.electric} />
           </View>
 
-          <Text style={styles.title}>QUÊN MẬT KHẨU</Text>
+          <Text style={styles.title}>{t('forgot_password.title')}</Text>
           <Text style={styles.subtitle}>
-            Nhập email đã đăng ký. Chúng tôi sẽ gửi mã xác thực để bạn đặt lại mật khẩu.
+            {t('forgot_password.subtitle')}
           </Text>
 
           {!!error && (
@@ -72,11 +74,11 @@ export default function ForgotPasswordScreen() {
             </View>
           )}
 
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>{t('forgot_password.email_label')}</Text>
           <TextInput
             value={email}
             onChangeText={setEmail}
-            placeholder="quy@example.com"
+            placeholder={t('login.email_hint')}
             placeholderTextColor={Colors.mutedGray}
             autoCapitalize="none"
             keyboardType="email-address"
@@ -91,14 +93,14 @@ export default function ForgotPasswordScreen() {
             {isLoading ? (
               <ActivityIndicator color={Colors.black} />
             ) : (
-              <Text style={styles.btnText}>Gửi mã xác thực</Text>
+              <Text style={styles.btnText}>{t('forgot_password.send_code')}</Text>
             )}
           </TouchableOpacity>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Đã có tài khoản? </Text>
+            <Text style={styles.footerText}>{t('register.already_account')} </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.footerLink}>Đăng nhập</Text>
+              <Text style={styles.footerLink}>{t('register.log_in')}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -23,25 +23,25 @@ export default function AchievementsScreen() {
   const badges = [
     {
       icon: 'zap',
-      label: t('achievements.streak_7', 'Chuỗi 7 ngày'),
+      label: t('achievements.streak_7'),
       earned: streakDays >= 7,
       progress: `${Math.min(streakDays, 7)}/7`,
     },
     {
       icon: 'award',
-      label: t('achievements.workouts_10', '10 buổi tập'),
+      label: t('achievements.workouts_10'),
       earned: totalWorkouts >= 10,
       progress: `${Math.min(totalWorkouts, 10)}/10`,
     },
     {
       icon: 'trending-up',
-      label: t('achievements.workouts_50', '50 buổi tập'),
+      label: t('achievements.workouts_50'),
       earned: totalWorkouts >= 50,
       progress: `${Math.min(totalWorkouts, 50)}/50`,
     },
     {
       icon: 'star',
-      label: t('achievements.streak_30', 'Chuỗi 30 ngày'),
+      label: t('achievements.streak_30'),
       earned: streakDays >= 30,
       progress: `${Math.min(streakDays, 30)}/30`,
     },
@@ -54,7 +54,7 @@ export default function AchievementsScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
             <Feather name="chevron-left" size={20} color={Colors.onSurface} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('achievements.title', 'THÀNH TÍCH')}</Text>
+          <Text style={styles.headerTitle}>{t('achievements.title')}</Text>
           <View style={styles.iconButton} />
         </View>
 
@@ -62,20 +62,20 @@ export default function AchievementsScreen() {
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{isLoading ? '—' : totalWorkouts}</Text>
-            <Text style={styles.statLabel}>{t('achievements.total_workouts', 'Buổi tập')}</Text>
+            <Text style={styles.statLabel}>{t('achievements.total_workouts')}</Text>
           </View>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{isLoading ? '—' : streakDays}</Text>
-            <Text style={styles.statLabel}>{t('achievements.streak_days', 'Ngày liên tiếp')}</Text>
+            <Text style={styles.statLabel}>{t('achievements.streak_days')}</Text>
           </View>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{isLoading ? '—' : totalVolume}</Text>
-            <Text style={styles.statLabel}>{t('achievements.total_volume', 'Kg đã nâng')}</Text>
+            <Text style={styles.statLabel}>{t('achievements.total_volume')}</Text>
           </View>
         </View>
 
         {/* Badges grid */}
-        <Text style={styles.sectionLabel}>{t('achievements.badges', 'Huy hiệu')}</Text>
+        <Text style={styles.sectionLabel}>{t('achievements.badges')}</Text>
         <View style={styles.badgeGrid}>
           {badges.map((badge) => (
             <View

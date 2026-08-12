@@ -24,11 +24,24 @@ const LEVELS = [
 ];
 
 export default function OnboardingGoalScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<OnboardingGoalNav>();
   const [goal, setGoal] = useState('muscle');
   const [level, setLevel] = useState('beginner');
   const [daysPerWeek, setDaysPerWeek] = useState(3);
   const [isSaving, setIsSaving] = useState(false);
+
+  const GOALS = [
+    { key: 'muscle', icon: 'trending-up', label: t('onboarding.goal_muscle', 'Build Muscle'), desc: t('onboarding.step1_desc') },
+    { key: 'fat_loss', icon: 'activity', label: t('onboarding.goal_weight', 'Lose Weight'), desc: t('onboarding.step1_desc') },
+    { key: 'endurance', icon: 'wind', label: t('onboarding.goal_active', 'Stay Active'), desc: t('onboarding.step1_desc') },
+  ];
+
+  const LEVELS = [
+    { key: 'beginner', label: t('onboarding.level_beginner', 'Complete Beginner') },
+    { key: 'intermediate', label: t('onboarding.level_intermediate', 'Some Experience') },
+    { key: 'advanced', label: t('onboarding.level_expert', 'Experienced Athlete') },
+  ];
 
   const handleContinue = async () => {
     try {
@@ -46,8 +59,8 @@ export default function OnboardingGoalScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>Mục tiêu của bạn là gì?</Text>
-        <Text style={styles.subtitle}>Chọn 1 mục tiêu chính, bạn có thể đổi sau</Text>
+        <Text style={styles.title}>{t('onboarding.step1_title')} PULSE</Text>
+        <Text style={styles.subtitle}>{t('onboarding.step1_desc')}</Text>
 
         <View style={{ gap: 12, marginBottom: 28 }}>
           {GOALS.map((g) => {
@@ -71,7 +84,7 @@ export default function OnboardingGoalScreen() {
           })}
         </View>
 
-        <Text style={styles.sectionLabel}>Trình độ hiện tại</Text>
+        <Text style={styles.sectionLabel}>{t('onboarding.step2_title')}</Text>
         <View style={styles.levelRow}>
           {LEVELS.map((l) => {
             const active = level === l.key;
@@ -89,7 +102,7 @@ export default function OnboardingGoalScreen() {
           })}
         </View>
 
-        <Text style={styles.sectionLabel}>Số buổi tập mỗi tuần</Text>
+        <Text style={styles.sectionLabel}>{t('dashboard.days_label', 'Days')} / {t('dashboard.goal_label', 'goal')}</Text>
         <View style={styles.stepperCard}>
           <TouchableOpacity
             onPress={() => setDaysPerWeek((d) => Math.max(1, d - 1))}
@@ -111,7 +124,7 @@ export default function OnboardingGoalScreen() {
           disabled={isSaving}
           style={[styles.continueButton, isSaving && styles.continueButtonDisabled]}
         >
-          <Text style={styles.continueButtonText}>{isSaving ? 'Đang lưu...' : 'Tiếp tục'}</Text>
+          <Text style={styles.continueButtonText}>{isSaving ? t('profile.saving') : t('onboarding.use_template')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

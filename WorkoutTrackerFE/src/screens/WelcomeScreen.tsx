@@ -24,11 +24,11 @@ export default function WelcomeScreen() {
             </Svg>
             <Text style={styles.logoText}>PULSE</Text>
           </View>
-          <Text style={styles.logoSub}>{t('login.subtitle', 'Theo dõi buổi tập của bạn')}</Text>
+          <Text style={styles.logoSub}>{t('login.subtitle')}</Text>
         </View>
 
         <Text style={styles.heroTitle}>
-          {t('welcome.hero_title', 'Đạt mục tiêu thể hình\ncủa bạn, mỗi ngày.')}
+          {t('welcome.hero_title')}
         </Text>
 
         <View style={styles.buttonGroup}>
@@ -36,14 +36,14 @@ export default function WelcomeScreen() {
             onPress={() => navigation.navigate('Login')}
             style={styles.primaryBtn}
           >
-            <Text style={styles.primaryBtnText}>{t('welcome.login', 'Đăng nhập')}</Text>
+            <Text style={styles.primaryBtnText}>{t('welcome.login')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => navigation.navigate('Register')}
             style={styles.secondaryBtn}
           >
-            <Text style={styles.secondaryBtnText}>{t('welcome.register', 'Tạo tài khoản')}</Text>
+            <Text style={styles.secondaryBtnText}>{t('welcome.register')}</Text>
           </TouchableOpacity>
         </View>
       </View>

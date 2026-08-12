@@ -78,7 +78,7 @@ export default function EditProfileScreen() {
               <Feather name="chevron-left" size={20} color={Colors.onSurface} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>
-              {t('profile.edit_title', 'CHỈNH SỬA HỒ SƠ')}
+              {t('profile.edit_title')}
             </Text>
             <View style={styles.iconButton} />
           </View>
@@ -91,7 +91,7 @@ export default function EditProfileScreen() {
 
           <View style={styles.formCard}>
             <View style={styles.fieldGroup}>
-              <Text style={styles.inputLabel}>{t('profile.full_name', 'Họ và Tên')}</Text>
+              <Text style={styles.inputLabel}>{t('profile.full_name')}</Text>
               <Controller
                 control={control}
                 name="fullName"
@@ -112,8 +112,8 @@ export default function EditProfileScreen() {
 
             <View style={styles.fieldGroup}>
               <View style={styles.emailLabelRow}>
-                <Text style={styles.inputLabel}>{t('profile.email', 'Email')}</Text>
-                <Text style={styles.emailDisabledLabel}>{t('profile.cannot_change', 'Cannot be changed')}</Text>
+                <Text style={styles.inputLabel}>{t('profile.email')}</Text>
+                <Text style={styles.emailDisabledLabel}>{t('profile.cannot_change')}</Text>
               </View>
               <View style={[styles.inputContainer, styles.inputDisabled]}>
                 <Feather name="mail" size={16} color={Colors.mutedGray} style={styles.inputIcon} />
@@ -134,7 +134,7 @@ export default function EditProfileScreen() {
           >
             <Feather name="save" size={16} color="#000000" />
             <Text style={styles.saveButtonText}>
-              {isSubmitting ? t('profile.saving', 'Saving...') : t('profile.save_changes', 'Lưu thay đổi')}
+              {isSubmitting ? t('profile.saving') : t('profile.save_changes')}
             </Text>
           </TouchableOpacity>
         </ScrollView>

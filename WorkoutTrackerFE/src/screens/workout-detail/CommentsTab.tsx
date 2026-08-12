@@ -41,18 +41,18 @@ export function CommentsTab({
   return (
     <View style={styles.paneContent}>
       <Text style={styles.paneTitle}>
-        {t('workout_detail.athletic_bulletin', 'Athletic Bulletin')}
+        {t('workout_detail.athletic_bulletin')}
       </Text>
 
       {/* Comment Input */}
       <View style={styles.cardContainerComment}>
         <Text style={styles.commentInputTitle}>
-          {t('workout_detail.share_notes', 'Share Notes or Feedback')}
+          {t('workout_detail.share_notes')}
         </Text>
         <TextInput
           value={commentInput}
           onChangeText={onChangeCommentInput}
-          placeholder={t('workout_detail.comment_placeholder', 'Log energy levels, diet, split adjustments...')}
+          placeholder={t('workout_detail.comment_placeholder')}
           placeholderTextColor={Colors.mutedGray}
           multiline
           numberOfLines={3}
@@ -65,7 +65,7 @@ export function CommentsTab({
         >
           <Feather name="message-square" size={14} color={!commentInput.trim() ? Colors.white : Colors.black} />
           <Text style={[styles.postButtonText, !commentInput.trim() ? styles.textWhite : styles.textBlack]}>
-            {t('workout_detail.post_comment', 'Post Log')}
+            {t('workout_detail.post_comment')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -86,7 +86,7 @@ export function CommentsTab({
                   <View style={styles.commentHeader}>
                     <View>
                       <Text style={styles.commentAuthor}>
-                        {c.userName || t('workout_detail.anonymous_athlete', 'Anonymous Athlete')}
+                        {c.userName || t('workout_detail.anonymous_athlete')}
                       </Text>
                       <Text style={styles.commentDate}>
                         {c.createdAt ? new Date(c.createdAt).toLocaleDateString() : ''}
@@ -116,10 +116,10 @@ export function CommentsTab({
                       />
                       <View style={styles.editCommentActions}>
                         <TouchableOpacity onPress={onCancelEditComment} style={styles.cancelCommentBtn}>
-                          <Text style={styles.cancelCommentText}>Cancel</Text>
+                          <Text style={styles.cancelCommentText}>{t('common.cancel')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => onSaveEditComment(c.id)} style={styles.saveCommentBtn}>
-                          <Text style={styles.saveCommentText}>Save</Text>
+                          <Text style={styles.saveCommentText}>{t('workout_detail.save')}</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -132,7 +132,7 @@ export function CommentsTab({
           })}
         </View>
       ) : (
-        <Text style={styles.noCommentsText}>No comments yet.</Text>
+        <Text style={styles.noCommentsText}>{t('workout_detail.no_comments')}</Text>
       )}
     </View>
   );

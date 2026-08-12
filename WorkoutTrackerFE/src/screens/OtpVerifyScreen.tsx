@@ -10,6 +10,7 @@ import {
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../theme/colors';
 import { AuthStackParamList } from '../navigation/types';
@@ -22,6 +23,7 @@ const CODE_LENGTH = 6;
 const RESEND_SECONDS = 42;
 
 export default function OtpVerifyScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<OtpVerifyNav>();
   const route = useRoute<OtpVerifyRoute>();
   const email = route.params?.email || '';
@@ -64,12 +66,12 @@ export default function OtpVerifyScreen() {
     } catch (e: any) {
       const message =
         e?.response?.data?.message === 'OtpExpired'
-          ? 'Mã đã hết hạn, vui lòng gửi lại'
+          ? t('otp_verify.expired')
           : e?.response?.data?.message === 'OtpIncorrect'
-            ? 'Mã không chính xác'
+            ? t('otp_verify.incorrect')
             : e?.response?.data?.message === 'OtpAlreadyUsed'
-              ? 'Mã đã được sử dụng, vui lòng gửi lại'
-              : 'Xác thực thất bại, vui lòng thử lại';
+              ? t('otp_verify.already_used')
+              : t('otp_verify.failed');
       setError(message);
     } finally {
       setIsSubmitting(false);
@@ -93,10 +95,10 @@ export default function OtpVerifyScreen() {
           <Feather name="chevron-left" size={20} color={Colors.onSurface} />
         </TouchableOpacity>
 
-        <Text style={styles.title}>NHẬP MÃ XÁC THỰC</Text>
+        <Text style={styles.title}>{t('otp_verify.title')}</Text>
         <Text style={styles.subtitle}>
-          Mã gồm 6 số đã gửi tới{'\n'}
-          <Text style={styles.emailText}>{email || 'email của bạn'}</Text>
+          {t('otp_verify.subtitle')}{'\n'}
+          <Text style={styles.emailText}>{email || t('otp_verify.default_email')}</Text>
         </Text>
 
         <View style={styles.codeRow}>
@@ -117,7 +119,7 @@ export default function OtpVerifyScreen() {
         </View>
 
         <Text style={styles.timerText}>
-          Gửi lại mã sau {secondsLeft > 0 ? `${mm}:${ss}` : ''}
+          {t('otp_verify.resend_in')} {secondsLeft > 0 ? `${mm}:${ss}` : ''}
         </Text>
 
         <TouchableOpacity
@@ -128,13 +130,13 @@ export default function OtpVerifyScreen() {
           {isSubmitting ? (
             <ActivityIndicator color={Colors.black} />
           ) : (
-            <Text style={styles.btnText}>Xác nhận</Text>
+            <Text style={styles.btnText}>{t('otp_verify.confirm')}</Text>
           )}
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleResend} disabled={secondsLeft > 0} style={styles.resendRow}>
           <Text style={[styles.resendText, secondsLeft > 0 && styles.resendTextDisabled]}>
-            Không nhận được mã? Gửi lại
+            {t('otp_verify.didnt_receive')}
           </Text>
         </TouchableOpacity>
       </View>

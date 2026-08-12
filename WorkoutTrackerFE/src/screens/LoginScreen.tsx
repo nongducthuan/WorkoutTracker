@@ -96,7 +96,7 @@ export default function LoginScreen() {
             onPress={() => (navigation as any).navigate('ForgotPassword')}
             style={styles.forgotPasswordLink}
           >
-            <Text style={styles.forgotPasswordText}>{t('login.forgot_password', 'Quên mật khẩu?')}</Text>
+            <Text style={styles.forgotPasswordText}>{t('login.forgot_password')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

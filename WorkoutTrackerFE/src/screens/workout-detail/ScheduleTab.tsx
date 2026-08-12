@@ -21,12 +21,12 @@ export function ScheduleTab({ schedules, sortedSchedules, onAddSchedule, onDelet
     <View style={styles.paneContent}>
       <View style={styles.paneHeader}>
         <Text style={styles.paneTitle}>
-          {t('workout_detail.calendar_split', 'Calendar Split')}
+          {t('workout_detail.calendar_split')}
         </Text>
         <TouchableOpacity onPress={onAddSchedule} style={styles.addSchedButton}>
           <Feather name="calendar" size={14} color={Colors.white} />
           <Text style={styles.addSchedText}>
-            {t('workout_detail.add_schedule', 'Schedule')}
+            {t('workout_detail.add_schedule')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -66,8 +66,8 @@ export function ScheduleTab({ schedules, sortedSchedules, onAddSchedule, onDelet
         </View>
       ) : (
         <EmptyState
-          title="No Schedules"
-          description="Schedule this workout to see it in your calendar."
+          title={t('schedule.empty_title')}
+          description={t('schedule.empty_desc')}
           icon={<Feather name="calendar" size={32} color={Colors.mutedGray} />}
         />
       )}

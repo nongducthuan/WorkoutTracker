@@ -274,7 +274,7 @@ export default function ScheduleScreen() {
           <View style={styles.modalActions}>
             <TouchableOpacity onPress={() => setReschedulingId(null)} style={styles.cancelButton}>
               <Text style={styles.cancelButtonText}>
-                {t('schedule.cancel')}
+                {t('common.cancel')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleSaveReschedule} style={styles.saveButton}>

@@ -34,7 +34,8 @@
       "sign_up": "Đăng ký",
       "expired_session": "Phiên đăng nhập đã hết hạn — vui lòng đăng nhập lại",
       "welcome_back": "Chào mừng trở lại, {{name}}!",
-      "login_failed": "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập."
+      "login_failed": "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.",
+      "forgot_password": "Quên mật khẩu?"
     },
     "register": {
       "subtitle": "Hệ thống hiệu suất thể thao",
@@ -56,19 +57,27 @@
       "already_account": "Đã có tài khoản?",
       "log_in": "Đăng nhập",
       "welcome": "Chào mừng đến với AscleX, {{name}}! Tài khoản đã được tạo.",
-      "register_failed": "Đăng ký thất bại. Tên đăng nhập hoặc email có thể đã được sử dụng."
+      "register_failed": "Đăng ký thất bại. Tên đăng nhập hoặc email có thể đã được sử dụng.",
+      "title_screen": "Đăng Ký Tài Khoản",
+      "fill_all": "Vui lòng điền đầy đủ thông tin",
+      "password_mismatch": "Mật khẩu không trùng khớp",
+      "confirm_password_label": "Xác nhận mật khẩu",
+      "confirm_password_hint": "Nhập lại mật khẩu",
+      "name_placeholder": "Nhập họ và tên",
+      "username_placeholder": "Nhập tên đăng nhập",
+      "sign_up": "ĐĂNG KÝ TÀI KHOẢN"
     },
     "workouts": {
       "title": "Chương trình tập luyện",
       "subtitle": "Xây dựng, lên lịch và thực hiện chương trình tùy chỉnh",
-      "new_workout": "Tạo bài tập",
+      "new_workout": "Tạo buổi tập mới",
       "routine_profile": "Hồ sơ chương trình",
       "enter_studio": "Vào phòng tập",
       "no_description": "Chưa có mô tả.",
       "empty_title": "Danh sách bài tập trống",
       "empty_desc": "Tạo một bài tập để bắt đầu theo dõi tiến độ.",
       "empty_action": "+ Tạo bài tập đầu tiên",
-      "modal_create_title": "Tạo chương trình mới",
+      "modal_create_title": "Tạo giáo án mới",
       "modal_edit_title": "Chỉnh sửa chương trình",
       "name_label": "Tên bài tập",
       "name_valid": "✓ Hợp lệ",
@@ -76,7 +85,6 @@
       "desc_label": "Mô tả bài tập",
       "desc_valid": "✓ Hợp lệ",
       "desc_hint": "Mô tả mục tiêu hoặc trọng tâm của bài tập này.",
-      "cancel": "Hủy",
       "saving": "Đang lưu…",
       "saved": "✓ Đã lưu!",
       "try_again": "Thử lại",
@@ -85,7 +93,8 @@
       "delete_title": "Xóa chương trình tập?",
       "delete_message": "Cảnh báo: Thao tác này sẽ xóa vĩnh viễn chương trình này, tất cả bài tập đã ghi, lịch nhắc nhở và bình luận liên quan. Không thể hoàn tác.",
       "edit_title": "Chỉnh sửa tổng quan",
-      "delete_button": "Xóa chương trình"
+      "delete_button": "Xóa chương trình",
+      "delete_confirm": "Bạn có chắc chắn? Thao tác này sẽ xóa tất cả lịch tập và bài tập liên quan."
     },
     "exercises": {
       "title": "Thư viện động tác",
@@ -116,7 +125,6 @@
       "empty_action": "Lên lịch bài tập →",
       "reschedule_modal_title": "Điều chỉnh ngày tập",
       "reschedule_label": "Chọn thời gian mới",
-      "cancel": "Hủy",
       "save_schedule": "Lưu lịch",
       "delete_title": "Hủy buổi tập sắp tới?",
       "delete_message": "Bạn có chắc muốn hủy lịch nhắc nhở này? Lịch này sẽ bị xóa vĩnh viễn.",
@@ -211,7 +219,12 @@
       "greeting_afternoon": "Chào buổi chiều",
       "greeting_evening": "Chào buổi tối",
       "goal_label": "mục tiêu",
-      "days_label": "Ngày"
+      "days_label": "Ngày",
+      "quick_action": "Thao tác nhanh",
+      "profile": "Hồ sơ",
+      "notifications": "Thông báo",
+      "achievements": "Thành tựu",
+      "muscle_recovery": "Phục hồi cơ bắp"
     },
     "onboarding": {
       "seeding": "Đang tạo mẫu khởi đầu...",
@@ -251,10 +264,9 @@
       "exercise_modal_add": "Thêm bài tập vào chương trình",
       "exercise_modal_edit": "Chỉnh sửa bài tập",
       "exercise_label": "Bài tập",
-      "sets_label": "Số hiệp",
-      "reps_label": "Số lần",
-      "weight_label": "Cân nặng (kg)",
-      "cancel": "Hủy",
+      "sets_label": "Hiệp",
+      "reps_label": "Lần",
+      "weight_label": "Mức tạ (kg)",
       "saving": "Đang lưu…",
       "saved": "✓ Đã lưu",
       "try_again": "Thử lại",
@@ -318,12 +330,23 @@
       "search_library_hint": "Tìm kiếm thư viện động tác để tập trung vào các nhóm cơ cụ thể.",
       "sets_hint": "Bạn sẽ tập bao nhiêu hiệp? (ví dụ: 3)",
       "reps_hint": "Số lần lặp mỗi hiệp? (ví dụ: 10–12)",
-      "weight_hint": "Cân nặng bằng kg. Chọn 0 nếu là tay không/trọng lượng cơ thể.",
+      "weight_hint": "Mức tạ tính bằng kg. Chọn 0 nếu là tay không/trọng lượng cơ thể.",
       "logging": "Đang lưu...",
       "logged": "✓ Đã lưu!",
       "anatomical_confirm": "Xác nhận giải phẫu",
       "rest_timer_active": "Đồng hồ nghỉ đang hoạt động",
-      "skip_rest": "Bỏ qua nghỉ"
+      "skip_rest": "Bỏ qua nghỉ",
+      "calendar_split": "Lịch phân chia",
+      "edit_movement": "Chỉnh sửa động tác",
+      "add_movement": "Thêm động tác",
+      "exercise_library": "Thư viện động tác",
+      "sets": "Hiệp",
+      "reps": "Lần",
+      "weight": "Mức tạ",
+      "save_movement": "Lưu động tác",
+      "save_split": "Lưu giáo án",
+      "no_description": "Chưa có mô tả.",
+      "schedule_modal_title": "Lên lịch tập"
     },
     "auth": {
       "validation": {
@@ -369,7 +392,99 @@
       "new_password": "Mật khẩu mới",
       "confirm_new_password": "Xác nhận mật khẩu mới",
       "updating": "Đang cập nhật...",
-      "update_password": "Cập nhật mật khẩu"
+      "update_password": "Cập nhật mật khẩu",
+      "edit_title": "Chỉnh sửa hồ sơ",
+      "cannot_change": "Tên đăng nhập và email không thể thay đổi",
+      "change_password_title": "Đổi mật khẩu",
+      "settings_title": "Cài đặt",
+      "logout_confirm_title": "Đăng xuất",
+      "logout_confirm_desc": "Bạn có chắc chắn muốn đăng xuất không?",
+      "menu_edit_profile": "Chỉnh sửa hồ sơ",
+      "menu_weekly_goal": "Mục tiêu tuần",
+      "menu_settings": "Cài đặt hệ thống",
+      "stat_workouts": "Buổi tập đã xong",
+      "stat_schedules": "Lịch tập"
+    },
+    "common": {
+      "cancel": "Hủy",
+      "confirm": "Xác nhận",
+      "save": "Lưu",
+      "back": "Quay lại",
+      "delete": "Xóa"
+    },
+    "forgot_password": {
+      "title": "QUÊN MẬT KHẨU",
+      "subtitle": "Nhập email đã đăng ký. Chúng tôi sẽ gửi mã xác thực để bạn đặt lại mật khẩu.",
+      "email_label": "Email",
+      "send_code": "Gửi mã xác thực",
+      "enter_email_error": "Vui lòng nhập email",
+      "email_not_registered": "Email chưa được đăng ký",
+      "send_failed": "Gửi mã xác thực thất bại, vui lòng thử lại"
+    },
+    "otp_verify": {
+      "title": "NHẬP MÃ XÁC THỰC",
+      "subtitle": "Mã gồm 6 số đã gửi tới",
+      "default_email": "email của bạn",
+      "resend_in": "Gửi lại mã sau",
+      "confirm": "Xác nhận",
+      "didnt_receive": "Không nhận được mã? Gửi lại",
+      "expired": "Mã đã hết hạn, vui lòng gửi lại",
+      "incorrect": "Mã không chính xác",
+      "already_used": "Mã đã được sử dụng, vui lòng gửi lại",
+      "failed": "Xác thực thất bại, vui lòng thử lại"
+    },
+    "reset_password": {
+      "title": "ĐẶT LẠI MẬT KHẨU",
+      "subtitle": "Nhập mật khẩu mới cho tài khoản của bạn.",
+      "new_password": "Mật khẩu mới",
+      "confirm_password": "Xác nhận mật khẩu",
+      "submit": "Đặt lại mật khẩu",
+      "fill_all": "Vui lòng nhập đầy đủ thông tin",
+      "min_length": "Mật khẩu phải có ít nhất 6 ký tự",
+      "mismatch": "Mật khẩu xác nhận không khớp",
+      "token_expired": "Mã đã hết hạn, vui lòng thực hiện lại",
+      "token_invalid": "Yêu cầu không hợp lệ, vui lòng thực hiện lại",
+      "failed": "Đặt lại mật khẩu thất bại, vui lòng thử lại"
+    },
+    "about": {
+      "title": "Về ứng dụng",
+      "faq": "Hỏi đáp & Hỗ trợ"
+    },
+    "settings": {
+      "version": "Phiên bản",
+      "language": "Ngôn ngữ",
+      "theme": "Giao diện",
+      "dark_mode_fixed": "Chế độ tối (Cố định)"
+    },
+    "achievements": {
+      "title": "Thành tựu & Huy hiệu",
+      "streak_days": "Chuỗi ngày liên tiếp",
+      "total_workouts": "Tổng số buổi tập",
+      "total_volume": "Tổng khối lượng (kg)",
+      "badges": "Huy hiệu đã đạt",
+      "streak_7": "Chuỗi 7 ngày",
+      "streak_30": "Chuỗi 30 ngày",
+      "workouts_10": "Hoàn thành 10 buổi tập",
+      "workouts_50": "Hoàn thành 50 buổi tập"
+    },
+    "notifications": {
+      "title": "Thông báo",
+      "remind_before_30": "Nhắc nhở: 30 phút trước buổi tập",
+      "upcoming": "Buổi tập sắp tới",
+      "empty": "Hiện chưa có thông báo nào",
+      "workout": "Nhắc nhở tập luyện"
+    },
+    "weekly_goal": {
+      "title": "Mục tiêu hàng tuần",
+      "description": "Đặt số buổi tập bạn muốn hoàn thành mỗi tuần.",
+      "sessions_per_week": "Buổi / Tuần",
+      "save": "Lưu mục tiêu",
+      "saved": "Đã lưu mục tiêu thành công!"
+    },
+    "welcome": {
+      "hero_title": "Nâng Tầm Thể Lực",
+      "login": "Đăng nhập",
+      "register": "Đăng ký"
     }
   }
 }

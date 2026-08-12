@@ -34,12 +34,12 @@ export default function ProfileScreen() {
 
   const handleLogout = () => {
     Alert.alert(
-      t('profile.logout_confirm_title', 'Log out'),
-      t('profile.logout_confirm_desc', 'Are you sure you want to log out?'),
+      t('profile.logout_confirm_title'),
+      t('profile.logout_confirm_desc'),
       [
-        { text: t('common.cancel', 'Cancel'), style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: t('auth.logout', 'Log out'),
+          text: t('logout'),
           style: 'destructive',
           onPress: async () => {
             await authApi.logout();
@@ -57,17 +57,17 @@ export default function ProfileScreen() {
   }[] = [
     {
       icon: 'edit-3',
-      label: t('profile.menu_edit_profile', 'Chỉnh sửa hồ sơ'),
+      label: t('profile.menu_edit_profile'),
       onPress: () => navigation.navigate('EditProfile'),
     },
     {
       icon: 'target',
-      label: t('profile.menu_weekly_goal', 'Mục tiêu tuần'),
+      label: t('profile.menu_weekly_goal'),
       onPress: () => navigation.navigate('WeeklyGoal'),
     },
     {
       icon: 'sliders',
-      label: t('profile.menu_settings', 'Cài đặt'),
+      label: t('profile.menu_settings'),
       onPress: () => navigation.navigate('Settings'),
     },
   ];
@@ -82,7 +82,7 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
             <Feather name="chevron-left" size={20} color={Colors.onSurface} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('profile.title', 'HỒ SƠ')}</Text>
+          <Text style={styles.headerTitle}>{t('profile.title')}</Text>
           <View style={styles.iconButton} />
         </View>
 
@@ -101,11 +101,11 @@ export default function ProfileScreen() {
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{workouts.length}</Text>
-            <Text style={styles.statLabel}>{t('profile.stat_workouts', 'Giáo án')}</Text>
+            <Text style={styles.statLabel}>{t('profile.stat_workouts')}</Text>
           </View>
           <View style={styles.statCard}>
             <Text style={styles.statValue}>{schedules.length}</Text>
-            <Text style={styles.statLabel}>{t('profile.stat_schedules', 'Buổi đã lên lịch')}</Text>
+            <Text style={styles.statLabel}>{t('profile.stat_schedules')}</Text>
           </View>
         </View>
 
@@ -131,7 +131,7 @@ export default function ProfileScreen() {
 
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Feather name="log-out" size={16} color={Colors.electricOrange} />
-          <Text style={styles.logoutButtonText}>{t('auth.logout', 'Đăng xuất')}</Text>
+          <Text style={styles.logoutButtonText}>{t('logout')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

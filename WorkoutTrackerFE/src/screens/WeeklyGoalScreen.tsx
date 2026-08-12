@@ -34,7 +34,7 @@ export default function WeeklyGoalScreen() {
     try {
       setIsSaving(true);
       await AsyncStorage.setItem(WEEKLY_GOAL_KEY, String(goal));
-      Alert.alert(t('weekly_goal.saved', 'Đã lưu mục tiêu tuần!'));
+      Alert.alert(t('weekly_goal.saved'));
       navigation.goBack();
     } finally {
       setIsSaving(false);
@@ -48,13 +48,13 @@ export default function WeeklyGoalScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
             <Feather name="chevron-left" size={20} color={Colors.onSurface} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('weekly_goal.title', 'MỤC TIÊU TUẦN')}</Text>
+          <Text style={styles.headerTitle}>{t('weekly_goal.title')}</Text>
           <View style={styles.iconButton} />
         </View>
 
         <View style={styles.card}>
           <Text style={styles.description}>
-            {t('weekly_goal.description', 'Số buổi tập mỗi tuần bạn muốn đặt mục tiêu.')}
+            {t('weekly_goal.description')}
           </Text>
 
           <View style={styles.stepperRow}>
@@ -77,7 +77,7 @@ export default function WeeklyGoalScreen() {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.goalLabel}>{t('weekly_goal.sessions_per_week', 'buổi / tuần')}</Text>
+          <Text style={styles.goalLabel}>{t('weekly_goal.sessions_per_week')}</Text>
         </View>
 
         <TouchableOpacity
@@ -87,7 +87,7 @@ export default function WeeklyGoalScreen() {
         >
           <Feather name="check-circle" size={16} color="#000000" />
           <Text style={styles.saveButtonText}>
-            {isSaving ? t('profile.saving', 'Saving...') : t('weekly_goal.save', 'Lưu mục tiêu')}
+            {isSaving ? t('profile.saving') : t('weekly_goal.save')}
           </Text>
         </TouchableOpacity>
       </ScrollView>

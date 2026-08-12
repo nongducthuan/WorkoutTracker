@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { Controller, Control } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from '../../../components/Modal';
 import { Colors } from '../../theme/colors';
@@ -17,11 +18,12 @@ interface ExerciseFormModalProps {
 }
 
 export function ExerciseFormModal({ isOpen, onClose, isEditing, control, onSubmit, submitStatus }: ExerciseFormModalProps) {
+  const { t } = useTranslation();
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={isEditing ? 'Edit Movement' : 'Add Movement'}>
+    <Modal isOpen={isOpen} onClose={onClose} title={isEditing ? t('workout_detail.edit_movement') : t('workout_detail.add_movement')}>
       <View style={styles.modalContent}>
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Exercise Library</Text>
+          <Text style={styles.inputLabel}>{t('workout_detail.exercise_library')}</Text>
           <Controller
             control={control}
             name="exerciseId"
@@ -46,7 +48,7 @@ export function ExerciseFormModal({ isOpen, onClose, isEditing, control, onSubmi
 
         <View style={styles.rowGap4}>
           <View style={styles.flex1}>
-            <Text style={styles.inputLabel}>Sets</Text>
+            <Text style={styles.inputLabel}>{t('workout_detail.sets')}</Text>
             <Controller
               control={control}
               name="sets"
@@ -61,7 +63,7 @@ export function ExerciseFormModal({ isOpen, onClose, isEditing, control, onSubmi
             />
           </View>
           <View style={styles.flex1}>
-            <Text style={styles.inputLabel}>Reps</Text>
+            <Text style={styles.inputLabel}>{t('workout_detail.reps')}</Text>
             <Controller
               control={control}
               name="repetitions"
@@ -76,7 +78,7 @@ export function ExerciseFormModal({ isOpen, onClose, isEditing, control, onSubmi
             />
           </View>
           <View style={styles.flex1}>
-            <Text style={styles.inputLabel}>Weight</Text>
+            <Text style={styles.inputLabel}>{t('workout_detail.weight')}</Text>
             <Controller
               control={control}
               name="weight"
@@ -98,7 +100,7 @@ export function ExerciseFormModal({ isOpen, onClose, isEditing, control, onSubmi
           style={styles.modalSaveBtn}
         >
           <Text style={styles.modalSaveText}>
-            {submitStatus === 'loading' ? 'Saving...' : 'Save Movement'}
+            {submitStatus === 'loading' ? t('profile.saving') : t('workout_detail.save_movement')}
           </Text>
         </TouchableOpacity>
       </View>

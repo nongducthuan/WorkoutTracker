@@ -12,6 +12,7 @@ import {
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation, useRoute, RouteProp, CommonActions } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../theme/colors';
 import { AuthStackParamList } from '../navigation/types';
@@ -21,6 +22,7 @@ type ResetPasswordNav = NativeStackNavigationProp<AuthStackParamList>;
 type ResetPasswordRoute = RouteProp<AuthStackParamList, 'ResetPassword'>;
 
 export default function ResetPasswordScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<ResetPasswordNav>();
   const route = useRoute<ResetPasswordRoute>();
   const resetToken = route.params?.resetToken || '';
@@ -33,15 +35,15 @@ export default function ResetPasswordScreen() {
 
   const handleReset = async () => {
     if (!newPassword.trim() || !confirmPassword.trim()) {
-      setError('Vui lòng nhập đầy đủ thông tin');
+      setError(t('reset_password.fill_all'));
       return;
     }
     if (newPassword.length < 6) {
-      setError('Mật khẩu phải có ít nhất 6 ký tự');
+      setError(t('reset_password.min_length'));
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError('Mật khẩu xác nhận không khớp');
+      setError(t('reset_password.mismatch'));
       return;
     }
 
@@ -59,11 +61,11 @@ export default function ResetPasswordScreen() {
     } catch (e: any) {
       const message =
         e?.response?.data?.message === 'ResetTokenExpired'
-          ? 'Mã đã hết hạn, vui lòng thực hiện lại'
+          ? t('reset_password.token_expired')
           : e?.response?.data?.message === 'ResetTokenInvalid' ||
             e?.response?.data?.message === 'ResetTokenAlreadyUsed'
-          ? 'Yêu cầu không hợp lệ, vui lòng thực hiện lại'
-          : 'Đặt lại mật khẩu thất bại, vui lòng thử lại';
+          ? t('reset_password.token_invalid')
+          : t('reset_password.failed');
       setError(message);
     } finally {
       setIsLoading(false);
@@ -85,9 +87,9 @@ export default function ResetPasswordScreen() {
             <Feather name="key" size={28} color={Colors.electric} />
           </View>
 
-          <Text style={styles.title}>ĐẶT LẠI MẬT KHẨU</Text>
+          <Text style={styles.title}>{t('reset_password.title')}</Text>
           <Text style={styles.subtitle}>
-            Nhập mật khẩu mới cho tài khoản của bạn.
+            {t('reset_password.subtitle')}
           </Text>
 
           {!!error && (
@@ -96,7 +98,7 @@ export default function ResetPasswordScreen() {
             </View>
           )}
 
-          <Text style={styles.label}>Mật khẩu mới</Text>
+          <Text style={styles.label}>{t('reset_password.new_password')}</Text>
           <View style={styles.inputWrap}>
             <TextInput
               value={newPassword}
@@ -115,7 +117,7 @@ export default function ResetPasswordScreen() {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.label}>Xác nhận mật khẩu</Text>
+          <Text style={styles.label}>{t('reset_password.confirm_password')}</Text>
           <View style={styles.inputWrap}>
             <TextInput
               value={confirmPassword}
@@ -135,7 +137,7 @@ export default function ResetPasswordScreen() {
             {isLoading ? (
               <ActivityIndicator color={Colors.black} />
             ) : (
-              <Text style={styles.btnText}>Đặt lại mật khẩu</Text>
+              <Text style={styles.btnText}>{t('reset_password.submit')}</Text>
             )}
           </TouchableOpacity>
         </View>

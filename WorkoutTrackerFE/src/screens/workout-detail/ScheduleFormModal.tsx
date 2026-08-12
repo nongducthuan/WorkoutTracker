@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Controller, Control } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from '../../../components/Modal';
 import { Colors } from '../../theme/colors';
@@ -14,11 +15,12 @@ interface ScheduleFormModalProps {
 }
 
 export function ScheduleFormModal({ isOpen, onClose, control, onSubmit }: ScheduleFormModalProps) {
+  const { t } = useTranslation();
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Schedule Split">
+    <Modal isOpen={isOpen} onClose={onClose} title={t('workout_detail.schedule_modal_title')}>
       <View style={styles.modalContent}>
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Date & Time</Text>
+          <Text style={styles.inputLabel}>{t('schedule.reschedule_label')}</Text>
           <Controller
             control={control}
             name="scheduledDate"
@@ -34,7 +36,7 @@ export function ScheduleFormModal({ isOpen, onClose, control, onSubmit }: Schedu
           />
         </View>
         <TouchableOpacity onPress={onSubmit} style={styles.modalSaveBtn}>
-          <Text style={styles.modalSaveText}>Confirm</Text>
+          <Text style={styles.modalSaveText}>{t('common.confirm')}</Text>
         </TouchableOpacity>
       </View>
     </Modal>

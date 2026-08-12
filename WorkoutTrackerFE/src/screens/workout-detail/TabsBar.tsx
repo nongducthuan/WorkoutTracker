@@ -17,9 +17,9 @@ export function TabsBar({ activeTab, onChangeTab }: TabsBarProps) {
   const { t } = useTranslation();
 
   const tabs: { id: WorkoutDetailTabId; label: string; icon: string }[] = [
-    { id: 'exercises', label: t('workout_detail.tab_exercises', 'Exercise Logs'), icon: 'list' },
-    { id: 'comments', label: t('workout_detail.tab_comments', 'Board Comments'), icon: 'message-square' },
-    { id: 'schedule', label: t('workout_detail.tab_schedule', 'Calendar Split'), icon: 'calendar' },
+    { id: 'exercises', label: t('workout_detail.tab_exercises'), icon: 'list' },
+    { id: 'comments', label: t('workout_detail.tab_comments'), icon: 'message-square' },
+    { id: 'schedule', label: t('workout_detail.tab_schedule'), icon: 'calendar' },
   ];
 
   return (

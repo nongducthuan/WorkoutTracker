@@ -42,12 +42,12 @@ export function ExercisesTab({
     <View style={styles.paneContent}>
       <View style={styles.paneHeader}>
         <Text style={styles.paneTitle}>
-          {t('workout_detail.split_movements', 'Split Movements')}
+          {t('workout_detail.split_movements')}
         </Text>
         <TouchableOpacity onPress={onAddExercise} style={styles.addExButton}>
           <Feather name="plus" size={14} color={Colors.black} />
           <Text style={styles.addExText}>
-            {t('workout_detail.add_exercise', 'Add Movement')}
+            {t('workout_detail.add_exercise')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -81,15 +81,15 @@ export function ExercisesTab({
 
                   <View style={styles.statsRow}>
                     <View style={styles.statBox}>
-                      <Text style={styles.statLabel}>Sets</Text>
+                      <Text style={styles.statLabel}>{t('workout_detail.sets')}</Text>
                       <Text style={styles.statVal}>{we.sets}</Text>
                     </View>
                     <View style={styles.statBox}>
-                      <Text style={styles.statLabel}>Reps</Text>
+                      <Text style={styles.statLabel}>{t('workout_detail.reps')}</Text>
                       <Text style={styles.statVal}>{we.repetitions}</Text>
                     </View>
                     <View style={styles.statBoxElectric}>
-                      <Text style={styles.statLabelElectric}>Weight</Text>
+                      <Text style={styles.statLabelElectric}>{t('workout_detail.weight')}</Text>
                       <Text style={styles.statValElectric}>{we.weight} <Text style={styles.statUnit}>KG</Text></Text>
                     </View>
                   </View>
@@ -119,10 +119,10 @@ export function ExercisesTab({
           {/* Anatomical Studio */}
           <View style={styles.studioCard}>
             <Text style={styles.studioTitle}>
-              {t('workout_detail.anatomical_studio', 'Anatomical Studio')}
+              {t('workout_detail.anatomical_studio')}
             </Text>
             <Text style={styles.studioSubtitle}>
-              {t('workout_detail.union_highlights', "Union highlights of today's split targets")}
+              {t('workout_detail.union_highlights')}
             </Text>
 
             <View style={styles.mapContainer}>
@@ -138,18 +138,18 @@ export function ExercisesTab({
 
             <View style={styles.targetsContainer}>
               <Text style={styles.targetsTitle}>
-                {t('workout_detail.todays_muscle_targets', "Today's Muscle Targets")}
+                {t('workout_detail.todays_muscle_targets')}
               </Text>
 
               {overallTargets.primary.length === 0 && overallTargets.secondary.length === 0 ? (
                 <Text style={styles.noMusclesText}>
-                  {t('workout_detail.no_muscles_logged', 'No muscles logged yet')}
+                  {t('workout_detail.no_muscles_logged')}
                 </Text>
               ) : (
                 <View style={styles.targetsList}>
                   {overallTargets.primary.length > 0 && (
                     <View>
-                      <Text style={styles.primaryTitle}>Primary:</Text>
+                      <Text style={styles.primaryTitle}>{t('workout_detail.primary')}:</Text>
                       <View style={styles.tagWrap}>
                         {overallTargets.primary.map(m => (
                           <View key={m} style={styles.primaryTag}>
@@ -161,7 +161,7 @@ export function ExercisesTab({
                   )}
                   {overallTargets.secondary.length > 0 && (
                     <View style={styles.marginTop8}>
-                      <Text style={styles.secondaryTitle}>Secondary:</Text>
+                      <Text style={styles.secondaryTitle}>{t('workout_detail.secondary')}:</Text>
                       <View style={styles.tagWrap}>
                         {overallTargets.secondary.map(m => (
                           <View key={m} style={styles.secondaryTag}>
@@ -178,9 +178,9 @@ export function ExercisesTab({
         </View>
       ) : (
         <EmptyState
-          title={t('workout_detail.no_exercises', 'No exercises added yet')}
-          description={t('workout_detail.no_exercises_desc', 'Add exercises to track your sets, reps, and weight.')}
-          actionText={t('workout_detail.add_first_exercise', '+ Add first exercise')}
+          title={t('workout_detail.no_exercises')}
+          description={t('workout_detail.no_exercises_desc')}
+          actionText={t('workout_detail.add_first_exercise')}
           onAction={onAddExercise}
           icon={<Feather name="book-open" size={32} color={Colors.mutedGray} />}
         />

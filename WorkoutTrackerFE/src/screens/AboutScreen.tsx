@@ -36,16 +36,16 @@ export default function AboutScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
             <Feather name="chevron-left" size={20} color={Colors.onSurface} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t('about.title', 'VỀ ỨNG DỤNG')}</Text>
+          <Text style={styles.headerTitle}>{t('about.title')}</Text>
           <View style={styles.iconButton} />
         </View>
 
         <View style={styles.brandCard}>
           <Text style={styles.brandName}>PULSE</Text>
-          <Text style={styles.brandVersion}>{t('settings.version', 'Phiên bản')} 2.1.0</Text>
+          <Text style={styles.brandVersion}>{t('settings.version')} 2.1.0</Text>
         </View>
 
-        <Text style={styles.sectionLabel}>{t('about.faq', 'Câu hỏi thường gặp')}</Text>
+        <Text style={styles.sectionLabel}>{t('about.faq')}</Text>
         <View style={styles.group}>
           {FAQ.map((item, idx) => (
             <View

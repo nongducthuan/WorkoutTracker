@@ -34,7 +34,8 @@
       "sign_up": "Sign Up",
       "expired_session": "Your session expired — please log in again",
       "welcome_back": "Welcome back, {{name}}!",
-      "login_failed": "Login failed. Please check your credentials."
+      "login_failed": "Login failed. Please check your credentials.",
+      "forgot_password": "Forgot password?"
     },
     "register": {
       "subtitle": "Athletic Performance System",
@@ -56,19 +57,27 @@
       "already_account": "Already have an account?",
       "log_in": "Log In",
       "welcome": "Welcome to AscleX, {{name}}! Account created.",
-      "register_failed": "Registration failed. Username or email might be taken."
+      "register_failed": "Registration failed. Username or email might be taken.",
+      "title_screen": "Create Account",
+      "fill_all": "Please fill in all fields",
+      "password_mismatch": "Passwords do not match",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_hint": "Re-enter password",
+      "name_placeholder": "Enter your full name",
+      "username_placeholder": "Enter your username",
+      "sign_up": "REGISTER ACCOUNT"
     },
     "workouts": {
       "title": "Workout Routines",
       "subtitle": "Build, Schedule, and Execute Custom Programs",
-      "new_workout": "New Workout",
+      "new_workout": "Create New Workout",
       "routine_profile": "Routine Profile",
       "enter_studio": "Enter Studio",
       "no_description": "No description provided.",
       "empty_title": "Your workout list is empty",
       "empty_desc": "Create a workout to start tracking your progress.",
       "empty_action": "+ Create my first workout",
-      "modal_create_title": "Draft New Routine",
+      "modal_create_title": "Create Workout",
       "modal_edit_title": "Edit Workout Profile",
       "name_label": "Workout Name",
       "name_valid": "✓ Valid",
@@ -76,7 +85,6 @@
       "desc_label": "Workout Description",
       "desc_valid": "✓ Valid",
       "desc_hint": "Describe what this workout targets or what you want to focus on.",
-      "cancel": "Cancel",
       "saving": "Saving…",
       "saved": "✓ Saved!",
       "try_again": "Try again",
@@ -85,7 +93,8 @@
       "delete_title": "Delete Workout Routine?",
       "delete_message": "Warning: This action will permanently remove this routine split, all nested logged exercises, scheduled reminders, and related board comments. This operation cannot be undone.",
       "edit_title": "Edit Overview",
-      "delete_button": "Delete Routine"
+      "delete_button": "Delete Routine",
+      "delete_confirm": "Are you sure? This will remove all associated schedules and exercises."
     },
     "exercises": {
       "title": "Movement Library",
@@ -116,7 +125,6 @@
       "empty_action": "Schedule a workout →",
       "reschedule_modal_title": "Adjust Split Slot Date",
       "reschedule_label": "Select New Target Time Slot",
-      "cancel": "Cancel",
       "save_schedule": "Save Schedule",
       "delete_title": "Cancel Upcoming Session Split?",
       "delete_message": "Are you sure you want to cancel this scheduled gym split reminder? This schedule box will be permanently deleted.",
@@ -211,7 +219,12 @@
       "greeting_afternoon": "Good afternoon",
       "greeting_evening": "Good evening",
       "goal_label": "goal",
-      "days_label": "Days"
+      "days_label": "Days",
+      "quick_action": "Quick Actions",
+      "profile": "Profile",
+      "notifications": "Notifications",
+      "achievements": "Achievements",
+      "muscle_recovery": "Muscle Recovery"
     },
     "onboarding": {
       "seeding": "Seeding Starter Template...",
@@ -254,7 +267,6 @@
       "sets_label": "Sets",
       "reps_label": "Reps",
       "weight_label": "Weight (kg)",
-      "cancel": "Cancel",
       "saving": "Saving…",
       "saved": "✓ Saved",
       "try_again": "Retry",
@@ -323,7 +335,18 @@
       "logged": "✓ Logged!",
       "anatomical_confirm": "Anatomical Confirm",
       "rest_timer_active": "Rest Interval Active",
-      "skip_rest": "Skip Rest"
+      "skip_rest": "Skip Rest",
+      "calendar_split": "Calendar Split",
+      "edit_movement": "Edit Movement",
+      "add_movement": "Add Movement",
+      "exercise_library": "Movement Library",
+      "sets": "Sets",
+      "reps": "Reps",
+      "weight": "Weight",
+      "save_movement": "Save Movement",
+      "save_split": "Save Split",
+      "no_description": "No description provided.",
+      "schedule_modal_title": "Schedule Split"
     },
     "auth": {
       "validation": {
@@ -369,7 +392,99 @@
       "new_password": "New Password",
       "confirm_new_password": "Confirm New Password",
       "updating": "Updating...",
-      "update_password": "Update Password"
+      "update_password": "Update Password",
+      "edit_title": "Edit Profile",
+      "cannot_change": "Username and email cannot be changed",
+      "change_password_title": "Change Password",
+      "settings_title": "Settings",
+      "logout_confirm_title": "Log Out",
+      "logout_confirm_desc": "Are you sure you want to log out?",
+      "menu_edit_profile": "Edit Profile",
+      "menu_weekly_goal": "Weekly Target",
+      "menu_settings": "System Settings",
+      "stat_workouts": "Workouts Done",
+      "stat_schedules": "Schedules"
+    },
+    "common": {
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "save": "Save",
+      "back": "Back",
+      "delete": "Delete"
+    },
+    "forgot_password": {
+      "title": "FORGOT PASSWORD",
+      "subtitle": "Enter your registered email. We will send a verification code to reset your password.",
+      "email_label": "Email Address",
+      "send_code": "Send Verification Code",
+      "enter_email_error": "Please enter your email",
+      "email_not_registered": "Email is not registered",
+      "send_failed": "Failed to send code, please try again"
+    },
+    "otp_verify": {
+      "title": "ENTER VERIFICATION CODE",
+      "subtitle": "A 6-digit code has been sent to",
+      "default_email": "your email",
+      "resend_in": "Resend code in",
+      "confirm": "Confirm",
+      "didnt_receive": "Didn't receive code? Resend",
+      "expired": "Code expired, please resend",
+      "incorrect": "Incorrect code",
+      "already_used": "Code already used, please resend",
+      "failed": "Verification failed, please try again"
+    },
+    "reset_password": {
+      "title": "RESET PASSWORD",
+      "subtitle": "Enter a new password for your account.",
+      "new_password": "New Password",
+      "confirm_password": "Confirm Password",
+      "submit": "Reset Password",
+      "fill_all": "Please fill in all fields",
+      "min_length": "Password must be at least 6 characters",
+      "mismatch": "Passwords do not match",
+      "token_expired": "Code expired, please try again",
+      "token_invalid": "Invalid request, please try again",
+      "failed": "Reset password failed, please try again"
+    },
+    "about": {
+      "title": "About App",
+      "faq": "FAQ & Support"
+    },
+    "settings": {
+      "version": "Version",
+      "language": "Language",
+      "theme": "Theme",
+      "dark_mode_fixed": "Dark Mode (Fixed)"
+    },
+    "achievements": {
+      "title": "Achievements & Badges",
+      "streak_days": "Streak Days",
+      "total_workouts": "Total Workouts",
+      "total_volume": "Total Tonnage (kg)",
+      "badges": "Earned Badges",
+      "streak_7": "7-Day Streak",
+      "streak_30": "30-Day Streak",
+      "workouts_10": "10 Workouts Completed",
+      "workouts_50": "50 Workouts Completed"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "remind_before_30": "Reminder: 30 minutes before workout",
+      "upcoming": "Upcoming Sessions",
+      "empty": "No notifications right now",
+      "workout": "Workout Reminder"
+    },
+    "weekly_goal": {
+      "title": "Weekly Goal",
+      "description": "Set the number of workout sessions you aim to complete each week.",
+      "sessions_per_week": "Sessions / Week",
+      "save": "Save Goal",
+      "saved": "Goal saved successfully!"
+    },
+    "welcome": {
+      "hero_title": "Level Up Your Fitness",
+      "login": "Log In",
+      "register": "Sign Up"
     }
   }
 }
