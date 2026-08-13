@@ -7,13 +7,14 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 type SettingsNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const navigation = useNavigation<SettingsNav>();
+  const { isDark, toggleTheme, colors } = useTheme();
 
   const toggleLanguage = () => {
     const nextLang = i18n.language === 'en' ? 'vi' : 'en';
@@ -21,12 +22,14 @@ export default function SettingsScreen() {
     AsyncStorage.setItem('language', nextLang);
   };
 
+  const styles = makeStyles(colors, isDark);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+            <Feather name="chevron-left" size={20} color={colors.onSurface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('profile.settings_title')}</Text>
           <View style={styles.iconButton} />
@@ -35,7 +38,7 @@ export default function SettingsScreen() {
         <View style={styles.group}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
-              <Feather name="globe" size={18} color={Colors.mutedGray} />
+              <Feather name="globe" size={18} color={colors.mutedGray} />
               <Text style={styles.settingItemText}>{t('settings.language')}</Text>
             </View>
             <TouchableOpacity onPress={toggleLanguage} style={styles.settingActionBtn}>
@@ -45,12 +48,14 @@ export default function SettingsScreen() {
 
           <View style={[styles.settingItem, styles.settingItemLast]}>
             <View style={styles.settingItemLeft}>
-              <Feather name="moon" size={18} color={Colors.mutedGray} />
+              <Feather name={isDark ? 'moon' : 'sun'} size={18} color={colors.mutedGray} />
               <Text style={styles.settingItemText}>{t('settings.theme')}</Text>
             </View>
-            <View style={[styles.settingActionBtn, styles.settingActionBtnDisabled]}>
-              <Text style={styles.settingActionTextDisabled}>{t('settings.dark_mode_fixed')}</Text>
-            </View>
+            <TouchableOpacity onPress={toggleTheme} style={styles.settingActionBtn}>
+              <Text style={styles.settingActionText}>
+                {isDark ? t('settings.theme_dark') : t('settings.theme_light')}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -60,10 +65,10 @@ export default function SettingsScreen() {
             onPress={() => navigation.navigate('ChangePassword')}
           >
             <View style={styles.settingItemLeft}>
-              <Feather name="lock" size={18} color={Colors.mutedGray} />
+              <Feather name="lock" size={18} color={colors.mutedGray} />
               <Text style={styles.settingItemText}>{t('profile.change_password_title')}</Text>
             </View>
-            <Feather name="chevron-right" size={18} color={Colors.mutedGray} />
+            <Feather name="chevron-right" size={18} color={colors.mutedGray} />
           </TouchableOpacity>
         </View>
 
@@ -73,7 +78,7 @@ export default function SettingsScreen() {
             onPress={() => navigation.navigate('About')}
           >
             <View style={styles.settingItemLeft}>
-              <Feather name="info" size={18} color={Colors.mutedGray} />
+              <Feather name="info" size={18} color={colors.mutedGray} />
               <Text style={styles.settingItemText}>{t('about.title')}</Text>
             </View>
             <Text style={styles.versionInline}>2.1.0</Text>
@@ -84,94 +89,86 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-  },
-  iconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Colors.card,
-    borderWidth: 1,
-    borderColor: Colors.borderGray,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: '900',
-    letterSpacing: 1.5,
-    color: Colors.onSurface,
-    textTransform: 'uppercase',
-  },
-  group: {
-    backgroundColor: Colors.card,
-    borderWidth: 1,
-    borderColor: Colors.borderGray,
-    borderRadius: 16,
-    marginBottom: 16,
-    overflow: 'hidden',
-  },
-  settingItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderGray,
-  },
-  settingItemLast: {
-    borderBottomWidth: 0,
-  },
-  settingItemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  settingItemText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  settingActionBtn: {
-    backgroundColor: Colors.background,
-    borderWidth: 1,
-    borderColor: Colors.borderGray,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  settingActionBtnDisabled: {
-    opacity: 0.5,
-  },
-  settingActionText: {
-    color: Colors.electric,
-    fontSize: 12,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  settingActionTextDisabled: {
-    color: Colors.mutedGray,
-    fontSize: 12,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  versionInline: {
-    fontSize: 12,
-    color: Colors.mutedGray,
-  },
-});
+const makeStyles = (colors: ReturnType<typeof useTheme>['colors'], isDark: boolean) =>
+  StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    scrollContent: {
+      padding: 20,
+    },
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 24,
+    },
+    iconButton: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: colors.card,
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    headerTitle: {
+      fontSize: 16,
+      fontWeight: '900',
+      letterSpacing: 1.5,
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+    },
+    group: {
+      backgroundColor: colors.card,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 16,
+      marginBottom: 16,
+      overflow: 'hidden',
+    },
+    settingItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingVertical: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    settingItemLast: {
+      borderBottomWidth: 0,
+    },
+    settingItemLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+    },
+    settingItemText: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    settingActionBtn: {
+      backgroundColor: colors.background,
+      borderWidth: 1,
+      borderColor: colors.border,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 8,
+    },
+    settingActionText: {
+      color: colors.electric,
+      fontSize: 12,
+      fontWeight: '900',
+      textTransform: 'uppercase',
+    },
+    versionInline: {
+      fontSize: 12,
+      color: colors.mutedGray,
+    },
+  });

@@ -12,9 +12,9 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../theme/colors';
 import { AuthStackParamList } from '../navigation/types';
 import { authApi } from '../api/auth';
+import { useTheme } from '../context/ThemeContext';
 
 type OtpVerifyNav = NativeStackNavigationProp<AuthStackParamList>;
 type OtpVerifyRoute = RouteProp<AuthStackParamList, 'OtpVerify'>;
@@ -23,6 +23,7 @@ const CODE_LENGTH = 6;
 const RESEND_SECONDS = 42;
 
 export default function OtpVerifyScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<OtpVerifyNav>();
   const route = useRoute<OtpVerifyRoute>();
@@ -88,11 +89,13 @@ export default function OtpVerifyScreen() {
   const mm = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
   const ss = String(secondsLeft % 60).padStart(2, '0');
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.inner}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+          <Feather name="chevron-left" size={20} color={colors.onSurface} />
         </TouchableOpacity>
 
         <Text style={styles.title}>{t('otp_verify.title')}</Text>
@@ -128,7 +131,7 @@ export default function OtpVerifyScreen() {
           style={[styles.btn, (!isComplete || isSubmitting) && styles.btnDisabled]}
         >
           {isSubmitting ? (
-            <ActivityIndicator color={Colors.black} />
+            <ActivityIndicator color={colors.black} />
           ) : (
             <Text style={styles.btnText}>{t('otp_verify.confirm')}</Text>
           )}
@@ -144,25 +147,26 @@ export default function OtpVerifyScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+  screen: { flex: 1, backgroundColor: colors.background },
   inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 32 },
   backButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
     top: 0,
     left: 0,
   },
-  title: { fontSize: 22, fontWeight: '900', color: Colors.onSurface, textAlign: 'center', marginBottom: 12, letterSpacing: 1 },
-  subtitle: { fontSize: 13, color: Colors.mutedGray, textAlign: 'center', marginBottom: 28, lineHeight: 20 },
-  emailText: { color: Colors.onSurface, fontWeight: '700' },
+  title: { fontSize: 22, fontWeight: '900', color: colors.onSurface, textAlign: 'center', marginBottom: 12, letterSpacing: 1 },
+  subtitle: { fontSize: 13, color: colors.mutedGray, textAlign: 'center', marginBottom: 28, lineHeight: 20 },
+  emailText: { color: colors.onSurface, fontWeight: '700' },
   codeRow: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -174,33 +178,33 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: Colors.border,
-    backgroundColor: Colors.card,
-    color: Colors.onSurface,
+    borderColor: colors.border,
+    backgroundColor: colors.card,
+    color: colors.onSurface,
     fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
   },
   codeBoxFilled: {
-    borderColor: Colors.electric,
+    borderColor: colors.electric,
   },
   timerText: {
     textAlign: 'center',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 12,
     marginBottom: 24,
   },
   btn: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
   },
   btnDisabled: {
-    backgroundColor: Colors.electricDim,
+    backgroundColor: colors.electricDim,
   },
-  btnText: { color: Colors.black, fontWeight: '900', fontSize: 16 },
+  btnText: { color: colors.black, fontWeight: '900', fontSize: 16 },
   resendRow: { marginTop: 20, alignItems: 'center' },
-  resendText: { color: Colors.electric, fontWeight: '700', fontSize: 13 },
-  resendTextDisabled: { color: Colors.mutedGray },
+  resendText: { color: colors.electric, fontWeight: '700', fontSize: 13 },
+  resendTextDisabled: { color: colors.mutedGray },
 });

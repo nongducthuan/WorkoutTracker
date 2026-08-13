@@ -7,7 +7,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 const WEEKLY_GOAL_KEY = 'weeklyGoal';
 const MIN_GOAL = 1;
@@ -16,6 +16,7 @@ const MAX_GOAL = 7;
 type WeeklyGoalNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function WeeklyGoalScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<WeeklyGoalNav>();
   const [goal, setGoal] = useState(3);
@@ -41,12 +42,14 @@ export default function WeeklyGoalScreen() {
     }
   };
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+            <Feather name="chevron-left" size={20} color={colors.onSurface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('weekly_goal.title')}</Text>
           <View style={styles.iconButton} />
@@ -63,7 +66,7 @@ export default function WeeklyGoalScreen() {
               disabled={goal <= MIN_GOAL}
               style={[styles.stepperButton, goal <= MIN_GOAL && styles.stepperButtonDisabled]}
             >
-              <Feather name="minus" size={20} color={Colors.onSurface} />
+              <Feather name="minus" size={20} color={colors.onSurface} />
             </TouchableOpacity>
 
             <Text style={styles.goalValue}>{goal}</Text>
@@ -73,7 +76,7 @@ export default function WeeklyGoalScreen() {
               disabled={goal >= MAX_GOAL}
               style={[styles.stepperButton, goal >= MAX_GOAL && styles.stepperButtonDisabled]}
             >
-              <Feather name="plus" size={20} color={Colors.onSurface} />
+              <Feather name="plus" size={20} color={colors.onSurface} />
             </TouchableOpacity>
           </View>
 
@@ -95,10 +98,11 @@ export default function WeeklyGoalScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -113,9 +117,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -123,20 +127,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   card: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 16,
     padding: 24,
     alignItems: 'center',
     marginBottom: 24,
   },
   description: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 13,
     textAlign: 'center',
     marginBottom: 24,
@@ -150,9 +154,9 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -162,13 +166,13 @@ const styles = StyleSheet.create({
   goalValue: {
     fontSize: 48,
     fontWeight: '900',
-    color: Colors.electric,
+    color: colors.electric,
     minWidth: 64,
     textAlign: 'center',
   },
   goalLabel: {
     marginTop: 16,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 12,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
@@ -181,7 +185,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
   },
   saveButtonDisabled: {
     backgroundColor: 'rgba(204, 255, 0, 0.5)',

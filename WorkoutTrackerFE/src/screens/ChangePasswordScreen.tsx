@@ -20,7 +20,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { authApi } from '../api/auth';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 const passwordSchema = z
   .object({
@@ -37,6 +37,7 @@ type PasswordFormValues = z.infer<typeof passwordSchema>;
 type ChangePasswordNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function ChangePasswordScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<ChangePasswordNav>();
 
@@ -65,6 +66,8 @@ export default function ChangePasswordScreen() {
     }
   };
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <KeyboardAvoidingView
@@ -74,7 +77,7 @@ export default function ChangePasswordScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.headerRow}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-              <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+              <Feather name="chevron-left" size={20} color={colors.onSurface} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>{t('profile.change_password_title')}</Text>
             <View style={styles.iconButton} />
@@ -88,17 +91,17 @@ export default function ChangePasswordScreen() {
                 name="oldPassword"
                 render={({ field: { onChange, value } }) => (
                   <View style={[styles.inputContainer, errors.oldPassword ? styles.inputError : null]}>
-                    <Feather name="lock" size={16} color={Colors.mutedGray} style={styles.inputIcon} />
+                    <Feather name="lock" size={16} color={colors.mutedGray} style={styles.inputIcon} />
                     <TextInput
                       value={value}
                       onChangeText={onChange}
                       secureTextEntry={!showOld}
                       style={styles.input}
                       placeholder="••••••••"
-                      placeholderTextColor={Colors.mutedGray}
+                      placeholderTextColor={colors.mutedGray}
                     />
                     <TouchableOpacity onPress={() => setShowOld(!showOld)} style={styles.eyeButton}>
-                      <Feather name={showOld ? 'eye-off' : 'eye'} size={16} color={Colors.mutedGray} />
+                      <Feather name={showOld ? 'eye-off' : 'eye'} size={16} color={colors.mutedGray} />
                     </TouchableOpacity>
                   </View>
                 )}
@@ -113,17 +116,17 @@ export default function ChangePasswordScreen() {
                 name="newPassword"
                 render={({ field: { onChange, value } }) => (
                   <View style={[styles.inputContainer, errors.newPassword ? styles.inputError : null]}>
-                    <Feather name="lock" size={16} color={Colors.mutedGray} style={styles.inputIcon} />
+                    <Feather name="lock" size={16} color={colors.mutedGray} style={styles.inputIcon} />
                     <TextInput
                       value={value}
                       onChangeText={onChange}
                       secureTextEntry={!showNew}
                       style={styles.input}
                       placeholder="••••••••"
-                      placeholderTextColor={Colors.mutedGray}
+                      placeholderTextColor={colors.mutedGray}
                     />
                     <TouchableOpacity onPress={() => setShowNew(!showNew)} style={styles.eyeButton}>
-                      <Feather name={showNew ? 'eye-off' : 'eye'} size={16} color={Colors.mutedGray} />
+                      <Feather name={showNew ? 'eye-off' : 'eye'} size={16} color={colors.mutedGray} />
                     </TouchableOpacity>
                   </View>
                 )}
@@ -138,17 +141,17 @@ export default function ChangePasswordScreen() {
                 name="confirmPassword"
                 render={({ field: { onChange, value } }) => (
                   <View style={[styles.inputContainer, errors.confirmPassword ? styles.inputError : null]}>
-                    <Feather name="lock" size={16} color={Colors.mutedGray} style={styles.inputIcon} />
+                    <Feather name="lock" size={16} color={colors.mutedGray} style={styles.inputIcon} />
                     <TextInput
                       value={value}
                       onChangeText={onChange}
                       secureTextEntry={!showConfirm}
                       style={styles.input}
                       placeholder="••••••••"
-                      placeholderTextColor={Colors.mutedGray}
+                      placeholderTextColor={colors.mutedGray}
                     />
                     <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)} style={styles.eyeButton}>
-                      <Feather name={showConfirm ? 'eye-off' : 'eye'} size={16} color={Colors.mutedGray} />
+                      <Feather name={showConfirm ? 'eye-off' : 'eye'} size={16} color={colors.mutedGray} />
                     </TouchableOpacity>
                   </View>
                 )}
@@ -173,10 +176,11 @@ export default function ChangePasswordScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -191,9 +195,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -201,13 +205,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   formCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 16,
     padding: 20,
     gap: 16,
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 10,
     fontWeight: '900',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     marginBottom: 6,
@@ -227,14 +231,14 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     paddingHorizontal: 16,
   },
   inputError: {
-    borderColor: Colors.electricOrange,
+    borderColor: colors.electricOrange,
   },
   inputIcon: {
     marginRight: 8,
@@ -250,7 +254,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   errorText: {
-    color: Colors.electricOrange,
+    color: colors.electricOrange,
     fontSize: 12,
     marginTop: 4,
     fontWeight: 'bold',
@@ -262,7 +266,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
   },
   saveButtonDisabled: {
     backgroundColor: 'rgba(204, 255, 0, 0.5)',

@@ -9,10 +9,11 @@ import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { DashboardSkeleton as Skeleton } from '../../components/LoadingSkeleton';
 import { EmptyState } from '../../components/EmptyState';
 import { WorkoutSchedule } from '../types';
-import { Colors } from '../theme/colors';
 import { globalStyles } from '../theme/styles';
+import { useTheme } from '../context/ThemeContext';
 
 export default function ScheduleScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { schedules = [], isLoading: isSchedulesLoading, updateSchedule, deleteSchedule } = useSchedules();
@@ -81,6 +82,8 @@ export default function ScheduleScreen() {
 
   const futureSchedules = schedules.filter((s: WorkoutSchedule) => new Date(s.scheduledDate).getTime() >= Date.now());
 
+  const styles = makeStyles(colors);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -103,7 +106,7 @@ export default function ScheduleScreen() {
                 viewMode === 'calendar' ? styles.viewModeButtonActive : styles.viewModeButtonInactive
               ]}
             >
-              <Feather name="calendar" size={14} color={viewMode === 'calendar' ? 'black' : Colors.mutedGray} />
+              <Feather name="calendar" size={14} color={viewMode === 'calendar' ? 'black' : colors.mutedGray} />
               <Text style={[
                 styles.viewModeText,
                 viewMode === 'calendar' ? styles.viewModeTextActive : styles.viewModeTextInactive
@@ -118,7 +121,7 @@ export default function ScheduleScreen() {
                 viewMode === 'list' ? styles.viewModeButtonActive : styles.viewModeButtonInactive
               ]}
             >
-              <Feather name="list" size={14} color={viewMode === 'list' ? 'black' : Colors.mutedGray} />
+              <Feather name="list" size={14} color={viewMode === 'list' ? 'black' : colors.mutedGray} />
               <Text style={[
                 styles.viewModeText,
                 viewMode === 'list' ? styles.viewModeTextActive : styles.viewModeTextInactive
@@ -133,17 +136,17 @@ export default function ScheduleScreen() {
           <View style={styles.viewContent}>
             <View style={styles.calendarHeader}>
               <View style={styles.calendarTitleContainer}>
-                <Feather name="calendar" size={20} color={Colors.electric} />
+                <Feather name="calendar" size={20} color={colors.electric} />
                 <Text style={styles.calendarTitle}>
                   {currentDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}
                 </Text>
               </View>
               <View style={styles.calendarNav}>
                 <TouchableOpacity onPress={prevMonth} style={styles.calendarNavButton}>
-                  <Feather name="chevron-left" size={16} color={Colors.mutedGray} />
+                  <Feather name="chevron-left" size={16} color={colors.mutedGray} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={nextMonth} style={styles.calendarNavButton}>
-                  <Feather name="chevron-right" size={16} color={Colors.mutedGray} />
+                  <Feather name="chevron-right" size={16} color={colors.mutedGray} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -209,7 +212,7 @@ export default function ScheduleScreen() {
                     <View key={schedule.id} style={styles.listItem}>
                       <View style={styles.listMainContent}>
                         <View style={styles.listIconContainer}>
-                          <Feather name="clock" size={20} color={Colors.electric} />
+                          <Feather name="clock" size={20} color={colors.electric} />
                         </View>
                         <View style={styles.listTextContainer}>
                           <Text style={styles.listWorkoutName} numberOfLines={1}>
@@ -228,10 +231,10 @@ export default function ScheduleScreen() {
                       </View>
                       <View style={styles.listActions}>
                         <TouchableOpacity onPress={() => handleOpenReschedule(schedule.id, schedule.scheduledDate)} style={styles.actionButton}>
-                          <Feather name="edit-2" size={16} color={Colors.mutedGray} />
+                          <Feather name="edit-2" size={16} color={colors.mutedGray} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setDeletingId(schedule.id)} style={styles.actionButton}>
-                          <Feather name="trash-2" size={16} color={Colors.error} />
+                          <Feather name="trash-2" size={16} color={colors.error} />
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -244,7 +247,7 @@ export default function ScheduleScreen() {
                 description={t('schedule.empty_desc')}
                 actionText={t('schedule.empty_action')}
                 onAction={() => navigation.navigate('Workouts')} // Ensure navigating to workouts makes sense in CLI
-                icon={<Feather name="calendar" size={32} color={Colors.mutedGray} />}
+                icon={<Feather name="calendar" size={32} color={colors.mutedGray} />}
               />
             )}
           </View>
@@ -266,7 +269,7 @@ export default function ScheduleScreen() {
               value={newDateInput}
               onChangeText={setNewDateInput}
               placeholder="2026-10-15T14:30"
-              placeholderTextColor={Colors.mutedGray}
+              placeholderTextColor={colors.mutedGray}
               style={styles.input}
             />
           </View>
@@ -297,10 +300,11 @@ export default function ScheduleScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -310,7 +314,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderGray,
+    borderBottomColor: colors.borderGray,
     paddingBottom: 24,
     marginBottom: 24,
     flexWrap: 'wrap',
@@ -320,11 +324,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '900',
     letterSpacing: 1,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   headerSubtitle: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 12,
     letterSpacing: 1,
     textTransform: 'uppercase',
@@ -333,9 +337,9 @@ const styles = StyleSheet.create({
   },
   viewModeContainer: {
     flexDirection: 'row',
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 8,
     padding: 4,
   },
@@ -348,7 +352,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   viewModeButtonActive: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
   },
   viewModeButtonInactive: {
     backgroundColor: 'transparent',
@@ -363,7 +367,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   viewModeTextInactive: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   viewContent: {
     marginBottom: 16,
@@ -372,9 +376,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -393,7 +397,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '900',
     letterSpacing: 2,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   calendarNav: {
@@ -404,14 +408,14 @@ const styles = StyleSheet.create({
   calendarNavButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   calendarGrid: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -423,8 +427,8 @@ const styles = StyleSheet.create({
   daysHeaderRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderGray,
-    backgroundColor: Colors.surface,
+    borderBottomColor: colors.borderGray,
+    backgroundColor: colors.surface,
     paddingVertical: 12,
   },
   dayHeaderText: {
@@ -434,15 +438,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   daysGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     borderLeftWidth: 1,
     borderTopWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   dayCellEmpty: {
     width: '14.28%',
@@ -450,7 +454,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(30, 30, 30, 0.25)',
     borderRightWidth: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   dayCell: {
     width: '14.28%',
@@ -458,12 +462,12 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRightWidth: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   dayCellToday: {
     backgroundColor: 'rgba(219, 255, 0, 0.1)',
     borderTopWidth: 2,
-    borderTopColor: Colors.electric,
+    borderTopColor: colors.electric,
   },
   dayCellHeader: {
     flexDirection: 'row',
@@ -477,16 +481,16 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   dayCellNumberToday: {
-    color: Colors.electric,
+    color: colors.electric,
   },
   dayCellNumberNormal: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   dayCellIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
   },
   scheduleList: {
     gap: 4,
@@ -503,11 +507,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.electric,
+    color: colors.electric,
   },
   moreEventsText: {
     fontSize: 8,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     fontWeight: '600',
   },
@@ -515,9 +519,9 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   listItem: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     padding: 20,
     flexDirection: 'row',
@@ -550,7 +554,7 @@ const styles = StyleSheet.create({
   },
   listWorkoutName: {
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
     fontSize: 16,
@@ -563,16 +567,16 @@ const styles = StyleSheet.create({
   },
   listDateText: {
     fontSize: 12,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontWeight: '600',
   },
   listDot: {
     fontSize: 12,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   listTimeText: {
     fontSize: 12,
-    color: Colors.electric,
+    color: colors.electric,
     fontWeight: 'bold',
   },
   listActions: {
@@ -583,9 +587,9 @@ const styles = StyleSheet.create({
   actionButton: {
     padding: 8,
     borderRadius: 4,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   modalContent: {
     gap: 16,
@@ -598,19 +602,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginBottom: 8,
   },
   input: {
     width: '100%',
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 14,
-    color: Colors.onSurface,
+    color: colors.onSurface,
   },
   modalActions: {
     flexDirection: 'row',
@@ -621,20 +625,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   cancelButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   saveButton: {
     borderRadius: 8,
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     paddingHorizontal: 24,
     paddingVertical: 12,
     flexDirection: 'row',

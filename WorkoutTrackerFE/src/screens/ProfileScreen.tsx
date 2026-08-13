@@ -15,12 +15,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { authApi } from '../api/auth';
 import { useWorkouts, useSchedules } from '../hooks/useFitnessData';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
 import { globalStyles } from '../theme/styles';
+import { useTheme } from '../context/ThemeContext';
 
 type ProfileNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function ProfileScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<ProfileNav>();
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -72,6 +73,8 @@ export default function ProfileScreen() {
     },
   ];
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={globalStyles.screen} edges={['top', 'bottom']}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
@@ -80,7 +83,7 @@ export default function ProfileScreen() {
         {/* Header */}
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+            <Feather name="chevron-left" size={20} color={colors.onSurface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('profile.title')}</Text>
           <View style={styles.iconButton} />
@@ -121,16 +124,16 @@ export default function ProfileScreen() {
               ]}
             >
               <View style={styles.menuItemLeft}>
-                <Feather name={item.icon as any} size={18} color={Colors.mutedGray} />
+                <Feather name={item.icon as any} size={18} color={colors.mutedGray} />
                 <Text style={styles.menuItemText}>{item.label}</Text>
               </View>
-              <Feather name="chevron-right" size={18} color={Colors.mutedGray} />
+              <Feather name="chevron-right" size={18} color={colors.mutedGray} />
             </TouchableOpacity>
           ))}
         </View>
 
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-          <Feather name="log-out" size={16} color={Colors.electricOrange} />
+          <Feather name="log-out" size={16} color={colors.electricOrange} />
           <Text style={styles.logoutButtonText}>{t('logout')}</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -138,7 +141,8 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   scrollView: {
     flex: 1,
   },
@@ -164,9 +168,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -174,7 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   profileCard: {
@@ -186,8 +190,8 @@ const styles = StyleSheet.create({
     height: 72,
     borderRadius: 36,
     borderWidth: 2,
-    borderColor: Colors.electric,
-    backgroundColor: Colors.surface,
+    borderColor: colors.electric,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
@@ -196,19 +200,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     letterSpacing: 1.5,
-    color: Colors.electric,
+    color: colors.electric,
     textTransform: 'uppercase',
   },
   userName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
   },
   userHandle: {
     fontSize: 12,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginTop: 2,
   },
   statsRow: {
@@ -218,9 +222,9 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -228,20 +232,20 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 22,
     fontWeight: '900',
-    color: Colors.electric,
+    color: colors.electric,
   },
   statLabel: {
     fontSize: 11,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginTop: 4,
     textTransform: 'uppercase',
     letterSpacing: 1,
     textAlign: 'center',
   },
   menuGroup: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 16,
     marginBottom: 24,
     overflow: 'hidden',
@@ -253,7 +257,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderGray,
+    borderBottomColor: colors.borderGray,
   },
   menuItemLast: {
     borderBottomWidth: 0,
@@ -266,7 +270,7 @@ const styles = StyleSheet.create({
   menuItemText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
@@ -282,7 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 77, 0, 0.1)',
   },
   logoutButtonText: {
-    color: Colors.electricOrange,
+    color: colors.electricOrange,
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 1.5,

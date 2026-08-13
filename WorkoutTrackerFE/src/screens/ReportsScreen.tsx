@@ -9,12 +9,13 @@ import { DashboardSkeleton } from '../../components/LoadingSkeleton';
 import { EmptyState } from '../../components/EmptyState';
 import { MuscleMap } from '../../components/MuscleMap';
 import { MuscleId, getMuscleLabel } from '../lib/muscleMap';
-import { Colors } from '../theme/colors';
 import { globalStyles } from '../theme/styles';
+import { useTheme } from '../context/ThemeContext';
 
 const screenWidth = Dimensions.get('window').width;
 
 export default function ReportsScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { stats, isLoading } = useReports();
@@ -106,6 +107,8 @@ export default function ReportsScreen() {
     return <DashboardSkeleton />;
   }
 
+  const styles = makeStyles(colors);
+
   if (!stats || stats.totalWorkouts === 0) {
     return (
       <View style={[globalStyles.screen, { paddingTop: 40, paddingHorizontal: 20 }]}>
@@ -114,7 +117,7 @@ export default function ReportsScreen() {
           description={t('reports.empty_activity_desc')}
           actionText="Go to workouts →"
           onAction={() => navigation.navigate('Workouts')}
-          icon={<Feather name="bar-chart-2" size={32} color={Colors.mutedGray} />}
+          icon={<Feather name="bar-chart-2" size={32} color={colors.mutedGray} />}
         />
       </View>
     );
@@ -125,14 +128,14 @@ export default function ReportsScreen() {
   const barData = (stats.weeklyWorkouts || []).map(w => ({
     value: w.count,
     label: w.week,
-    frontColor: Colors.electric,
-    labelTextStyle: { color: Colors.mutedGray, fontSize: 10, fontWeight: 'bold' as const }
+    frontColor: colors.electric,
+    labelTextStyle: { color: colors.mutedGray, fontSize: 10, fontWeight: 'bold' as const }
   }));
 
   const lineData = (stats.weeklyWorkouts || []).map(w => ({
     value: w.volume,
     label: w.week,
-    labelTextStyle: { color: Colors.mutedGray, fontSize: 10, fontWeight: 'bold' as const }
+    labelTextStyle: { color: colors.mutedGray, fontSize: 10, fontWeight: 'bold' as const }
   }));
 
   const chartWidth = screenWidth - 80; 
@@ -170,7 +173,7 @@ export default function ReportsScreen() {
             </View>
           </View>
           <View style={styles.subStatsRow}>
-            <Feather name="calendar" size={12} color={Colors.mutedGray} />
+            <Feather name="calendar" size={12} color={colors.mutedGray} />
             <Text style={styles.subStatsText}>
               {t('reports.past_sessions')}
             </Text>
@@ -183,7 +186,7 @@ export default function ReportsScreen() {
             {t('reports.tonnage_lifted')}
           </Text>
           <View style={styles.statsRow}>
-            <Text style={[styles.statsValueMain, { color: Colors.electric }]}>
+            <Text style={[styles.statsValueMain, { color: colors.electric }]}>
               {totalVolumeTons} <Text style={styles.statsValueUnit}>{t('reports.tons')}</Text>
             </Text>
             <View style={styles.badgeOrange}>
@@ -193,7 +196,7 @@ export default function ReportsScreen() {
             </View>
           </View>
           <View style={styles.subStatsRow}>
-            <Feather name="trending-up" size={12} color={Colors.mutedGray} />
+            <Feather name="trending-up" size={12} color={colors.mutedGray} />
             <Text style={styles.subStatsText}>
               {t('reports.tonnage_formula')}
             </Text>
@@ -216,7 +219,7 @@ export default function ReportsScreen() {
             </View>
           </View>
           <View style={styles.subStatsRow}>
-            <Feather name="activity" size={12} color={Colors.electricOrange} />
+            <Feather name="activity" size={12} color={colors.electricOrange} />
             <Text style={styles.subStatsText}>
               {t('reports.consecutive_freq')}
             </Text>
@@ -230,7 +233,7 @@ export default function ReportsScreen() {
         <View style={[globalStyles.card, { marginBottom: 24 }]}>
           <View style={styles.chartHeader}>
             <View style={styles.chartTitleContainer}>
-              <Feather name="bar-chart-2" size={16} color={Colors.electric} />
+              <Feather name="bar-chart-2" size={16} color={colors.electric} />
               <Text style={styles.chartTitleText}>
                 {t('reports.session_frequency')}
               </Text>
@@ -248,11 +251,11 @@ export default function ReportsScreen() {
                   barWidth={24}
                   noOfSections={4}
                   barBorderRadius={4}
-                  frontColor={Colors.electric}
+                  frontColor={colors.electric}
                   yAxisThickness={0}
                   xAxisThickness={0}
                   hideRules={true}
-                  yAxisTextStyle={{ color: Colors.mutedGray, fontSize: 10, fontWeight: 'bold' }}
+                  yAxisTextStyle={{ color: colors.mutedGray, fontSize: 10, fontWeight: 'bold' }}
                   isAnimated
                   width={chartWidth}
                   height={150}
@@ -268,7 +271,7 @@ export default function ReportsScreen() {
         <View style={globalStyles.card}>
           <View style={styles.chartHeader}>
             <View style={styles.chartTitleContainer}>
-              <Feather name="activity" size={16} color={Colors.electricOrange} />
+              <Feather name="activity" size={16} color={colors.electricOrange} />
               <Text style={styles.chartTitleText}>
                 {t('reports.volume_progression')}
               </Text>
@@ -285,16 +288,16 @@ export default function ReportsScreen() {
                 data={lineData}
                 areaChart
                 hideDataPoints
-                color={Colors.electricOrange}
-                startFillColor={Colors.electricOrange}
-                endFillColor={Colors.electricOrange}
+                color={colors.electricOrange}
+                startFillColor={colors.electricOrange}
+                endFillColor={colors.electricOrange}
                 startOpacity={0.2}
                 endOpacity={0}
                 thickness={2}
                 yAxisThickness={0}
                 xAxisThickness={0}
                 hideRules={true}
-                yAxisTextStyle={{ color: Colors.mutedGray, fontSize: 10, fontWeight: 'bold' }}
+                yAxisTextStyle={{ color: colors.mutedGray, fontSize: 10, fontWeight: 'bold' }}
                 isAnimated
                 width={chartWidth}
                 height={150}
@@ -317,7 +320,7 @@ export default function ReportsScreen() {
         <View style={styles.scannerHeader}>
           <View>
             <View style={styles.scannerTitleRow}>
-              <Feather name="target" size={18} color={Colors.electric} />
+              <Feather name="target" size={18} color={colors.electric} />
               <Text style={styles.scannerTitleText}>
                 {t('reports.scanner_title')}
               </Text>
@@ -377,7 +380,7 @@ export default function ReportsScreen() {
               </Text>
             </View>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: Colors.card, borderWidth: 1, borderColor: Colors.border }]} />
+              <View style={[styles.legendColor, { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }]} />
               <Text style={styles.legendText}>
                 {t('reports.heatmap_rested')}
               </Text>
@@ -388,7 +391,7 @@ export default function ReportsScreen() {
         {/* Leaderboard */}
         <View style={styles.leaderboardContainer}>
           <View style={styles.leaderboardHeaderRow}>
-            <Feather name="trending-up" size={14} color={Colors.electric} />
+            <Feather name="trending-up" size={14} color={colors.electric} />
             <Text style={styles.leaderboardTitle}>
               {t('reports.leaderboard_title')}
             </Text>
@@ -422,7 +425,7 @@ export default function ReportsScreen() {
             </View>
           ) : (
             <View style={styles.noHistoryBox}>
-              <Feather name="calendar" size={24} color={Colors.border} />
+              <Feather name="calendar" size={24} color={colors.border} />
               <Text style={styles.noHistoryText}>
                 {t('reports.no_history')}
               </Text>
@@ -434,7 +437,7 @@ export default function ReportsScreen() {
       {/* Activity Log */}
       <View style={{ marginBottom: 40 }}>
         <View style={styles.activityTitleRow}>
-          <Feather name="list" size={18} color={Colors.electric} />
+          <Feather name="list" size={18} color={colors.electric} />
           <Text style={styles.activityTitle}>
             {t('reports.activity_log_title')}
           </Text>
@@ -486,7 +489,8 @@ export default function ReportsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   blurEffect: {
     position: 'absolute',
     top: 0,
@@ -498,7 +502,7 @@ const styles = StyleSheet.create({
   },
   header: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: colors.border,
     paddingBottom: 16,
     marginBottom: 24,
     marginTop: 16,
@@ -507,11 +511,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   headerSubtitle: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 12,
     letterSpacing: 1,
     textTransform: 'uppercase',
@@ -523,7 +527,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   statsRow: {
     flexDirection: 'row',
@@ -535,12 +539,12 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: '900',
     letterSpacing: 2,
-    color: Colors.onSurface,
+    color: colors.onSurface,
   },
   statsValueUnit: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   badgeElectric: {
     backgroundColor: 'rgba(198, 244, 50, 0.1)',
@@ -551,7 +555,7 @@ const styles = StyleSheet.create({
   badgeTextElectric: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: Colors.electric,
+    color: colors.electric,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
@@ -564,7 +568,7 @@ const styles = StyleSheet.create({
   badgeTextOrange: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: Colors.electricOrange,
+    color: colors.electricOrange,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
@@ -576,7 +580,7 @@ const styles = StyleSheet.create({
   },
   subStatsText: {
     fontSize: 10,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontWeight: '600',
   },
   chartHeader: {
@@ -584,7 +588,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: colors.border,
     paddingBottom: 12,
     marginBottom: 16,
   },
@@ -597,7 +601,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '900',
     letterSpacing: 1,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   chartContainer: {
@@ -606,7 +610,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   noDataText: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 12,
     textTransform: 'uppercase',
     fontWeight: 'bold',
@@ -616,7 +620,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 16,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: colors.border,
     paddingBottom: 16,
     marginBottom: 16,
   },
@@ -630,11 +634,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '900',
     letterSpacing: 1,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   scannerSubtitleText: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 12,
     letterSpacing: 1,
     textTransform: 'uppercase',
@@ -642,9 +646,9 @@ const styles = StyleSheet.create({
   },
   timeToggleContainer: {
     flexDirection: 'row',
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     borderRadius: 8,
     padding: 4,
     alignSelf: 'flex-start',
@@ -656,22 +660,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   timeToggleBtnActive: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
   },
   timeToggleText: {
     fontSize: 10,
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   timeToggleTextActive: {
-    color: Colors.black,
+    color: colors.black,
   },
   heatmapBox: {
     backgroundColor: 'rgba(13, 13, 15, 0.4)',
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     borderRadius: 16,
     padding: 16,
     paddingVertical: 24,
@@ -687,7 +691,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: Colors.border,
+    borderTopColor: colors.border,
     width: '100%',
   },
   legendItem: {
@@ -705,7 +709,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 2,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   leaderboardContainer: {},
   leaderboardHeaderRow: {
@@ -713,13 +717,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: colors.border,
     paddingBottom: 8,
     marginBottom: 8,
   },
   leaderboardTitle: {
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
     fontSize: 12,
@@ -732,21 +736,21 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   leaderboardRank: {
-    color: Colors.electric,
+    color: colors.electric,
     fontSize: 9,
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   leaderboardName: {
-    color: Colors.onSurface,
+    color: colors.onSurface,
     fontSize: 10,
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   leaderboardVolume: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 10,
     fontWeight: 'bold',
     textTransform: 'uppercase',
@@ -754,15 +758,15 @@ const styles = StyleSheet.create({
   },
   progressBarBg: {
     width: '100%',
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     height: 6,
     borderRadius: 3,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
   },
   progressBarFill: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     height: '100%',
     borderRadius: 3,
   },
@@ -773,7 +777,7 @@ const styles = StyleSheet.create({
   },
   noHistoryText: {
     fontSize: 10,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     fontWeight: 'bold',
     letterSpacing: 1,
@@ -789,7 +793,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '900',
     letterSpacing: 1,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   activityItemRow: {
@@ -800,11 +804,11 @@ const styles = StyleSheet.create({
   },
   borderBottom: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: colors.border,
   },
   activityItemName: {
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
     fontSize: 14,
@@ -812,7 +816,7 @@ const styles = StyleSheet.create({
   },
   activityItemDate: {
     fontSize: 12,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontWeight: '600',
   },
   activityItemActions: {
@@ -830,14 +834,14 @@ const styles = StyleSheet.create({
   badgeTextElectricSlim: {
     fontSize: 9,
     fontWeight: '900',
-    color: Colors.electric,
+    color: colors.electric,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   activityItemCount: {
     fontWeight: '900',
-    color: Colors.onSurface,
-    backgroundColor: Colors.surface,
+    color: colors.onSurface,
+    backgroundColor: colors.surface,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,

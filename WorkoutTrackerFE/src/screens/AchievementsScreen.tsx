@@ -7,11 +7,12 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useReports } from '../hooks/useFitnessData';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 type AchievementsNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function AchievementsScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<AchievementsNav>();
   const { stats, isLoading } = useReports();
@@ -47,12 +48,14 @@ export default function AchievementsScreen() {
     },
   ];
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+            <Feather name="chevron-left" size={20} color={colors.onSurface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('achievements.title')}</Text>
           <View style={styles.iconButton} />
@@ -86,7 +89,7 @@ export default function AchievementsScreen() {
                 <Feather
                   name={badge.icon as any}
                   size={24}
-                  color={badge.earned ? Colors.black : Colors.mutedGray}
+                  color={badge.earned ? colors.black : colors.mutedGray}
                 />
               </View>
               <Text style={[styles.badgeLabel, !badge.earned && styles.badgeLabelLocked]}>
@@ -101,10 +104,11 @@ export default function AchievementsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -119,9 +123,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -129,7 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   statsRow: {
@@ -139,9 +143,9 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
@@ -149,11 +153,11 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: '900',
-    color: Colors.electric,
+    color: colors.electric,
   },
   statLabel: {
     fontSize: 10,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginTop: 4,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -162,7 +166,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 12,
     fontWeight: '900',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     marginBottom: 12,
@@ -180,38 +184,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   badgeCardEarned: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderColor: 'rgba(198,244,50,0.4)',
   },
   badgeCardLocked: {
-    backgroundColor: Colors.card,
-    borderColor: Colors.borderGray,
+    backgroundColor: colors.card,
+    borderColor: colors.borderGray,
     opacity: 0.6,
   },
   badgeIconWrap: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
   },
   badgeIconWrapEarned: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
   },
   badgeLabel: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textAlign: 'center',
   },
   badgeLabelLocked: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   badgeProgress: {
     fontSize: 10,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginTop: 4,
   },
 });

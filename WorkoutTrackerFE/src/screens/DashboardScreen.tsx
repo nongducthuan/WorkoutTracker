@@ -4,16 +4,18 @@ import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Colors, globalStyles } from '../theme/styles';
+import { globalStyles } from '../theme/styles';
 import { useWorkouts, useSchedules, useExercises, useReports } from '../hooks/useFitnessData';
 import { DashboardSkeleton } from '../../components/LoadingSkeleton';
 import { MuscleMap } from '../../components/MuscleMap';
 import { RootStackParamList } from '../navigation/types';
 import { authApi } from '../api/auth';
+import { useTheme } from '../context/ThemeContext';
 
 type DashboardNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function DashboardScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<DashboardNav>();
 
@@ -52,12 +54,14 @@ export default function DashboardScreen() {
     weekday: 'long', month: 'short', day: 'numeric',
   });
 
+  const styles = makeStyles(colors);
+
   return (
     <ScrollView style={globalStyles.screen} contentContainerStyle={{ padding: 20 }}>
       {/* Header */}
       <View style={styles.header}>
         <View style={globalStyles.row}>
-          <Icon name="star" size={14} color={Colors.electric} style={{ marginRight: 6 }} />
+          <Icon name="star" size={14} color={colors.electric} style={{ marginRight: 6 }} />
           <Text style={styles.athleteText}>{t('dashboard.athlete_console')}</Text>
         </View>
         <Text style={globalStyles.heading}>
@@ -87,13 +91,13 @@ export default function DashboardScreen() {
               onPress={() => (navigation.getParent() as any)?.navigate('Workouts')}
             >
               <Text style={globalStyles.btnPrimaryText}>{t('dashboard.create_first')}</Text>
-              <Icon name="arrow-right" size={16} color={Colors.black} />
+              <Icon name="arrow-right" size={16} color={colors.black} />
             </TouchableOpacity>
           </View>
         ) : !todaySchedule ? (
           <View style={globalStyles.card}>
             <View style={[globalStyles.tagElectric, { backgroundColor: 'rgba(107,114,128,0.1)' }]}>
-              <Text style={[globalStyles.tagElectricText, { color: Colors.mutedGray }]}>{t('dashboard.reminders')}</Text>
+              <Text style={[globalStyles.tagElectricText, { color: colors.mutedGray }]}>{t('dashboard.reminders')}</Text>
             </View>
             <Text style={[globalStyles.heading, { fontSize: 24, marginTop: 12, marginBottom: 8 }]}>
               {t('dashboard.schedule_today_title', { count: workouts.length, label: 'Workouts' })}
@@ -110,8 +114,8 @@ export default function DashboardScreen() {
           </View>
         ) : (
           <View style={[globalStyles.card, { borderColor: 'rgba(198,244,50,0.3)' }]}>
-            <View style={[globalStyles.tagElectric, { backgroundColor: Colors.electric }]}>
-              <Text style={[globalStyles.tagElectricText, { color: Colors.black }]}>{t('dashboard.todays_session')}</Text>
+            <View style={[globalStyles.tagElectric, { backgroundColor: colors.electric }]}>
+              <Text style={[globalStyles.tagElectricText, { color: colors.black }]}>{t('dashboard.todays_session')}</Text>
             </View>
             <Text style={[globalStyles.heading, { fontSize: 24, marginTop: 12, marginBottom: 8 }]}>
               {t('dashboard.today_label')} <Text style={globalStyles.textElectric}>{todaySchedule.workoutName}</Text>
@@ -121,7 +125,7 @@ export default function DashboardScreen() {
               onPress={() => navigation.navigate('WorkoutDetail', { id: todaySchedule.workoutId })}
             >
               <Text style={globalStyles.btnPrimaryText}>{t('dashboard.start_workout')}</Text>
-              <Icon name="play" size={16} color={Colors.black} />
+              <Icon name="play" size={16} color={colors.black} />
             </TouchableOpacity>
           </View>
         )}
@@ -132,40 +136,41 @@ export default function DashboardScreen() {
         <Text style={globalStyles.label}>{t('dashboard.quick_action')}</Text>
         <View style={styles.quickActionsRow}>
           <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Profile')}>
-            <View style={styles.actionIcon}><Icon name="user" size={20} color={Colors.onSurface} /></View>
+            <View style={styles.actionIcon}><Icon name="user" size={20} color={colors.onSurface} /></View>
             <Text style={styles.actionText}>{t('dashboard.profile')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Notifications')}>
-            <View style={styles.actionIcon}><Icon name="bell" size={20} color={Colors.onSurface} /></View>
+            <View style={styles.actionIcon}><Icon name="bell" size={20} color={colors.onSurface} /></View>
             <Text style={styles.actionText}>{t('dashboard.notifications')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Achievements')}>
-            <View style={styles.actionIcon}><Icon name="award" size={20} color={Colors.onSurface} /></View>
+            <View style={styles.actionIcon}><Icon name="award" size={20} color={colors.onSurface} /></View>
             <Text style={styles.actionText}>{t('dashboard.achievements')}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Muscle Map Placeholder */}
+      {/* Muscle Map Recovery Overview */}
       <View style={{ marginBottom: 32 }}>
         <Text style={globalStyles.label}>{t('dashboard.muscle_recovery')}</Text>
-        <MuscleMap />
+        <MuscleMap size="sm" view="both" primaryMuscles={['chest', 'quadriceps']} secondaryMuscles={['triceps', 'abs']} />
       </View>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   header: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderBottomColor: colors.border,
     paddingBottom: 24,
     marginBottom: 24,
   },
   athleteText: {
     fontSize: 12,
     fontWeight: '700',
-    color: Colors.electric,
+    color: colors.electric,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
@@ -176,22 +181,22 @@ const styles = StyleSheet.create({
   },
   actionCard: {
     flex: 1,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   actionIcon: {
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
   },
   actionText: {
-    color: Colors.onSurface,
+    color: colors.onSurface,
     fontWeight: '700',
     fontSize: 12,
     textTransform: 'uppercase',

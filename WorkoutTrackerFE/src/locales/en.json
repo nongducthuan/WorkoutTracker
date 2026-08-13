@@ -454,7 +454,9 @@
       "version": "Version",
       "language": "Language",
       "theme": "Theme",
-      "dark_mode_fixed": "Dark Mode (Fixed)"
+      "dark_mode_fixed": "Dark Mode (Fixed)",
+      "theme_light": "Light",
+      "theme_dark": "Dark"
     },
     "achievements": {
       "title": "Achievements & Badges",

@@ -8,12 +8,27 @@ import { EmptyState } from '../../components/EmptyState';
 import { MuscleMap } from '../../components/MuscleMap';
 import { getExerciseMuscleGroup, MuscleId, getMuscleLabel } from '../lib/muscleMap';
 import { Modal } from '../../components/Modal';
-import { Colors } from '../theme/colors';
 import { globalStyles } from '../theme/styles';
+import { useTheme } from '../context/ThemeContext';
 
 const CATEGORIES = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Core', 'Cardio'];
 
+const categoryMuscleMap = {
+  Chest: { primary: ['chest', 'front-deltoid'], secondary: ['triceps'] },
+  Back: { primary: ['lats', 'trapezius-back'], secondary: ['biceps', 'rear-deltoid', 'lower-back'] },
+  Legs: { primary: ['quadriceps', 'glutes'], secondary: ['hamstrings', 'calves'] },
+  Shoulders: { primary: ['front-deltoid', 'rear-deltoid'], secondary: ['trapezius-front', 'triceps'] },
+  Arms: { primary: ['biceps', 'triceps'], secondary: ['forearms-front', 'forearms-back'] },
+  Core: { primary: ['abs', 'obliques'], secondary: ['lower-back'] },
+  Cardio: { primary: ['quadriceps', 'calves'], secondary: ['hamstrings', 'tibialis'] },
+};
+
+// Full-body fallback for "All" tab
+const ALL_MUSCLES_PRIMARY = ['chest', 'abs', 'quadriceps', 'biceps', 'front-deltoid', 'obliques'];
+const ALL_MUSCLES_SECONDARY = ['triceps', 'forearms-front', 'lats', 'trapezius-back', 'glutes', 'hamstrings', 'calves', 'lower-back', 'rear-deltoid'];
+
 export default function ExercisesScreen() {
+  const { colors } = useTheme();
   const { exercises = [], isLoading } = useExercises();
   const { t } = useTranslation();
   
@@ -60,6 +75,8 @@ export default function ExercisesScreen() {
     return <Skeleton />;
   }
 
+  const styles = makeStyles(colors);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -75,12 +92,12 @@ export default function ExercisesScreen() {
           </View>
 
           <View style={styles.searchContainer}>
-            <Feather name="search" size={16} color={Colors.mutedGray} style={styles.searchIcon} />
+            <Feather name="search" size={16} color={colors.mutedGray} style={styles.searchIcon} />
             <TextInput
               value={searchTerm}
               onChangeText={setSearchTerm}
               placeholder={t('exercises.search_placeholder')}
-              placeholderTextColor={Colors.mutedGray}
+              placeholderTextColor={colors.mutedGray}
               style={styles.searchInput}
             />
           </View>
@@ -123,7 +140,7 @@ export default function ExercisesScreen() {
                   {t('exercises.target_label', { muscle: getMuscleLabel(selectedMuscleFilter) })}
                 </Text>
                 <TouchableOpacity onPress={() => setSelectedMuscleFilter(null)}>
-                  <Feather name="x" size={14} color={Colors.electric} />
+                  <Feather name="x" size={14} color={colors.electric} />
                 </TouchableOpacity>
               </View>
             )}
@@ -184,15 +201,15 @@ export default function ExercisesScreen() {
               </Text>
               <View style={styles.legendItems}>
                 <View style={styles.legendItem}>
-                  <View style={[styles.legendDot, { backgroundColor: Colors.error }]} />
+                  <View style={[styles.legendDot, { backgroundColor: colors.error }]} />
                   <Text style={styles.legendText}>{t('exercises.legend_primary')}</Text>
                 </View>
                 <View style={styles.legendItem}>
-                  <View style={[styles.legendDot, { backgroundColor: Colors.warning }]} />
+                  <View style={[styles.legendDot, { backgroundColor: colors.warning }]} />
                   <Text style={styles.legendText}>{t('exercises.legend_secondary')}</Text>
                 </View>
                 <View style={styles.legendItem}>
-                  <View style={[styles.legendDot, { backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.borderGray }]} />
+                  <View style={[styles.legendDot, { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.borderGray }]} />
                   <Text style={styles.legendText}>{t('exercises.legend_inactive')}</Text>
                 </View>
               </View>
@@ -226,7 +243,7 @@ export default function ExercisesScreen() {
                           }}
                           style={styles.infoButton}
                         >
-                          <Feather name="info" size={14} color={Colors.mutedGray} />
+                          <Feather name="info" size={14} color={colors.mutedGray} />
                         </TouchableOpacity>
                         {isPinned && (
                           <View style={styles.pinnedIcon}>
@@ -277,7 +294,7 @@ export default function ExercisesScreen() {
               <EmptyState
                 title={t('exercises.empty_title')}
                 description={t('exercises.empty_desc')}
-                icon={<Feather name="book-open" size={32} color={Colors.mutedGray} />}
+                icon={<Feather name="book-open" size={32} color={colors.mutedGray} />}
               />
             )}
           </View>
@@ -366,10 +383,11 @@ export default function ExercisesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -379,7 +397,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderGray,
+    borderBottomColor: colors.borderGray,
     paddingBottom: 24,
     marginBottom: 24,
     flexWrap: 'wrap',
@@ -393,11 +411,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   subtitle: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 12,
     letterSpacing: 1,
     textTransform: 'uppercase',
@@ -417,16 +435,16 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     width: '100%',
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 8,
     paddingLeft: 40,
     paddingRight: 16,
     paddingTop: 10,
     paddingBottom: 10,
     fontSize: 14,
-    color: Colors.onSurface,
+    color: colors.onSurface,
   },
   categoriesContainer: {
     marginBottom: 24,
@@ -440,12 +458,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   categoryPillActive: {
-    backgroundColor: Colors.electric,
-    borderColor: Colors.electric,
+    backgroundColor: colors.electric,
+    borderColor: colors.electric,
   },
   categoryPillInactive: {
-    backgroundColor: Colors.card,
-    borderColor: Colors.borderGray,
+    backgroundColor: colors.card,
+    borderColor: colors.borderGray,
   },
   categoryPillText: {
     fontSize: 12,
@@ -457,7 +475,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   categoryPillTextInactive: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontWeight: 'bold',
   },
   activeFiltersContainer: {
@@ -465,16 +483,16 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 8,
     padding: 12,
     marginBottom: 24,
   },
   activeFiltersTitle: {
     fontWeight: '600',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     letterSpacing: 1,
     fontSize: 12,
@@ -493,7 +511,7 @@ const styles = StyleSheet.create({
   filterTagPrimaryText: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: Colors.electric,
+    color: colors.electric,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
@@ -520,7 +538,7 @@ const styles = StyleSheet.create({
   },
   clearFiltersText: {
     fontSize: 10,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     fontWeight: '900',
     letterSpacing: 1,
@@ -530,22 +548,22 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   muscleScannerContainer: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     padding: 20,
     marginBottom: 24,
   },
   muscleScannerTitle: {
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
     fontSize: 14,
   },
   muscleScannerDesc: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 10,
     textTransform: 'uppercase',
     fontWeight: '600',
@@ -553,18 +571,18 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   muscleScannerCanvas: {
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 8,
     paddingVertical: 16,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
   legendContainer: {
     borderTopWidth: 1,
-    borderTopColor: Colors.borderGray,
+    borderTopColor: colors.borderGray,
     paddingTop: 16,
     marginTop: 16,
     gap: 8,
@@ -572,7 +590,7 @@ const styles = StyleSheet.create({
   legendTitle: {
     fontSize: 10,
     fontWeight: '900',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     marginBottom: 8,
@@ -594,25 +612,25 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   exercisesList: {
     flex: 1,
     gap: 16,
   },
   exerciseCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
   },
   exerciseCardPinned: {
-    borderColor: Colors.electric,
+    borderColor: colors.electric,
     backgroundColor: 'rgba(204, 255, 0, 0.05)',
   },
   exerciseCardUnpinned: {
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   exerciseHeader: {
     flexDirection: 'row',
@@ -625,7 +643,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     letterSpacing: 1,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     flex: 1,
   },
@@ -639,9 +657,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -649,7 +667,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -670,29 +688,29 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.electric,
+    color: colors.electric,
   },
   exerciseFooter: {
     flexDirection: 'row',
     gap: 8,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderGray,
+    borderTopColor: colors.borderGray,
   },
   categoryBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
-    backgroundColor: Colors.surface,
+    borderColor: colors.borderGray,
+    backgroundColor: colors.surface,
   },
   categoryBadgeText: {
     fontSize: 10,
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
   },
   difficultyBadge: {
     paddingHorizontal: 8,
@@ -719,13 +737,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 149, 0, 0.1)',
   },
   diffTextBeginner: {
-    color: Colors.success,
+    color: colors.success,
   },
   diffTextIntermediate: {
-    color: Colors.electric,
+    color: colors.electric,
   },
   diffTextAdvanced: {
-    color: '#FF9500', // Assuming no Colors.electricOrange or warning might be used, but this matches Advanced
+    color: '#FF9500', // Assuming no colors.electricOrange or warning might be used, but this matches Advanced
   },
   modalContent: {
     gap: 20,
@@ -736,7 +754,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
@@ -750,15 +768,15 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
-    backgroundColor: Colors.surface,
+    borderColor: colors.borderGray,
+    backgroundColor: colors.surface,
   },
   modalCategoryText: {
     fontSize: 10,
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.onSurface,
+    color: colors.onSurface,
   },
   modalDifficultyBadge: {
     paddingHorizontal: 10,
@@ -773,7 +791,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.electric,
+    color: colors.electric,
   },
   modalSection: {
     gap: 8,
@@ -782,12 +800,12 @@ const styles = StyleSheet.create({
   modalSectionBorder: {
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderGray,
+    borderTopColor: colors.borderGray,
   },
   modalSectionTitle: {
     fontSize: 10,
     fontWeight: '900',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     marginBottom: 8,
@@ -810,7 +828,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    color: Colors.electric,
+    color: colors.electric,
   },
   modalMuscleSecondary: {
     backgroundColor: 'rgba(255, 149, 0, 0.1)',
@@ -829,7 +847,7 @@ const styles = StyleSheet.create({
   },
   modalInstructions: {
     fontSize: 14,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     lineHeight: 20,
     fontWeight: '600',
   },
@@ -841,14 +859,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
   },
   closeButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
 import { MainTabParamList } from './types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import DashboardScreen from '../screens/DashboardScreen';
 import WorkoutsScreen from '../screens/WorkoutsScreen';
 import ScheduleScreen from '../screens/ScheduleScreen';
@@ -12,33 +12,33 @@ import ReportsScreen from '../screens/ReportsScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-const headerStyle = {
-  backgroundColor: Colors.background,
-  borderBottomWidth: 1,
-  borderBottomColor: Colors.border,
-  elevation: 0,
-  shadowOpacity: 0,
-};
-
 export default function MainTabs() {
+  const { colors } = useTheme();
+
   return (
     <Tab.Navigator
       id="MainTabs"
       screenOptions={{
         headerShown: true,
-        headerStyle,
-        headerTitleStyle: { color: Colors.onSurface },
-        headerTintColor: Colors.onSurface,
+        headerStyle: {
+          backgroundColor: colors.background,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.border,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        headerTitleStyle: { color: colors.onSurface },
+        headerTintColor: colors.onSurface,
         tabBarStyle: {
-          backgroundColor: Colors.surface,
+          backgroundColor: colors.surface,
           borderTopWidth: 1,
-          borderTopColor: Colors.border,
+          borderTopColor: colors.border,
           height: Platform.OS === 'ios' ? 88 : 68,
           paddingBottom: Platform.OS === 'ios' ? 28 : 10,
           paddingTop: 10,
         },
-        tabBarActiveTintColor: Colors.electric,
-        tabBarInactiveTintColor: Colors.mutedGray,
+        tabBarActiveTintColor: colors.electric,
+        tabBarInactiveTintColor: colors.mutedGray,
       }}
     >
       <Tab.Screen

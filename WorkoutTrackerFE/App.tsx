@@ -8,10 +8,26 @@ import { authApi } from './src/api/auth';
 import { ToastProvider } from './components/Toast';
 import { Colors } from './src/theme/colors';
 import { DashboardSkeleton } from './components/LoadingSkeleton';
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import './src/i18n';
 
 const queryClient = new QueryClient();
 export const navigationRef = createNavigationContainerRef<any>();
+
+function AppContent({ isAuthenticated }: { isAuthenticated: boolean }) {
+  const { colors, isDark } = useTheme();
+
+  return (
+    <SafeAreaProvider>
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
+      <ToastProvider>
+        <NavigationContainer ref={navigationRef}>
+          <RootNavigator isAuthenticated={isAuthenticated} navigationRef={navigationRef} />
+        </NavigationContainer>
+      </ToastProvider>
+    </SafeAreaProvider>
+  );
+}
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -30,14 +46,9 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaProvider>
-        <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
-        <ToastProvider>
-          <NavigationContainer ref={navigationRef}>
-            <RootNavigator isAuthenticated={isAuthenticated} navigationRef={navigationRef} />
-          </NavigationContainer>
-        </ToastProvider>
-      </SafeAreaProvider>
+      <ThemeProvider>
+        <AppContent isAuthenticated={isAuthenticated} />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 type AboutNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -26,15 +26,18 @@ const FAQ = [
 ];
 
 export default function AboutScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<AboutNav>();
+
+  const styles = makeStyles(colors);
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+            <Feather name="chevron-left" size={20} color={colors.onSurface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('about.title')}</Text>
           <View style={styles.iconButton} />
@@ -62,7 +65,7 @@ export default function AboutScreen() {
           style={styles.contactRow}
           onPress={() => Linking.openURL('mailto:support@pulseapp.com')}
         >
-          <Feather name="mail" size={16} color={Colors.electric} />
+          <Feather name="mail" size={16} color={colors.electric} />
           <Text style={styles.contactText}>support@pulseapp.com</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -70,10 +73,11 @@ export default function AboutScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -88,9 +92,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -98,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   brandCard: {
@@ -109,26 +113,26 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 28,
     fontWeight: '900',
-    color: Colors.electric,
+    color: colors.electric,
     letterSpacing: 1,
   },
   brandVersion: {
     fontSize: 12,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginTop: 4,
   },
   sectionLabel: {
     fontSize: 12,
     fontWeight: '900',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     marginBottom: 12,
   },
   group: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 16,
     marginBottom: 24,
     overflow: 'hidden',
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
   faqItem: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderGray,
+    borderBottomColor: colors.borderGray,
   },
   faqItemLast: {
     borderBottomWidth: 0,
@@ -144,12 +148,12 @@ const styles = StyleSheet.create({
   faqQuestion: {
     fontSize: 13,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     marginBottom: 6,
   },
   faqAnswer: {
     fontSize: 12,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     lineHeight: 18,
   },
   contactRow: {
@@ -159,7 +163,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   contactText: {
-    color: Colors.electric,
+    color: colors.electric,
     fontSize: 13,
     fontWeight: '600',
   },

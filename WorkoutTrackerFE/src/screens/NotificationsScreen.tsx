@@ -8,13 +8,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSchedules } from '../hooks/useFitnessData';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 const REMINDER_KEY = 'reminderBefore30Min';
 
 type NotificationsNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function NotificationsScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<NotificationsNav>();
   const { schedules } = useSchedules();
@@ -36,12 +37,14 @@ export default function NotificationsScreen() {
     .sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime())
     .slice(0, 5);
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconButton}>
-            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+            <Feather name="chevron-left" size={20} color={colors.onSurface} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('notifications.title')}</Text>
           <View style={styles.iconButton} />
@@ -49,7 +52,7 @@ export default function NotificationsScreen() {
 
         <View style={styles.reminderCard}>
           <View style={styles.reminderLeft}>
-            <Feather name="bell" size={18} color={Colors.electric} />
+            <Feather name="bell" size={18} color={colors.electric} />
             <Text style={styles.reminderText}>
               {t('notifications.remind_before_30')}
             </Text>
@@ -57,7 +60,7 @@ export default function NotificationsScreen() {
           <Switch
             value={reminderEnabled}
             onValueChange={toggleReminder}
-            trackColor={{ false: Colors.borderGray, true: Colors.electric }}
+            trackColor={{ false: colors.borderGray, true: colors.electric }}
             thumbColor="#FFFFFF"
           />
         </View>
@@ -66,7 +69,7 @@ export default function NotificationsScreen() {
 
         {upcoming.length === 0 ? (
           <View style={styles.emptyBox}>
-            <Feather name="inbox" size={32} color={Colors.mutedGray} />
+            <Feather name="inbox" size={32} color={colors.mutedGray} />
             <Text style={styles.emptyText}>
               {t('notifications.empty')}
             </Text>
@@ -75,7 +78,7 @@ export default function NotificationsScreen() {
           upcoming.map((s) => (
             <View key={s.id} style={styles.notifCard}>
               <View style={styles.notifIcon}>
-                <Feather name="calendar" size={16} color={Colors.electric} />
+                <Feather name="calendar" size={16} color={colors.electric} />
               </View>
               <View style={styles.notifBody}>
                 <Text style={styles.notifTitle}>{s.workoutName || t('notifications.workout')}</Text>
@@ -97,10 +100,11 @@ export default function NotificationsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -115,9 +119,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -125,16 +129,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '900',
     letterSpacing: 1.5,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     textTransform: 'uppercase',
   },
   reminderCard: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 16,
     padding: 16,
     marginBottom: 24,
@@ -147,12 +151,12 @@ const styles = StyleSheet.create({
   reminderText: {
     fontSize: 13,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
   },
   sectionLabel: {
     fontSize: 12,
     fontWeight: '900',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     marginBottom: 12,
@@ -161,9 +165,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -172,7 +176,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -182,11 +186,11 @@ const styles = StyleSheet.create({
   notifTitle: {
     fontSize: 13,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
   },
   notifSubtitle: {
     fontSize: 11,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginTop: 2,
   },
   emptyBox: {
@@ -195,7 +199,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   emptyText: {
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     fontSize: 13,
     textAlign: 'center',
   },

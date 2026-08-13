@@ -7,7 +7,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from '../navigation/types';
-import { Colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 type OnboardingGoalNav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -24,6 +24,7 @@ const LEVELS = [
 ];
 
 export default function OnboardingGoalScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<OnboardingGoalNav>();
   const [goal, setGoal] = useState('muscle');
@@ -56,6 +57,8 @@ export default function OnboardingGoalScreen() {
     }
   };
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -72,13 +75,13 @@ export default function OnboardingGoalScreen() {
                 style={[styles.goalCard, active && styles.goalCardActive]}
               >
                 <View style={[styles.goalIcon, active && styles.goalIconActive]}>
-                  <Feather name={g.icon as any} size={20} color={active ? Colors.black : Colors.mutedGray} />
+                  <Feather name={g.icon as any} size={20} color={active ? colors.black : colors.mutedGray} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.goalLabel, active && styles.goalLabelActive]}>{g.label}</Text>
                   <Text style={styles.goalDesc}>{g.desc}</Text>
                 </View>
-                {active && <Feather name="check-circle" size={20} color={Colors.electric} />}
+                {active && <Feather name="check-circle" size={20} color={colors.electric} />}
               </TouchableOpacity>
             );
           })}
@@ -108,14 +111,14 @@ export default function OnboardingGoalScreen() {
             onPress={() => setDaysPerWeek((d) => Math.max(1, d - 1))}
             style={styles.stepperButton}
           >
-            <Feather name="minus" size={18} color={Colors.onSurface} />
+            <Feather name="minus" size={18} color={colors.onSurface} />
           </TouchableOpacity>
           <Text style={styles.stepperValue}>{daysPerWeek}</Text>
           <TouchableOpacity
             onPress={() => setDaysPerWeek((d) => Math.min(7, d + 1))}
             style={styles.stepperButton}
           >
-            <Feather name="plus" size={18} color={Colors.onSurface} />
+            <Feather name="plus" size={18} color={colors.onSurface} />
           </TouchableOpacity>
         </View>
 
@@ -131,10 +134,11 @@ export default function OnboardingGoalScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scrollContent: {
     padding: 20,
@@ -143,56 +147,56 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '900',
-    color: Colors.onSurface,
+    color: colors.onSurface,
     marginBottom: 6,
   },
   subtitle: {
     fontSize: 13,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginBottom: 24,
   },
   goalCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 14,
     padding: 16,
   },
   goalCardActive: {
-    borderColor: Colors.electric,
+    borderColor: colors.electric,
     backgroundColor: 'rgba(198,244,50,0.06)',
   },
   goalIcon: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   goalIconActive: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
   },
   goalLabel: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: Colors.onSurface,
+    color: colors.onSurface,
   },
   goalLabelActive: {
-    color: Colors.electric,
+    color: colors.electric,
   },
   goalDesc: {
     fontSize: 11,
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     marginTop: 2,
   },
   sectionLabel: {
     fontSize: 12,
     fontWeight: '900',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     marginBottom: 12,
@@ -207,31 +211,31 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
-    backgroundColor: Colors.card,
+    borderColor: colors.borderGray,
+    backgroundColor: colors.card,
     alignItems: 'center',
   },
   levelChipActive: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     borderColor: 'transparent',
   },
   levelChipText: {
     fontSize: 11,
     fontWeight: 'bold',
-    color: Colors.mutedGray,
+    color: colors.mutedGray,
     textTransform: 'uppercase',
   },
   levelChipTextActive: {
-    color: Colors.black,
+    color: colors.black,
   },
   stepperCard: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     borderRadius: 14,
     paddingVertical: 16,
     marginBottom: 32,
@@ -240,21 +244,21 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: Colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: Colors.borderGray,
+    borderColor: colors.borderGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
   stepperValue: {
     fontSize: 28,
     fontWeight: '900',
-    color: Colors.electric,
+    color: colors.electric,
     minWidth: 40,
     textAlign: 'center',
   },
   continueButton: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -263,7 +267,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(204, 255, 0, 0.5)',
   },
   continueButtonText: {
-    color: Colors.black,
+    color: colors.black,
     fontWeight: '900',
     fontSize: 15,
   },

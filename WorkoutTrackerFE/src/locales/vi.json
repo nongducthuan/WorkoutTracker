@@ -454,7 +454,9 @@
       "version": "Phiên bản",
       "language": "Ngôn ngữ",
       "theme": "Giao diện",
-      "dark_mode_fixed": "Chế độ tối (Cố định)"
+      "dark_mode_fixed": "Chế độ tối (Cố định)",
+      "theme_light": "Sáng",
+      "theme_dark": "Tối"
     },
     "achievements": {
       "title": "Thành tựu & Huy hiệu",

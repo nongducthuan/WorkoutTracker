@@ -16,12 +16,13 @@ import { useTranslation } from 'react-i18next';
 import Svg, { Path } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { authApi } from '../api/auth';
-import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/types';
+import { useTheme } from '../context/ThemeContext';
 
 type RegisterNav = NativeStackNavigationProp<RootStackParamList>;
 
 export default function RegisterScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<RegisterNav>();
   const [fullName, setFullName] = useState('');
@@ -53,6 +54,8 @@ export default function RegisterScreen() {
     }
   };
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.keyboardView} edges={['top', 'bottom']}>
       <KeyboardAvoidingView
@@ -61,14 +64,14 @@ export default function RegisterScreen() {
       >
       <ScrollView contentContainerStyle={styles.scrollInner}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={Colors.onSurface} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={colors.onSurface} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <Path d="M15 18l-6-6 6-6" />
           </Svg>
         </TouchableOpacity>
 
         <View style={styles.logoSection}>
           <View style={styles.logoRow}>
-            <Svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={Colors.electric} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <Svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={colors.electric} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <Path d="M6 18h12M6 6h12M12 6v12M2 12h4M18 12h4" />
             </Svg>
             <Text style={styles.logoText}>PULSE</Text>
@@ -90,7 +93,7 @@ export default function RegisterScreen() {
             value={fullName}
             onChangeText={setFullName}
             placeholder={t('register.name_placeholder')}
-            placeholderTextColor={Colors.mutedGray}
+            placeholderTextColor={colors.mutedGray}
             style={styles.input}
           />
 
@@ -99,7 +102,7 @@ export default function RegisterScreen() {
             value={userName}
             onChangeText={setUserName}
             placeholder={t('register.username_placeholder')}
-            placeholderTextColor={Colors.mutedGray}
+            placeholderTextColor={colors.mutedGray}
             autoCapitalize="none"
             style={styles.input}
           />
@@ -109,7 +112,7 @@ export default function RegisterScreen() {
             value={email}
             onChangeText={setEmail}
             placeholder={t('login.email_hint')}
-            placeholderTextColor={Colors.mutedGray}
+            placeholderTextColor={colors.mutedGray}
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.input}
@@ -120,7 +123,7 @@ export default function RegisterScreen() {
             value={password}
             onChangeText={setPassword}
             placeholder={t('login.password_hint')}
-            placeholderTextColor={Colors.mutedGray}
+            placeholderTextColor={colors.mutedGray}
             secureTextEntry
             style={styles.input}
           />
@@ -130,7 +133,7 @@ export default function RegisterScreen() {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             placeholder={t('register.confirm_password_hint')}
-            placeholderTextColor={Colors.mutedGray}
+            placeholderTextColor={colors.mutedGray}
             secureTextEntry
             style={styles.input}
           />
@@ -138,10 +141,10 @@ export default function RegisterScreen() {
           <TouchableOpacity
             onPress={handleRegister}
             disabled={isLoading}
-            style={[styles.btn, isLoading && { backgroundColor: Colors.electricDim }]}
+            style={[styles.btn, isLoading && { backgroundColor: colors.electricDim }]}
           >
             {isLoading ? (
-              <ActivityIndicator color={Colors.black} />
+              <ActivityIndicator color={colors.black} />
             ) : (
               <Text style={styles.btnText}>{t('register.sign_up')}</Text>
             )}
@@ -160,25 +163,26 @@ export default function RegisterScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  keyboardView: { flex: 1, backgroundColor: Colors.background },
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+  keyboardView: { flex: 1, backgroundColor: colors.background },
   scrollInner: { flexGrow: 1, justifyContent: 'center', paddingHorizontal: 32, paddingVertical: 40 },
   backButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
   },
   logoSection: { alignItems: 'center', marginBottom: 24 },
   logoRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
-  logoText: { fontSize: 36, fontWeight: '900', color: Colors.onSurface, letterSpacing: -1 },
-  logoSub: { color: Colors.electricOrange, fontSize: 12, fontWeight: '700', letterSpacing: 3, textTransform: 'uppercase' },
-  title: { fontSize: 24, fontWeight: '700', color: Colors.onSurface, textAlign: 'center', marginBottom: 24 },
+  logoText: { fontSize: 36, fontWeight: '900', color: colors.onSurface, letterSpacing: -1 },
+  logoSub: { color: colors.electricOrange, fontSize: 12, fontWeight: '700', letterSpacing: 3, textTransform: 'uppercase' },
+  title: { fontSize: 24, fontWeight: '700', color: colors.onSurface, textAlign: 'center', marginBottom: 24 },
   errorBox: {
     backgroundColor: 'rgba(239,68,68,0.15)',
     borderWidth: 1,
@@ -189,32 +193,32 @@ const styles = StyleSheet.create({
   },
   errorText: { color: '#FC8181', textAlign: 'center', fontWeight: '600' },
   form: { gap: 4 },
-  label: { color: Colors.mutedGray, fontSize: 13, fontWeight: '700', marginBottom: 8 },
+  label: { color: colors.mutedGray, fontSize: 13, fontWeight: '700', marginBottom: 8 },
   input: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     marginBottom: 4,
   },
   btn: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 24,
     elevation: 5,
-    shadowColor: Colors.electric,
+    shadowColor: colors.electric,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
   },
-  btnText: { color: Colors.black, fontWeight: '900', fontSize: 16 },
+  btnText: { color: colors.black, fontWeight: '900', fontSize: 16 },
   footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 24 },
-  footerText: { color: Colors.mutedGray },
-  footerLink: { color: Colors.electric, fontWeight: '700' },
+  footerText: { color: colors.mutedGray },
+  footerLink: { color: colors.electric, fontWeight: '700' },
 });

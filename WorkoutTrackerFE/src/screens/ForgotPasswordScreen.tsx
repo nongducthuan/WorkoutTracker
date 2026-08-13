@@ -14,13 +14,14 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../theme/colors';
 import { AuthStackParamList } from '../navigation/types';
 import { authApi } from '../api/auth';
+import { useTheme } from '../context/ThemeContext';
 
 type ForgotPasswordNav = NativeStackNavigationProp<AuthStackParamList>;
 
 export default function ForgotPasswordScreen() {
+  const { colors } = useTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<ForgotPasswordNav>();
   const [email, setEmail] = useState('');
@@ -48,6 +49,8 @@ export default function ForgotPasswordScreen() {
     }
   };
 
+  const styles = makeStyles(colors);
+
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <KeyboardAvoidingView
@@ -56,11 +59,11 @@ export default function ForgotPasswordScreen() {
       >
         <View style={styles.inner}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Feather name="chevron-left" size={20} color={Colors.onSurface} />
+            <Feather name="chevron-left" size={20} color={colors.onSurface} />
           </TouchableOpacity>
 
           <View style={styles.lockIconWrap}>
-            <Feather name="lock" size={28} color={Colors.electric} />
+            <Feather name="lock" size={28} color={colors.electric} />
           </View>
 
           <Text style={styles.title}>{t('forgot_password.title')}</Text>
@@ -79,7 +82,7 @@ export default function ForgotPasswordScreen() {
             value={email}
             onChangeText={setEmail}
             placeholder={t('login.email_hint')}
-            placeholderTextColor={Colors.mutedGray}
+            placeholderTextColor={colors.mutedGray}
             autoCapitalize="none"
             keyboardType="email-address"
             style={styles.input}
@@ -88,10 +91,10 @@ export default function ForgotPasswordScreen() {
           <TouchableOpacity
             onPress={handleSend}
             disabled={isLoading}
-            style={[styles.btn, isLoading && { backgroundColor: Colors.electricDim }]}
+            style={[styles.btn, isLoading && { backgroundColor: colors.electricDim }]}
           >
             {isLoading ? (
-              <ActivityIndicator color={Colors.black} />
+              <ActivityIndicator color={colors.black} />
             ) : (
               <Text style={styles.btnText}>{t('forgot_password.send_code')}</Text>
             )}
@@ -109,16 +112,17 @@ export default function ForgotPasswordScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.background },
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+  screen: { flex: 1, backgroundColor: colors.background },
   inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 32 },
   backButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
@@ -129,16 +133,16 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
     marginBottom: 24,
   },
-  title: { fontSize: 22, fontWeight: '900', color: Colors.onSurface, textAlign: 'center', marginBottom: 12, letterSpacing: 1 },
-  subtitle: { fontSize: 13, color: Colors.mutedGray, textAlign: 'center', marginBottom: 28, lineHeight: 20 },
+  title: { fontSize: 22, fontWeight: '900', color: colors.onSurface, textAlign: 'center', marginBottom: 12, letterSpacing: 1 },
+  subtitle: { fontSize: 13, color: colors.mutedGray, textAlign: 'center', marginBottom: 28, lineHeight: 20 },
   errorBox: {
     backgroundColor: 'rgba(239,68,68,0.15)',
     borderWidth: 1,
@@ -148,27 +152,27 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   errorText: { color: '#FC8181', textAlign: 'center', fontWeight: '600' },
-  label: { color: Colors.mutedGray, fontSize: 13, fontWeight: '700', marginBottom: 8 },
+  label: { color: colors.mutedGray, fontSize: 13, fontWeight: '700', marginBottom: 8 },
   input: {
-    backgroundColor: Colors.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: Colors.onSurface,
+    color: colors.onSurface,
     marginBottom: 4,
   },
   btn: {
-    backgroundColor: Colors.electric,
+    backgroundColor: colors.electric,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 24,
   },
-  btnText: { color: Colors.black, fontWeight: '900', fontSize: 16 },
+  btnText: { color: colors.black, fontWeight: '900', fontSize: 16 },
   footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 32 },
-  footerText: { color: Colors.mutedGray },
-  footerLink: { color: Colors.electric, fontWeight: '700' },
+  footerText: { color: colors.mutedGray },
+  footerLink: { color: colors.electric, fontWeight: '700' },
 });
