@@ -8,7 +8,6 @@ import { EmptyState } from '../../components/EmptyState';
 import { MuscleMap } from '../../components/MuscleMap';
 import { getExerciseMuscleGroup, MuscleId, getMuscleLabel } from '../lib/muscleMap';
 import { Modal } from '../../components/Modal';
-import { globalStyles } from '../theme/styles';
 import { useTheme } from '../context/ThemeContext';
 
 const CATEGORIES = ['All', 'Chest', 'Back', 'Legs', 'Shoulders', 'Arms', 'Core', 'Cardio'];
