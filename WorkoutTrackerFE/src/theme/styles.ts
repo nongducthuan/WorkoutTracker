@@ -86,7 +86,7 @@ export const createGlobalStyles = (colors: ThemeColors) =>
       gap: 8,
     },
     btnPrimaryText: {
-      color: colors.white,
+      color: colors.black,
       fontWeight: '900',
       fontSize: 16,
     },
@@ -123,7 +123,7 @@ export const createGlobalStyles = (colors: ThemeColors) =>
       gap: 6,
     },
     btnSmallText: {
-      color: colors.white,
+      color: colors.black,
       fontWeight: '900',
       fontSize: 12,
       textTransform: 'uppercase',

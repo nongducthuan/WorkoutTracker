@@ -7,7 +7,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { globalStyles } from '../theme/styles';
 import { useWorkouts, useSchedules, useExercises, useReports } from '../hooks/useFitnessData';
 import { DashboardSkeleton } from '../../components/LoadingSkeleton';
-import { MuscleMap } from '../../components/MuscleMap';
 import { RootStackParamList } from '../navigation/types';
 import { authApi } from '../api/auth';
 import { useTheme } from '../context/ThemeContext';
@@ -148,12 +147,6 @@ export default function DashboardScreen() {
             <Text style={styles.actionText}>{t('dashboard.achievements')}</Text>
           </TouchableOpacity>
         </View>
-      </View>
-
-      {/* Muscle Map Recovery Overview */}
-      <View style={{ marginBottom: 32 }}>
-        <Text style={globalStyles.label}>{t('dashboard.muscle_recovery')}</Text>
-        <MuscleMap size="sm" view="both" primaryMuscles={['chest', 'quadriceps']} secondaryMuscles={['triceps', 'abs']} />
       </View>
     </ScrollView>
   );

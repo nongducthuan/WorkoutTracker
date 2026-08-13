@@ -56,6 +56,14 @@ const slugToMuscleIdMap: Partial<Record<Slug, MuscleId>> = {
   calves: 'calves',
 };
 
+export const MUSCLE_INTENSITY_COLORS = {
+  low: '#F59E0B',
+  moderate: '#EF4444',
+  overloaded: '#FF3B30',
+  resting: '#1F1F24',
+  restingBorder: '#3A3A45',
+} as const;
+
 export const MuscleMap: React.FC<MuscleMapProps> = ({
   primaryMuscles = [],
   secondaryMuscles = [],
@@ -127,7 +135,15 @@ export const MuscleMap: React.FC<MuscleMapProps> = ({
     }
   };
 
-  const colors = useMemo(() => ['#F59E0B', '#EF4444', '#FF3B30', '#FF6B35'], []);
+
+  const colors = useMemo(
+    () => [
+      MUSCLE_INTENSITY_COLORS.low,
+      MUSCLE_INTENSITY_COLORS.moderate,
+      MUSCLE_INTENSITY_COLORS.overloaded,
+    ],
+    []
+  );
 
   return (
     <View style={styles.wrapper}>

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useReports } from '../hooks/useFitnessData';
 import { DashboardSkeleton } from '../../components/LoadingSkeleton';
 import { EmptyState } from '../../components/EmptyState';
-import { MuscleMap } from '../../components/MuscleMap';
+import { MuscleMap, MUSCLE_INTENSITY_COLORS } from '../../components/MuscleMap';
 import { MuscleId, getMuscleLabel } from '../lib/muscleMap';
 import { globalStyles } from '../theme/styles';
 import { useTheme } from '../context/ThemeContext';
@@ -81,7 +81,7 @@ export default function ReportsScreen() {
 
     const maxVal = Math.max(...Object.values(musclesScore), 1);
     const scaledScore: Partial<Record<MuscleId, number>> = {};
-    
+
     Object.entries(musclesScore).forEach(([key, val]) => {
       scaledScore[key as MuscleId] = val / maxVal;
     });
@@ -98,7 +98,7 @@ export default function ReportsScreen() {
       .map(([muscleId, volume]) => ({
         id: muscleId as MuscleId,
         name: getMuscleLabel(muscleId as MuscleId),
-        volume: Math.round(volume * 10), 
+        volume: Math.round(volume * 10),
       }))
       .sort((a, b) => b.volume - a.volume);
   }, [heatmapData]);
@@ -138,7 +138,7 @@ export default function ReportsScreen() {
     labelTextStyle: { color: colors.mutedGray, fontSize: 10, fontWeight: 'bold' as const }
   }));
 
-  const chartWidth = screenWidth - 80; 
+  const chartWidth = screenWidth - 80;
 
   return (
     <ScrollView style={globalStyles.screen} contentContainerStyle={{ padding: 20 }}>
@@ -245,25 +245,25 @@ export default function ReportsScreen() {
             </View>
           </View>
           <View style={styles.chartContainer}>
-             {barData.length > 0 ? (
-                <BarChart
-                  data={barData}
-                  barWidth={24}
-                  noOfSections={4}
-                  barBorderRadius={4}
-                  frontColor={colors.electric}
-                  yAxisThickness={0}
-                  xAxisThickness={0}
-                  hideRules={true}
-                  yAxisTextStyle={{ color: colors.mutedGray, fontSize: 10, fontWeight: 'bold' }}
-                  isAnimated
-                  width={chartWidth}
-                  height={150}
-                  disableScroll={true}
-                />
-             ) : (
-                <Text style={styles.noDataText}>No Data</Text>
-             )}
+            {barData.length > 0 ? (
+              <BarChart
+                data={barData}
+                barWidth={24}
+                noOfSections={4}
+                barBorderRadius={4}
+                frontColor={colors.electric}
+                yAxisThickness={0}
+                xAxisThickness={0}
+                hideRules={true}
+                yAxisTextStyle={{ color: colors.mutedGray, fontSize: 10, fontWeight: 'bold' }}
+                isAnimated
+                width={chartWidth}
+                height={150}
+                disableScroll={true}
+              />
+            ) : (
+              <Text style={styles.noDataText}>No Data</Text>
+            )}
           </View>
         </View>
 
@@ -362,28 +362,24 @@ export default function ReportsScreen() {
           />
           <View style={styles.heatmapLegend}>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: '#C6F432' }]} />
-              <Text style={styles.legendText}>
-                {t('reports.heatmap_overloaded')}
-              </Text>
+              <View style={[styles.legendColor, { backgroundColor: MUSCLE_INTENSITY_COLORS.overloaded }]} />
+              <Text style={styles.legendText}>{t('reports.heatmap_overloaded')}</Text>
             </View>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: '#8BB300' }]} />
-              <Text style={styles.legendText}>
-                {t('reports.heatmap_moderate')}
-              </Text>
+              <View style={[styles.legendColor, { backgroundColor: MUSCLE_INTENSITY_COLORS.moderate }]} />
+              <Text style={styles.legendText}>{t('reports.heatmap_moderate')}</Text>
             </View>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: '#4C6E00' }]} />
-              <Text style={styles.legendText}>
-                {t('reports.heatmap_low')}
-              </Text>
+              <View style={[styles.legendColor, { backgroundColor: MUSCLE_INTENSITY_COLORS.low }]} />
+              <Text style={styles.legendText}>{t('reports.heatmap_low')}</Text>
             </View>
             <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }]} />
-              <Text style={styles.legendText}>
-                {t('reports.heatmap_rested')}
-              </Text>
+              <View style={[styles.legendColor, {
+                backgroundColor: MUSCLE_INTENSITY_COLORS.resting,
+                borderWidth: 1,
+                borderColor: MUSCLE_INTENSITY_COLORS.restingBorder,
+              }]} />
+              <Text style={styles.legendText}>{t('reports.heatmap_rested')}</Text>
             </View>
           </View>
         </View>
@@ -415,7 +411,7 @@ export default function ReportsScreen() {
                       </Text>
                     </View>
                     <View style={styles.progressBarBg}>
-                      <View 
+                      <View
                         style={[styles.progressBarFill, { width: `${pct}%` }]}
                       />
                     </View>
@@ -449,8 +445,8 @@ export default function ReportsScreen() {
               const activityDate = new Date(activity.date);
               const isLast = index === stats.recentActivity.length - 1;
               return (
-                <View 
-                  key={activity.id} 
+                <View
+                  key={activity.id}
                   style={[styles.activityItemRow, !isLast && styles.borderBottom]}
                 >
                   <View style={{ flex: 1 }}>
@@ -491,360 +487,360 @@ export default function ReportsScreen() {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-  blurEffect: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: 256,
-    height: 256,
-    backgroundColor: 'rgba(198, 244, 50, 0.05)',
-    borderRadius: 128,
-  },
-  header: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    paddingBottom: 16,
-    marginBottom: 24,
-    marginTop: 16,
-  },
-  headerTitle: {
-    fontSize: 30,
-    fontWeight: '900',
-    letterSpacing: 1.5,
-    color: colors.onSurface,
-    textTransform: 'uppercase',
-  },
-  headerSubtitle: {
-    color: colors.mutedGray,
-    fontSize: 12,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-    marginTop: 4,
-  },
-  cardLabel: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    color: colors.mutedGray,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    marginTop: 8,
-  },
-  statsValueMain: {
-    fontSize: 48,
-    fontWeight: '900',
-    letterSpacing: 2,
-    color: colors.onSurface,
-  },
-  statsValueUnit: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.mutedGray,
-  },
-  badgeElectric: {
-    backgroundColor: 'rgba(198, 244, 50, 0.1)',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  badgeTextElectric: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: colors.electric,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  badgeOrange: {
-    backgroundColor: 'rgba(255, 107, 53, 0.1)',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  badgeTextOrange: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: colors.electricOrange,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  subStatsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginTop: 12,
-  },
-  subStatsText: {
-    fontSize: 10,
-    color: colors.mutedGray,
-    fontWeight: '600',
-  },
-  chartHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    paddingBottom: 12,
-    marginBottom: 16,
-  },
-  chartTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  chartTitleText: {
-    fontSize: 14,
-    fontWeight: '900',
-    letterSpacing: 1,
-    color: colors.onSurface,
-    textTransform: 'uppercase',
-  },
-  chartContainer: {
-    height: 192,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  noDataText: {
-    color: colors.mutedGray,
-    fontSize: 12,
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-    letterSpacing: 1,
-  },
-  scannerHeader: {
-    flexDirection: 'column',
-    gap: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    paddingBottom: 16,
-    marginBottom: 16,
-  },
-  scannerTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 4,
-  },
-  scannerTitleText: {
-    fontSize: 18,
-    fontWeight: '900',
-    letterSpacing: 1,
-    color: colors.onSurface,
-    textTransform: 'uppercase',
-  },
-  scannerSubtitleText: {
-    color: colors.mutedGray,
-    fontSize: 12,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-  },
-  timeToggleContainer: {
-    flexDirection: 'row',
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    padding: 4,
-    alignSelf: 'flex-start',
-  },
-  timeToggleBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-    backgroundColor: 'transparent',
-  },
-  timeToggleBtnActive: {
-    backgroundColor: colors.electric,
-  },
-  timeToggleText: {
-    fontSize: 10,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    color: colors.mutedGray,
-  },
-  timeToggleTextActive: {
-    color: colors.black,
-  },
-  heatmapBox: {
-    backgroundColor: 'rgba(13, 13, 15, 0.4)',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 16,
-    padding: 16,
-    paddingVertical: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 24,
-  },
-  heatmapLegend: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 16,
-    marginTop: 24,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    width: '100%',
-  },
-  legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  legendColor: {
-    width: 12,
-    height: 12,
-    borderRadius: 2,
-  },
-  legendText: {
-    fontSize: 9,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-    color: colors.mutedGray,
-  },
-  leaderboardContainer: {},
-  leaderboardHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    paddingBottom: 8,
-    marginBottom: 8,
-  },
-  leaderboardTitle: {
-    fontWeight: 'bold',
-    color: colors.onSurface,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontSize: 12,
-  },
-  leaderboardList: {},
-  leaderboardItemRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  leaderboardRank: {
-    color: colors.electric,
-    fontSize: 9,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  leaderboardName: {
-    color: colors.onSurface,
-    fontSize: 10,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  leaderboardVolume: {
-    color: colors.mutedGray,
-    fontSize: 10,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  progressBarBg: {
-    width: '100%',
-    backgroundColor: colors.surface,
-    height: 6,
-    borderRadius: 3,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  progressBarFill: {
-    backgroundColor: colors.electric,
-    height: '100%',
-    borderRadius: 3,
-  },
-  noHistoryBox: {
-    paddingVertical: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  noHistoryText: {
-    fontSize: 10,
-    color: colors.mutedGray,
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-    letterSpacing: 1,
-    marginTop: 8,
-  },
-  activityTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 16,
-  },
-  activityTitle: {
-    fontSize: 20,
-    fontWeight: '900',
-    letterSpacing: 1,
-    color: colors.onSurface,
-    textTransform: 'uppercase',
-  },
-  activityItemRow: {
-    padding: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  borderBottom: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  activityItemName: {
-    fontWeight: 'bold',
-    color: colors.onSurface,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontSize: 14,
-    marginBottom: 4,
-  },
-  activityItemDate: {
-    fontSize: 12,
-    color: colors.mutedGray,
-    fontWeight: '600',
-  },
-  activityItemActions: {
-    alignItems: 'flex-end',
-    gap: 8,
-  },
-  badgeElectricSlim: {
-    backgroundColor: 'rgba(198, 244, 50, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(198, 244, 50, 0.1)',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  badgeTextElectricSlim: {
-    fontSize: 9,
-    fontWeight: '900',
-    color: colors.electric,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  activityItemCount: {
-    fontWeight: '900',
-    color: colors.onSurface,
-    backgroundColor: colors.surface,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-    fontSize: 12,
-  },
-});
+    blurEffect: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      width: 256,
+      height: 256,
+      backgroundColor: 'rgba(198, 244, 50, 0.05)',
+      borderRadius: 128,
+    },
+    header: {
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+      paddingBottom: 16,
+      marginBottom: 24,
+      marginTop: 16,
+    },
+    headerTitle: {
+      fontSize: 30,
+      fontWeight: '900',
+      letterSpacing: 1.5,
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+    },
+    headerSubtitle: {
+      color: colors.mutedGray,
+      fontSize: 12,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      fontWeight: 'bold',
+      marginTop: 4,
+    },
+    cardLabel: {
+      fontSize: 12,
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      color: colors.mutedGray,
+    },
+    statsRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+      marginTop: 8,
+    },
+    statsValueMain: {
+      fontSize: 48,
+      fontWeight: '900',
+      letterSpacing: 2,
+      color: colors.onSurface,
+    },
+    statsValueUnit: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.mutedGray,
+    },
+    badgeElectric: {
+      backgroundColor: 'rgba(198, 244, 50, 0.1)',
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: 4,
+    },
+    badgeTextElectric: {
+      fontSize: 12,
+      fontWeight: 'bold',
+      color: colors.electric,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    badgeOrange: {
+      backgroundColor: 'rgba(255, 107, 53, 0.1)',
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: 4,
+    },
+    badgeTextOrange: {
+      fontSize: 10,
+      fontWeight: 'bold',
+      color: colors.electricOrange,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    subStatsRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      marginTop: 12,
+    },
+    subStatsText: {
+      fontSize: 10,
+      color: colors.mutedGray,
+      fontWeight: '600',
+    },
+    chartHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+      paddingBottom: 12,
+      marginBottom: 16,
+    },
+    chartTitleContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    chartTitleText: {
+      fontSize: 14,
+      fontWeight: '900',
+      letterSpacing: 1,
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+    },
+    chartContainer: {
+      height: 192,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    noDataText: {
+      color: colors.mutedGray,
+      fontSize: 12,
+      textTransform: 'uppercase',
+      fontWeight: 'bold',
+      letterSpacing: 1,
+    },
+    scannerHeader: {
+      flexDirection: 'column',
+      gap: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+      paddingBottom: 16,
+      marginBottom: 16,
+    },
+    scannerTitleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 4,
+    },
+    scannerTitleText: {
+      fontSize: 18,
+      fontWeight: '900',
+      letterSpacing: 1,
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+    },
+    scannerSubtitleText: {
+      color: colors.mutedGray,
+      fontSize: 12,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      fontWeight: 'bold',
+    },
+    timeToggleContainer: {
+      flexDirection: 'row',
+      backgroundColor: colors.background,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      padding: 4,
+      alignSelf: 'flex-start',
+    },
+    timeToggleBtn: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 6,
+      backgroundColor: 'transparent',
+    },
+    timeToggleBtnActive: {
+      backgroundColor: colors.electric,
+    },
+    timeToggleText: {
+      fontSize: 10,
+      fontWeight: '900',
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      color: colors.mutedGray,
+    },
+    timeToggleTextActive: {
+      color: colors.black,
+    },
+    heatmapBox: {
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 16,
+      padding: 16,
+      paddingVertical: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 24,
+    },
+    heatmapLegend: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: 16,
+      marginTop: 24,
+      paddingTop: 16,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      width: '100%',
+    },
+    legendItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+    },
+    legendColor: {
+      width: 12,
+      height: 12,
+      borderRadius: 2,
+    },
+    legendText: {
+      fontSize: 9,
+      fontWeight: '900',
+      textTransform: 'uppercase',
+      letterSpacing: 2,
+      color: colors.mutedGray,
+    },
+    leaderboardContainer: {},
+    leaderboardHeaderRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+      paddingBottom: 8,
+      marginBottom: 8,
+    },
+    leaderboardTitle: {
+      fontWeight: 'bold',
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      fontSize: 12,
+    },
+    leaderboardList: {},
+    leaderboardItemRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 4,
+    },
+    leaderboardRank: {
+      color: colors.electric,
+      fontSize: 9,
+      fontWeight: '900',
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    leaderboardName: {
+      color: colors.onSurface,
+      fontSize: 10,
+      fontWeight: '900',
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    leaderboardVolume: {
+      color: colors.mutedGray,
+      fontSize: 10,
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    progressBarBg: {
+      width: '100%',
+      backgroundColor: colors.surface,
+      height: 6,
+      borderRadius: 3,
+      overflow: 'hidden',
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    progressBarFill: {
+      backgroundColor: colors.electric,
+      height: '100%',
+      borderRadius: 3,
+    },
+    noHistoryBox: {
+      paddingVertical: 40,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    noHistoryText: {
+      fontSize: 10,
+      color: colors.mutedGray,
+      textTransform: 'uppercase',
+      fontWeight: 'bold',
+      letterSpacing: 1,
+      marginTop: 8,
+    },
+    activityTitleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 16,
+    },
+    activityTitle: {
+      fontSize: 20,
+      fontWeight: '900',
+      letterSpacing: 1,
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+    },
+    activityItemRow: {
+      padding: 16,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    borderBottom: {
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    activityItemName: {
+      fontWeight: 'bold',
+      color: colors.onSurface,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      fontSize: 14,
+      marginBottom: 4,
+    },
+    activityItemDate: {
+      fontSize: 12,
+      color: colors.mutedGray,
+      fontWeight: '600',
+    },
+    activityItemActions: {
+      alignItems: 'flex-end',
+      gap: 8,
+    },
+    badgeElectricSlim: {
+      backgroundColor: 'rgba(198, 244, 50, 0.1)',
+      borderWidth: 1,
+      borderColor: 'rgba(198, 244, 50, 0.1)',
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: 4,
+    },
+    badgeTextElectricSlim: {
+      fontSize: 9,
+      fontWeight: '900',
+      color: colors.electric,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    activityItemCount: {
+      fontWeight: '900',
+      color: colors.onSurface,
+      backgroundColor: colors.surface,
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: 4,
+      fontSize: 12,
+    },
+  });
