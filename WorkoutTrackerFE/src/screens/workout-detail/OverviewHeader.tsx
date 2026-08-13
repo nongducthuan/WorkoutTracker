@@ -45,7 +45,6 @@ export function OverviewHeader({
     <View style={styles.header}>
       <TouchableOpacity onPress={onGoBack} style={styles.backButton}>
         <Feather name="arrow-left" size={14} color={Colors.white} />
-        <Text style={styles.backText}>{t('workout_detail.back')}</Text>
       </TouchableOpacity>
 
       {isEditing ? (

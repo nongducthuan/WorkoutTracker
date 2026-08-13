@@ -39,14 +39,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
-  backText: {
-    color: Colors.white,
-    fontSize: 12,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginLeft: 6,
-  },
   editOverviewContainer: {
     gap: 16,
   },
