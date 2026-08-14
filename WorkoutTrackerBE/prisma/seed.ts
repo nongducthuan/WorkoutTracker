@@ -15,6 +15,9 @@ function daysAgoAt(daysAgo: number, hour: number, minute = 0): Date {
 async function main() {
   console.log('Cleaning up existing data...');
   // Delete in reverse order of foreign key dependencies
+  await prisma.workoutSet.deleteMany();
+  await prisma.workoutSession.deleteMany();
+  await prisma.userSettings.deleteMany();
   await prisma.workoutComment.deleteMany();
   await prisma.scheduleWorkout.deleteMany();
   await prisma.workoutExercise.deleteMany();
@@ -30,6 +33,17 @@ async function main() {
       email: 'user@example.com',
       userName: 'testuser',
       password: await bcrypt.hash('Test@123', 10),
+    },
+  });
+
+  console.log('Creating user settings...');
+  await prisma.userSettings.create({
+    data: {
+      id: 'E1111111-1111-1111-1111-111111111111',
+      userId: user.id,
+      goal: 'muscle',
+      level: 'intermediate',
+      onboardingCompleted: true,
     },
   });
 
@@ -130,6 +144,89 @@ async function main() {
       { id: 'C2222222-2222-2222-2222-222222222222', scheduledDate: daysAgoAt(3, 17, 30), workoutId: legDay.id, isCompleted: true },
       { id: 'C3333333-3333-3333-3333-333333333333', scheduledDate: daysAgoAt(2, 9), workoutId: pullDay.id, isCompleted: true },
       { id: 'C4444444-4444-4444-4444-444444444444', scheduledDate: daysAgoAt(1, 16), workoutId: cardioCore.id, isCompleted: true },
+    ],
+  });
+
+  console.log('Creating workout sessions & sets...');
+
+  // Push Day session (matches ScheduleWorkout C1111111...)
+  const pushSession = await prisma.workoutSession.create({
+    data: {
+      id: 'A1111111-1111-1111-1111-111111111111',
+      userId: user.id,
+      workoutId: pushDay.id,
+      scheduleId: 'C1111111-1111-1111-1111-111111111111',
+      startedAt: daysAgoAt(4, 8),
+      finishedAt: daysAgoAt(4, 9),
+      durationSec: 3600,
+      totalVolume: 4 * 8 * 80 + 3 * 10 * 24 + 3 * 8 * 40 + 3 * 12 * 25,
+    },
+  });
+
+  // Leg Day session (matches C2222222...)
+  const legSession = await prisma.workoutSession.create({
+    data: {
+      id: 'A2222222-2222-2222-2222-222222222222',
+      userId: user.id,
+      workoutId: legDay.id,
+      scheduleId: 'C2222222-2222-2222-2222-222222222222',
+      startedAt: daysAgoAt(3, 17, 30),
+      finishedAt: daysAgoAt(3, 18, 30),
+      durationSec: 3600,
+      totalVolume: 4 * 6 * 100 + 3 * 10 * 160 + 3 * 12 * 45,
+    },
+  });
+
+  // Pull Day session (matches C3333333...)
+  const pullSession = await prisma.workoutSession.create({
+    data: {
+      id: 'A3333333-3333-3333-3333-333333333333',
+      userId: user.id,
+      workoutId: pullDay.id,
+      scheduleId: 'C3333333-3333-3333-3333-333333333333',
+      startedAt: daysAgoAt(2, 9),
+      finishedAt: daysAgoAt(2, 10, 15),
+      durationSec: 4500,
+      totalVolume: 3 * 5 * 120 + 4 * 10 * 60 + 3 * 12 * 30,
+    },
+  });
+
+  // Cardio & Core session (matches C4444444...)
+  const cardioSession = await prisma.workoutSession.create({
+    data: {
+      id: 'A4444444-4444-4444-4444-444444444444',
+      userId: user.id,
+      workoutId: cardioCore.id,
+      scheduleId: 'C4444444-4444-4444-4444-444444444444',
+      startedAt: daysAgoAt(1, 16),
+      finishedAt: daysAgoAt(1, 16, 40),
+      durationSec: 2400,
+      totalVolume: 0,
+    },
+  });
+
+  await prisma.workoutSet.createMany({
+    data: [
+      // Push Day sets
+      { sessionId: pushSession.id, exerciseId: 1, setIndex: 1, reps: 8, weight: 80 },
+      { sessionId: pushSession.id, exerciseId: 1, setIndex: 2, reps: 8, weight: 80 },
+      { sessionId: pushSession.id, exerciseId: 2, setIndex: 1, reps: 10, weight: 24 },
+      { sessionId: pushSession.id, exerciseId: 10, setIndex: 1, reps: 8, weight: 40 },
+      { sessionId: pushSession.id, exerciseId: 13, setIndex: 1, reps: 12, weight: 25 },
+
+      // Leg Day sets
+      { sessionId: legSession.id, exerciseId: 4, setIndex: 1, reps: 6, weight: 100 },
+      { sessionId: legSession.id, exerciseId: 5, setIndex: 1, reps: 10, weight: 160 },
+      { sessionId: legSession.id, exerciseId: 6, setIndex: 1, reps: 12, weight: 45 },
+
+      // Pull Day sets
+      { sessionId: pullSession.id, exerciseId: 7, setIndex: 1, reps: 5, weight: 120 },
+      { sessionId: pullSession.id, exerciseId: 8, setIndex: 1, reps: 10, weight: 60 },
+      { sessionId: pullSession.id, exerciseId: 12, setIndex: 1, reps: 12, weight: 30 },
+
+      // Cardio & Core sets
+      { sessionId: cardioSession.id, exerciseId: 17, setIndex: 1, reps: 15, weight: 0 },
+      { sessionId: cardioSession.id, exerciseId: 16, setIndex: 1, reps: 60, weight: 0 },
     ],
   });
 
