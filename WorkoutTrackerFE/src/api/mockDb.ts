@@ -183,6 +183,14 @@ export const mockDb = {
   getWorkoutSchedulesForWorkout: (workoutId: string): WorkoutSchedule[] =>
     mockDb.getWorkoutSchedules().filter(s => s.workoutId === workoutId),
 
+  /** Mirrors the server's `lastPerformedAt`: the newest completed schedule. */
+  getLastPerformedAt: (workoutId: string): string | null =>
+    mockDb
+      .getWorkoutSchedules()
+      .filter(s => s.workoutId === workoutId && s.isCompleted)
+      .sort((a, b) => new Date(b.scheduledDate).getTime() - new Date(a.scheduledDate).getTime())[0]
+      ?.scheduledDate ?? null,
+
   addWorkoutSchedule: (schedule: Omit<WorkoutSchedule, 'id'>): WorkoutSchedule => {
     const all = getStorageItem<WorkoutSchedule[]>('mock_schedules', INITIAL_SCHEDULES);
     const newSchedule = { ...schedule, id: 's_' + Math.random().toString(36).substr(2, 9) };

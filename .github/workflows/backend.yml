@@ -1,0 +1,69 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "WorkoutTrackerBE/**"
+      - ".github/workflows/backend.yml"
+  pull_request:
+    paths:
+      - "WorkoutTrackerBE/**"
+      - ".github/workflows/backend.yml"
+
+defaults:
+  run:
+    working-directory: WorkoutTrackerBE
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: workouttracker_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/workouttracker_test
+      JWT_SECRET: ci-only-secret-do-not-reuse
+      NODE_ENV: test
+      RUN_INTEGRATION_TESTS: "true"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: WorkoutTrackerBE/package-lock.json
+
+      - run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Apply migrations
+        run: npx prisma migrate deploy
+
+      - name: Seed the exercise catalogue
+        run: npx prisma db seed
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Test
+        run: npm test -- --run
+
+      - name: Build
+        run: npm run build

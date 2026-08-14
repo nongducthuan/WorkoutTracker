@@ -6,5 +6,6 @@ const router = Router();
 const exerciseController = new ExerciseController();
 
 router.get("/", requireAuth, exerciseController.getExercises);
+router.get("/categories", requireAuth, exerciseController.getCategories);
 
 export default router;

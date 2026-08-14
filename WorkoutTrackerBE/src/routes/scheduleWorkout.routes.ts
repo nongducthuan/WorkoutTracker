@@ -12,6 +12,8 @@ const controller = new ScheduleWorkoutController();
 
 router.get("/", requireAuth, controller.getAll);
 router.get("/workout/:workoutId", requireAuth, controller.getByWorkoutId);
+// Registered after the literal "/workout/..." route so it cannot shadow it.
+router.get("/:id", requireAuth, controller.getById);
 router.post("/", requireAuth, validate(CreateScheduleWorkoutSchema), controller.create);
 router.put("/:id", requireAuth, validate(UpdateScheduleWorkoutSchema), controller.update);
 router.put("/:id/complete", requireAuth, controller.complete);

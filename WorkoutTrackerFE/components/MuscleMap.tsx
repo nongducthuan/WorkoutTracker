@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Body, { ExtendedBodyPart, Slug } from 'react-native-body-highlighter';
 import { MuscleId } from '../src/lib/muscleMap';
+import { useTheme } from '../src/context/ThemeContext';
 
 export interface MuscleMapProps {
   primaryMuscles?: MuscleId[];
@@ -74,6 +75,7 @@ export const MuscleMap: React.FC<MuscleMapProps> = ({
   onMuscleClick,
   gender = 'male',
 }) => {
+  const { colors } = useTheme();
   // Scale calculation based on size prop
   const scale = useMemo(() => {
     const baseScale = (() => {
@@ -136,7 +138,7 @@ export const MuscleMap: React.FC<MuscleMapProps> = ({
   };
 
 
-  const colors = useMemo(
+  const intensityColors = useMemo(
     () => [
       MUSCLE_INTENSITY_COLORS.low,
       MUSCLE_INTENSITY_COLORS.moderate,
@@ -155,9 +157,9 @@ export const MuscleMap: React.FC<MuscleMapProps> = ({
               side="front"
               gender={gender}
               scale={scale}
-              colors={colors}
-              defaultFill="#1F1F24"
-              border="#3A3A45"
+              colors={intensityColors}
+              defaultFill={colors.bodyFill}
+              border={colors.bodyBorder}
               onBodyPartPress={handleBodyPartPress}
             />
           </View>
@@ -167,9 +169,9 @@ export const MuscleMap: React.FC<MuscleMapProps> = ({
               side="back"
               gender={gender}
               scale={scale}
-              colors={colors}
-              defaultFill="#1F1F24"
-              border="#3A3A45"
+              colors={intensityColors}
+              defaultFill={colors.bodyFill}
+              border={colors.bodyBorder}
               onBodyPartPress={handleBodyPartPress}
             />
           </View>
@@ -181,9 +183,9 @@ export const MuscleMap: React.FC<MuscleMapProps> = ({
             side={view === 'back' ? 'back' : 'front'}
             gender={gender}
             scale={scale}
-            colors={colors}
-            defaultFill="#1F1F24"
-            border="#3A3A45"
+            colors={intensityColors}
+            defaultFill={colors.bodyFill}
+            border={colors.bodyBorder}
             onBodyPartPress={handleBodyPartPress}
           />
         </View>

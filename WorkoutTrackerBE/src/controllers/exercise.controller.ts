@@ -18,4 +18,12 @@ export class ExerciseController {
       next(error);
     }
   };
+
+  getCategories = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      res.status(200).json(await this.exerciseService.getCategories());
+    } catch (error) {
+      next(error);
+    }
+  };
 }

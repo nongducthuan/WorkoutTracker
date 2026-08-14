@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
-import { View, Text, Animated, StyleSheet } from 'react-native';
+import { Text, Animated, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { Colors } from '../src/theme/colors';
+import { useTheme } from '../src/context/ThemeContext';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -20,31 +20,40 @@ export const useToast = () => {
 };
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { colors } = useTheme();
   const [message, setMessage] = useState('');
   const [type, setType] = useState<ToastType>('info');
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-20)).current;
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const showToast = useCallback((msg: string, toastType: ToastType) => {
-    setMessage(msg);
-    setType(toastType);
+  const showToast = useCallback(
+    (msg: string, toastType: ToastType) => {
+      setMessage(msg);
+      setType(toastType);
 
-    Animated.parallel([
-      Animated.timing(opacity, { toValue: 1, duration: 300, useNativeDriver: true }),
-      Animated.spring(translateY, { toValue: 0, useNativeDriver: true }),
-    ]).start();
-
-    setTimeout(() => {
       Animated.parallel([
-        Animated.timing(opacity, { toValue: 0, duration: 300, useNativeDriver: true }),
-        Animated.timing(translateY, { toValue: -20, duration: 300, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 1, duration: 250, useNativeDriver: true }),
+        Animated.spring(translateY, { toValue: 0, useNativeDriver: true }),
       ]).start();
-    }, 3000);
-  }, [opacity, translateY]);
+
+      if (hideTimer.current) clearTimeout(hideTimer.current);
+      hideTimer.current = setTimeout(() => {
+        Animated.parallel([
+          Animated.timing(opacity, { toValue: 0, duration: 250, useNativeDriver: true }),
+          Animated.timing(translateY, { toValue: -20, duration: 250, useNativeDriver: true }),
+        ]).start();
+      }, 3000);
+    },
+    [opacity, translateY]
+  );
 
   const success = useCallback((msg: string) => showToast(msg, 'success'), [showToast]);
   const error = useCallback((msg: string) => showToast(msg, 'error'), [showToast]);
   const info = useCallback((msg: string) => showToast(msg, 'info'), [showToast]);
+
+  const background =
+    type === 'success' ? colors.electricDim : type === 'error' ? colors.error : colors.mutedGray;
 
   return (
     <ToastContext.Provider value={{ success, error, info }}>
@@ -52,15 +61,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       <Animated.View
         style={[
           styles.container,
-          { opacity, transform: [{ translateY }] },
-          type === 'success' ? styles.success : type === 'error' ? styles.error : styles.info,
+          { opacity, transform: [{ translateY }], backgroundColor: background },
         ]}
         pointerEvents="none"
       >
         <Icon
           name={type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}
           size={16}
-          color="white"
+          color="#FFFFFF"
         />
         <Text style={styles.text}>{message}</Text>
       </Animated.View>
@@ -73,11 +81,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50,
     alignSelf: 'center',
+    maxWidth: '92%',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     gap: 8,
     zIndex: 9999,
     elevation: 10,
@@ -86,8 +95,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
   },
-  text: { color: 'white', fontSize: 14, fontWeight: 'bold' },
-  success: { backgroundColor: Colors.electricDim },
-  error: { backgroundColor: Colors.electricOrange },
-  info: { backgroundColor: Colors.mutedGray },
+  text: { color: '#FFFFFF', fontSize: 13, fontWeight: '700', flexShrink: 1 },
 });

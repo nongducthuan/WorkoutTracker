@@ -52,7 +52,9 @@ COPY --from=builder /app/package*.json ./
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:8080/health/live || exit 1
+# Readiness, not liveness: /health/live answers "ok" even with a dead database,
+# so it would never mark an unusable container unhealthy.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8080/health/ready || exit 1
 
 CMD ["node", "dist/server.js"]

@@ -3,7 +3,7 @@
   WorkoutCommentResponse,
 } from "../repositories/workoutComment.repository";
 import { CreateWorkoutCommentDto, UpdateWorkoutCommentDto } from "../dtos/workoutComment.dto";
-import { AppError } from "../errors/appError";
+import { AppError, ErrorCodes } from "../errors/appError";
 
 export class WorkoutCommentService {
   private repository: WorkoutCommentRepository;
@@ -15,7 +15,7 @@ export class WorkoutCommentService {
   async getByWorkoutId(workoutId: string, userId: string): Promise<WorkoutCommentResponse[]> {
     const isOwner = await this.repository.verifyWorkoutPlanOwnership(workoutId, userId);
     if (!isOwner) {
-      throw new AppError("WorkoutPlanNotFound", 404);
+      throw new AppError("WorkoutPlanNotFound", 404, ErrorCodes.WORKOUT_PLAN_NOT_FOUND);
     }
 
     return this.repository.findByWorkoutId(workoutId);
@@ -24,7 +24,7 @@ export class WorkoutCommentService {
   async create(dto: CreateWorkoutCommentDto, userId: string): Promise<WorkoutCommentResponse> {
     const isOwner = await this.repository.verifyWorkoutPlanOwnership(dto.workoutId, userId);
     if (!isOwner) {
-      throw new AppError("WorkoutPlanNotFound", 404);
+      throw new AppError("WorkoutPlanNotFound", 404, ErrorCodes.WORKOUT_PLAN_NOT_FOUND);
     }
 
     return this.repository.create({
@@ -41,7 +41,7 @@ export class WorkoutCommentService {
   ): Promise<WorkoutCommentResponse> {
     const existing = await this.repository.findByIdAndPlanOwner(id, userId);
     if (!existing) {
-      throw new AppError("CommentNotFound", 404);
+      throw new AppError("CommentNotFound", 404, ErrorCodes.COMMENT_NOT_FOUND);
     }
 
     return this.repository.update(id, dto.comment);
@@ -50,7 +50,7 @@ export class WorkoutCommentService {
   async delete(id: string, userId: string): Promise<{ message: string }> {
     const existing = await this.repository.findByIdAndPlanOwner(id, userId);
     if (!existing) {
-      throw new AppError("CommentNotFound", 404);
+      throw new AppError("CommentNotFound", 404, ErrorCodes.COMMENT_NOT_FOUND);
     }
 
     await this.repository.delete(id);

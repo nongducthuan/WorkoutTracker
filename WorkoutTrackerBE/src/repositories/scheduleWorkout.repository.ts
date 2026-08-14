@@ -1,5 +1,5 @@
 ﻿import { prisma } from "../config/prisma";
-import { ScheduleWorkout } from "@prisma/client";
+import { ScheduleWorkout, WorkoutPlan } from "@prisma/client";
 
 export interface ScheduleWorkoutWithWorkoutName {
   id: string;
@@ -7,7 +7,19 @@ export interface ScheduleWorkoutWithWorkoutName {
   workoutId: string;
   workoutName: string;
   isCompleted: boolean;
+  remindEnabled: boolean;
 }
+
+const withName = (
+  row: ScheduleWorkout & { workout: WorkoutPlan }
+): ScheduleWorkoutWithWorkoutName => ({
+  id: row.id,
+  scheduledDate: row.scheduledDate,
+  workoutId: row.workoutId,
+  workoutName: row.workout.name,
+  isCompleted: row.isCompleted,
+  remindEnabled: row.remindEnabled,
+});
 
 export class ScheduleWorkoutRepository {
   async verifyWorkoutPlanOwnership(workoutId: string, userId: string): Promise<boolean> {
@@ -17,10 +29,23 @@ export class ScheduleWorkoutRepository {
     return !!plan;
   }
 
-  async findAllByUserId(userId: string): Promise<ScheduleWorkoutWithWorkoutName[]> {
+  async findAllByUserId(
+    userId: string,
+    filter: { from?: Date; to?: Date; workoutId?: string; isCompleted?: boolean } = {}
+  ): Promise<ScheduleWorkoutWithWorkoutName[]> {
     const items = await prisma.scheduleWorkout.findMany({
       where: {
         workout: { userId },
+        ...(filter.workoutId ? { workoutId: filter.workoutId } : {}),
+        ...(filter.isCompleted !== undefined ? { isCompleted: filter.isCompleted } : {}),
+        ...(filter.from || filter.to
+          ? {
+              scheduledDate: {
+                ...(filter.from ? { gte: filter.from } : {}),
+                ...(filter.to ? { lte: filter.to } : {}),
+              },
+            }
+          : {}),
       },
       include: {
         workout: true,
@@ -28,13 +53,7 @@ export class ScheduleWorkoutRepository {
       orderBy: { scheduledDate: "asc" },
     });
 
-    return items.map((item) => ({
-      id: item.id,
-      scheduledDate: item.scheduledDate,
-      workoutId: item.workoutId,
-      workoutName: item.workout.name,
-      isCompleted: item.isCompleted,
-    }));
+    return items.map(withName);
   }
 
   async findByWorkoutId(workoutId: string, userId: string): Promise<ScheduleWorkoutWithWorkoutName[]> {
@@ -49,13 +68,19 @@ export class ScheduleWorkoutRepository {
       orderBy: { scheduledDate: "asc" },
     });
 
-    return items.map((item) => ({
-      id: item.id,
-      scheduledDate: item.scheduledDate,
-      workoutId: item.workoutId,
-      workoutName: item.workout.name,
-      isCompleted: item.isCompleted,
-    }));
+    return items.map(withName);
+  }
+
+  async findByIdAndUserIdWithName(
+    id: string,
+    userId: string
+  ): Promise<ScheduleWorkoutWithWorkoutName | null> {
+    const item = await prisma.scheduleWorkout.findFirst({
+      where: { id, workout: { userId } },
+      include: { workout: true },
+    });
+
+    return item ? withName(item) : null;
   }
 
   async findByIdAndUserId(id: string, userId: string): Promise<ScheduleWorkout | null> {
@@ -67,24 +92,22 @@ export class ScheduleWorkoutRepository {
     });
   }
 
-  async create(data: { scheduledDate: Date; workoutId: string }): Promise<ScheduleWorkoutWithWorkoutName> {
+  async create(data: {
+    scheduledDate: Date;
+    workoutId: string;
+    remindEnabled?: boolean;
+  }): Promise<ScheduleWorkoutWithWorkoutName> {
     const created = await prisma.scheduleWorkout.create({
       data,
       include: { workout: true },
     });
 
-    return {
-      id: created.id,
-      scheduledDate: created.scheduledDate,
-      workoutId: created.workoutId,
-      workoutName: created.workout.name,
-      isCompleted: created.isCompleted,
-    };
+    return withName(created);
   }
 
   async update(
     id: string,
-    data: { scheduledDate: Date; workoutId?: string }
+    data: { scheduledDate: Date; workoutId?: string; remindEnabled?: boolean }
   ): Promise<ScheduleWorkoutWithWorkoutName> {
     const updated = await prisma.scheduleWorkout.update({
       where: { id },
@@ -92,13 +115,7 @@ export class ScheduleWorkoutRepository {
       include: { workout: true },
     });
 
-    return {
-      id: updated.id,
-      scheduledDate: updated.scheduledDate,
-      workoutId: updated.workoutId,
-      workoutName: updated.workout.name,
-      isCompleted: updated.isCompleted,
-    };
+    return withName(updated);
   }
 
   async complete(id: string): Promise<ScheduleWorkoutWithWorkoutName> {
@@ -108,13 +125,7 @@ export class ScheduleWorkoutRepository {
       include: { workout: true },
     });
 
-    return {
-      id: updated.id,
-      scheduledDate: updated.scheduledDate,
-      workoutId: updated.workoutId,
-      workoutName: updated.workout.name,
-      isCompleted: updated.isCompleted,
-    };
+    return withName(updated);
   }
 
   async delete(id: string): Promise<void> {

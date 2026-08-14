@@ -22,15 +22,8 @@ export const commentsApi = {
       await delay(300);
       return mockDb.addWorkoutComment({ workoutId, comment, userName: user.name, userId: user.id, createdAt: new Date().toISOString() });
     }
-    await apiClient.post<string>('/workout-comments', { workoutId, comment });
-    return {
-      id: Math.random().toString(36).substr(2, 9),
-      workoutId,
-      comment,
-      userName: user.name,
-      userId: user.id,
-      createdAt: new Date().toISOString(),
-    };
+    const res = await apiClient.post<WorkoutComment>('/workout-comments', { workoutId, comment });
+    return res.data;
   },
 
   update: async (id: string, comment: string, workoutId: string): Promise<WorkoutComment> => {
@@ -41,10 +34,8 @@ export const commentsApi = {
       if (found) { found.comment = comment; return found; }
       throw new Error('Comment not found');
     }
-    const userJson = await AsyncStorage.getItem('pulse_user');
-    const user = userJson ? JSON.parse(userJson) : { name: 'Current User', id: 'usr1' };
-    await apiClient.put<string>(`/workout-comments/${id}`, { comment });
-    return { id, workoutId, comment, userName: user.name, userId: user.id, createdAt: new Date().toISOString() };
+    const res = await apiClient.put<WorkoutComment>(`/workout-comments/${id}`, { comment });
+    return res.data;
   },
 
   delete: async (id: string): Promise<void> => {

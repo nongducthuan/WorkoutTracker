@@ -18,9 +18,7 @@ export class PasswordResetRepository {
   }
 
   async findByResetToken(resetToken: string): Promise<PasswordReset | null> {
-    return prisma.passwordReset.findFirst({
-      where: { resetToken },
-    });
+    return prisma.passwordReset.findFirst({ where: { resetToken } });
   }
 
   async markVerified(
@@ -37,6 +35,27 @@ export class PasswordResetRepository {
   async markUsed(id: string): Promise<PasswordReset> {
     return prisma.passwordReset.update({
       where: { id },
+      data: { isUsed: true },
+    });
+  }
+
+  /** Returns the new attempt count so the caller can enforce the lockout. */
+  async incrementAttempt(id: string): Promise<number> {
+    const updated = await prisma.passwordReset.update({
+      where: { id },
+      data: { attemptCount: { increment: 1 } },
+      select: { attemptCount: true },
+    });
+    return updated.attemptCount;
+  }
+
+  /**
+   * Requesting a new code should retire the old ones, otherwise an attacker gets
+   * several live codes to guess against at the same time.
+   */
+  async invalidateActiveForUser(userId: string): Promise<void> {
+    await prisma.passwordReset.updateMany({
+      where: { userId, isUsed: false },
       data: { isUsed: true },
     });
   }

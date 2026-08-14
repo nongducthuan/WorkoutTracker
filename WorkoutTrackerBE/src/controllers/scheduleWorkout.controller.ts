@@ -1,5 +1,6 @@
 ﻿import { Request, Response, NextFunction } from "express";
 import { ScheduleWorkoutService } from "../services/scheduleWorkout.service";
+import { GetSchedulesQuerySchema } from "../dtos/scheduleWorkout.dto";
 
 export class ScheduleWorkoutController {
   private service: ScheduleWorkoutService;
@@ -11,7 +12,19 @@ export class ScheduleWorkoutController {
   getAll = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = (req as any).user.sub;
-      const result = await this.service.getAll(userId);
+      const query = GetSchedulesQuerySchema.parse(req.query);
+      const result = await this.service.getAll(userId, query);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const userId = (req as any).user.sub;
+      const result = await this.service.getById(id, userId);
       res.status(200).json(result);
     } catch (error) {
       next(error);

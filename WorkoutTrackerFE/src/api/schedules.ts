@@ -4,12 +4,15 @@ import { WorkoutSchedule } from '../types';
 import { delay } from './utils';
 
 export const schedulesApi = {
-  getAll: async (): Promise<WorkoutSchedule[]> => {
+  /** `range` narrows the query server-side instead of downloading every schedule. */
+  getAll: async (range?: { from?: string; to?: string }): Promise<WorkoutSchedule[]> => {
     if (isMockMode) {
       await delay(400);
       return mockDb.getWorkoutSchedules();
     }
-    const res = await apiClient.get<WorkoutSchedule[]>('/workout-schedules');
+    const res = await apiClient.get<WorkoutSchedule[]>('/workout-schedules', {
+      params: { from: range?.from, to: range?.to },
+    });
     return res.data;
   },
 
@@ -27,8 +30,12 @@ export const schedulesApi = {
       await delay(300);
       return mockDb.addWorkoutSchedule(data);
     }
-    await apiClient.post<string>('/workout-schedules', { scheduledDate: data.scheduledDate, workoutId: data.workoutId });
-    return { id: Math.random().toString(36).substr(2, 9), ...data };
+    const res = await apiClient.post<WorkoutSchedule>('/workout-schedules', {
+      scheduledDate: data.scheduledDate,
+      workoutId: data.workoutId,
+      remindEnabled: data.remindEnabled,
+    });
+    return res.data;
   },
 
   update: async (id: string, date: string, workoutId?: string): Promise<WorkoutSchedule> => {
@@ -38,8 +45,8 @@ export const schedulesApi = {
     }
     const payload: any = { scheduledDate: date };
     if (workoutId) payload.workoutId = workoutId;
-    await apiClient.put<string>(`/workout-schedules/${id}`, payload);
-    return { id, scheduledDate: date, workoutId: workoutId ?? '', isCompleted: false };
+    const res = await apiClient.put<WorkoutSchedule>(`/workout-schedules/${id}`, payload);
+    return res.data;
   },
 
   delete: async (id: string): Promise<void> => {
@@ -48,6 +55,17 @@ export const schedulesApi = {
       return mockDb.deleteWorkoutSchedule(id);
     }
     await apiClient.delete(`/workout-schedules/${id}`);
+  },
+
+  getById: async (id: string): Promise<WorkoutSchedule> => {
+    if (isMockMode) {
+      await delay(200);
+      const found = mockDb.getWorkoutSchedules().find(s => s.id === id);
+      if (!found) throw new Error('Schedule not found');
+      return found;
+    }
+    const res = await apiClient.get<WorkoutSchedule>(`/workout-schedules/${id}`);
+    return res.data;
   },
 
   markCompleted: async (id: string): Promise<void> => {

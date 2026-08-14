@@ -13,11 +13,115 @@ model User {
   email           String           @unique
   userName        String           @unique
   password        String
+  avatarUrl       String?          @db.VarChar(512)
+  weightKg        Float?
+  heightCm        Int?
+  birthday        DateTime?        @db.Date
   workoutPlans    WorkoutPlan[]
   workoutComments WorkoutComment[]
   passwordResets  PasswordReset[]
+  settings        UserSettings?
+  sessions        WorkoutSession[]
+  refreshTokens   RefreshToken[]
 
   @@map("users")
+}
+
+enum WeightUnit {
+  kg
+  lb
+}
+
+enum FitnessGoal {
+  muscle
+  fat_loss
+  endurance
+}
+
+enum FitnessLevel {
+  beginner
+  intermediate
+  advanced
+}
+
+model UserSettings {
+  id                   String     @id @default(uuid()) @db.Char(36)
+  userId               String     @unique @db.Char(36)
+  weeklyGoal           Int        @default(4)
+  /// JSON array of weekday numbers matching JS getDay(): 0 = Sunday … 6 = Saturday.
+  preferredDays        String     @default("[]") @db.VarChar(64)
+  autoSchedule         Boolean    @default(false)
+  weightUnit           WeightUnit @default(kg)
+  restTimerSeconds     Int        @default(90)
+  autoStartRestTimer   Boolean    @default(true)
+  keepScreenOn         Boolean    @default(true)
+  soundEnabled         Boolean    @default(true)
+  vibrationEnabled     Boolean    @default(true)
+  notificationsEnabled Boolean    @default(true)
+  language             String       @default("vi") @db.VarChar(8)
+  theme                String       @default("system") @db.VarChar(16)
+  goal                 FitnessGoal  @default(muscle)
+  level                FitnessLevel @default(beginner)
+  onboardingCompleted  Boolean      @default(false)
+  updatedAt            DateTime   @updatedAt
+  user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("userSettings")
+}
+
+/// A workout that was actually performed, as opposed to one that was merely planned.
+/// Reports, personal records and muscle load are derived from these rows, never from
+/// the plan configuration.
+model WorkoutSession {
+  id          String           @id @default(uuid()) @db.Char(36)
+  userId      String           @db.Char(36)
+  workoutId   String           @db.Char(36)
+  scheduleId  String?          @db.Char(36)
+  startedAt   DateTime
+  finishedAt  DateTime?
+  durationSec Int              @default(0)
+  totalVolume Float            @default(0)
+  note        String?          @db.Text
+  createdAt   DateTime         @default(now())
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout     WorkoutPlan      @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  schedule    ScheduleWorkout? @relation(fields: [scheduleId], references: [id], onDelete: SetNull)
+  sets        WorkoutSet[]
+
+  @@index([userId], map: "IX_WorkoutSessions_UserId")
+  @@index([workoutId], map: "IX_WorkoutSessions_WorkoutId")
+  @@index([userId, startedAt], map: "IX_WorkoutSessions_UserId_StartedAt")
+  @@map("workoutSessions")
+}
+
+model WorkoutSet {
+  id          String         @id @default(uuid()) @db.Char(36)
+  sessionId   String         @db.Char(36)
+  exerciseId  Int
+  setIndex    Int
+  reps        Int
+  weight      Float
+  completedAt DateTime       @default(now())
+  session     WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise    Exercise       @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId], map: "IX_WorkoutSets_SessionId")
+  @@index([exerciseId], map: "IX_WorkoutSets_ExerciseId")
+  @@map("workoutSets")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Char(36)
+  userId    String    @db.Char(36)
+  /// SHA-256 of the raw token; the raw value is never stored.
+  tokenHash String    @unique @db.VarChar(64)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "IX_RefreshTokens_UserId")
+  @@map("refreshTokens")
 }
 
 enum Difficulty {
@@ -33,7 +137,9 @@ model Exercise {
   category         String
   difficulty       Difficulty
   workoutExercises WorkoutExercise[]
+  workoutSets      WorkoutSet[]
 
+  @@index([category], map: "IX_Exercises_Category")
   @@map("exercises")
 }
 
@@ -46,6 +152,7 @@ model WorkoutPlan {
   workoutExercises WorkoutExercise[]
   scheduleWorkouts ScheduleWorkout[]
   workoutComments  WorkoutComment[]
+  sessions         WorkoutSession[]
 
   @@index([userId], map: "IX_WorkoutPlans_UserId")
   @@map("workoutPlans")
@@ -71,7 +178,12 @@ model ScheduleWorkout {
   scheduledDate DateTime
   workoutId     String      @db.Char(36)
   isCompleted   Boolean     @default(false)
+  /// Per-session opt out of the reminder, set from the "Nhắc nhở" toggle in 06b.
+  /// `userSettings.notificationsEnabled` is the account-wide switch above it:
+  /// a reminder is due only when both are on.
+  remindEnabled Boolean     @default(true)
   workout       WorkoutPlan @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  sessions      WorkoutSession[]
 
   @@index([scheduledDate], map: "IX_ScheduleWorkouts_ScheduledDate")
   @@index([workoutId], map: "IX_ScheduleWorkouts_WorkoutId")
@@ -102,6 +214,8 @@ model PasswordReset {
   resetToken     String?   @db.VarChar(255)
   tokenExpiresAt DateTime?
   isUsed         Boolean   @default(false)
+  /// Number of wrong OTP submissions; the record is locked once it reaches the limit.
+  attemptCount   Int       @default(0)
   createdAt      DateTime  @default(now())
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 

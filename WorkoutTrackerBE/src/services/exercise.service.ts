@@ -1,4 +1,4 @@
-﻿import { ExerciseRepository } from "../repositories/exercise.repository";
+import { ExerciseRepository } from "../repositories/exercise.repository";
 import { GetExercisesQueryDto } from "../dtos/exercise.dto";
 import { Exercise } from "@prisma/client";
 
@@ -12,14 +12,20 @@ export interface PaginatedExercisesResponse {
 export class ExerciseService {
   private exerciseRepository: ExerciseRepository;
 
-  constructor() {
-    this.exerciseRepository = new ExerciseRepository();
+  constructor(repository: ExerciseRepository = new ExerciseRepository()) {
+    this.exerciseRepository = repository;
   }
 
   async getAllExercises(query: GetExercisesQueryDto): Promise<PaginatedExercisesResponse> {
     const page = query.page || 1;
     const pageSize = query.pageSize || 10;
-    const { data, total } = await this.exerciseRepository.findMany(query.search, page, pageSize);
+    const { data, total } = await this.exerciseRepository.findMany({
+      search: query.search,
+      category: query.category,
+      maxDifficulty: query.maxDifficulty,
+      page,
+      pageSize,
+    });
 
     return {
       data,
@@ -27,5 +33,9 @@ export class ExerciseService {
       page,
       pageSize,
     };
+  }
+
+  async getCategories(): Promise<string[]> {
+    return this.exerciseRepository.findCategories();
   }
 }

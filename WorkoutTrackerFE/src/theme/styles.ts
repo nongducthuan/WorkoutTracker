@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { Colors, ThemeColors } from './colors';
-export { Colors };
+import { ThemeColors } from './colors';
+import { useTheme } from '../context/ThemeContext';
 
 export const createGlobalStyles = (colors: ThemeColors) =>
   StyleSheet.create({
@@ -180,8 +181,14 @@ export const createGlobalStyles = (colors: ThemeColors) =>
     },
   });
 
-export let globalStyles = createGlobalStyles(Colors);
+export type GlobalStyles = ReturnType<typeof createGlobalStyles>;
 
-export const updateGlobalStyles = (colors: ThemeColors) => {
-  globalStyles = createGlobalStyles(colors);
+/**
+ * Hook form of the shared stylesheet. Screens must use this rather than a
+ * module-level `globalStyles` object: the old export was built once at import
+ * time, so switching theme left every screen painted with the previous palette.
+ */
+export const useGlobalStyles = (): GlobalStyles => {
+  const { colors } = useTheme();
+  return useMemo(() => createGlobalStyles(colors), [colors]);
 };

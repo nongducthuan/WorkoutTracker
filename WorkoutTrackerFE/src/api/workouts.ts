@@ -7,7 +7,12 @@ export const workoutsApi = {
   getAll: async (): Promise<Workout[]> => {
     if (isMockMode) {
       await delay(500);
-      return mockDb.getWorkouts();
+      // The real endpoint derives `lastPerformedAt` server-side; mock mode has
+      // to do it here or the routine rows lose their "lần tập gần nhất" line.
+      return mockDb.getWorkouts().map((w) => ({
+        ...w,
+        lastPerformedAt: mockDb.getLastPerformedAt(w.id),
+      }));
     }
     const res = await apiClient.get<Workout[]>('/workouts');
     return res.data;
@@ -38,8 +43,11 @@ export const workoutsApi = {
       await delay(300);
       return mockDb.updateWorkout(id, data);
     }
-    await apiClient.put<string>(`/workouts/${id}`, { name: data.name, description: data.description });
-    return { id, name: data.name ?? '', description: data.description ?? '' };
+    const res = await apiClient.put<Workout>(`/workouts/${id}`, {
+      name: data.name,
+      description: data.description,
+    });
+    return res.data;
   },
 
   delete: async (id: string): Promise<void> => {
@@ -64,8 +72,8 @@ export const workoutsApi = {
       await delay(300);
       return mockDb.addWorkoutExercise(data);
     }
-    await apiClient.post<string>('/workout-exercises', data);
-    return { id: Math.random().toString(36).substr(2, 9), ...data };
+    const res = await apiClient.post<WorkoutExercise>('/workout-exercises', data);
+    return res.data;
   },
 
   updateExercise: async (id: string, data: Partial<WorkoutExercise>): Promise<WorkoutExercise> => {
@@ -73,8 +81,8 @@ export const workoutsApi = {
       await delay(300);
       return mockDb.updateWorkoutExercise(id, data);
     }
-    await apiClient.put<string>(`/workout-exercises/${id}`, data);
-    return { id, sets: data.sets ?? 0, repetitions: data.repetitions ?? 0, weight: data.weight ?? 0, exerciseId: data.exerciseId ?? 0 };
+    const res = await apiClient.put<WorkoutExercise>(`/workout-exercises/${id}`, data);
+    return res.data;
   },
 
   deleteExercise: async (id: string): Promise<void> => {
