@@ -111,9 +111,11 @@ export const authApi = {
       oldPassword: oldPw,
       newPassword: newPw,
     });
-    // The server revokes every refresh token on a password change, so the
-    // stored one is already dead — force a fresh sign in.
-    await clearSession();
+    // The server revokes all refresh tokens on a password change, but the
+    // current access token stays valid until it expires — no need to sign
+    // the user out. Just drop the stale refresh token so the next silent
+    // refresh attempt will prompt a login instead of silently failing.
+    await AsyncStorage.removeItem(REFRESH_TOKEN_KEY);
     return res.data;
   },
 

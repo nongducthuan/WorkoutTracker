@@ -120,7 +120,7 @@ export default function DashboardScreen() {
             title={t('workouts.empty_title')}
             description={t('workouts.empty_desc')}
             actionText={t('workouts.empty_action')}
-            onAction={() => (navigation.getParent() as any)?.navigate('Workouts')}
+            onAction={() => (navigation as any).navigate('Workouts')}
           />
         ) : activeToday ? (
           <>

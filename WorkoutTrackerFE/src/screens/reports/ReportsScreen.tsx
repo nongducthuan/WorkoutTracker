@@ -82,7 +82,7 @@ export default function ReportsScreen() {
             title={t('reports.empty_activity_title')}
             description={t('reports.empty_activity_desc')}
             actionText={t('workouts.title')}
-            onAction={() => (navigation.getParent() as any)?.navigate('Workouts')}
+            onAction={() => (navigation as any).navigate('Workouts')}
           />
         ) : (
           <>

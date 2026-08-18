@@ -53,7 +53,8 @@ export default function ResetPasswordScreen() {
     try {
       await authApi.resetPassword(resetToken, password);
       success(t('profile.password_success'));
-      navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+      // Reset về Welcome → Login để nút back vẫn xuất hiện trên màn Login.
+      navigation.reset({ index: 1, routes: [{ name: 'Welcome' }, { name: 'Login' }] });
     } catch (e: any) {
       const message = e?.response?.data?.message;
       setError(

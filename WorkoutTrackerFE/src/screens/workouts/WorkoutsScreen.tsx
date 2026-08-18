@@ -102,7 +102,7 @@ export default function WorkoutsScreen() {
             actionText={t('workouts.empty_action')}
             onAction={() => setFormOpen(true)}
             secondaryText={t('workouts.empty_secondary')}
-            onSecondary={() => (navigation.getParent() as any)?.navigate('Exercises')}
+            onSecondary={() => (navigation as any).navigate('Exercises')}
           />
         ) : (
           workouts.map((w) => {

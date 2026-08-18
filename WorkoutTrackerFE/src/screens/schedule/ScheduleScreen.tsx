@@ -153,7 +153,6 @@ export default function ScheduleScreen() {
           <TouchableOpacity
             style={styles.addButton}
             onPress={() => setPickerOpen(true)}
-            disabled={workouts.length === 0}
           >
             <Icon name="plus" size={20} color={colors.black} />
           </TouchableOpacity>
@@ -216,27 +215,49 @@ export default function ScheduleScreen() {
         variant="sheet"
         scrollable
       >
-        {workouts.map((w) => (
-          <TouchableOpacity
-            key={w.id}
-            style={styles.pickRow}
-            onPress={() => {
-              setPickerOpen(false);
-              setFormWorkoutId(w.id);
-            }}
-          >
-            <View style={styles.pickText}>
-              <Text style={styles.pickName}>{w.name}</Text>
-              <Text style={styles.pickMeta}>
-                {t('workouts.exercise_count', {
-                  count: summaries.get(w.id)?.exerciseCount ?? 0,
-                })}
+        {workouts.length === 0 ? (
+          <View style={styles.pickerEmpty}>
+            <Icon name="clipboard" size={32} color={colors.mutedGray} />
+            <Text style={styles.pickerEmptyTitle}>{t('workouts.empty_title')}</Text>
+            <Text style={styles.pickerEmptyDesc}>
+              {t('schedule.picker_no_workouts_desc', 'Bạn chưa có giáo án nào. Hãy tạo giáo án trước rồi lên lịch sau.')}
+            </Text>
+            <TouchableOpacity
+              style={[styles.pickerEmptyBtn, { backgroundColor: colors.electric }]}
+              onPress={() => {
+                setPickerOpen(false);
+                (navigation as any).navigate('Workouts');
+              }}
+            >
+              <Text style={[styles.pickerEmptyBtnText, { color: colors.background }]}>
+                {t('workouts.empty_action')}
               </Text>
-            </View>
-            <Icon name="chevron-right" size={18} color={colors.mutedGray} />
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          </View>
+        ) : (
+          workouts.map((w) => (
+            <TouchableOpacity
+              key={w.id}
+              style={styles.pickRow}
+              onPress={() => {
+                setPickerOpen(false);
+                setFormWorkoutId(w.id);
+              }}
+            >
+              <View style={styles.pickText}>
+                <Text style={styles.pickName}>{w.name}</Text>
+                <Text style={styles.pickMeta}>
+                  {t('workouts.exercise_count', {
+                    count: summaries.get(w.id)?.exerciseCount ?? 0,
+                  })}
+                </Text>
+              </View>
+              <Icon name="chevron-right" size={18} color={colors.mutedGray} />
+            </TouchableOpacity>
+          ))
+        )}
       </Modal>
+
 
       {/* Step 2 — date, time, repeat, reminder (design 06b). */}
       <ScheduleFormModal
@@ -304,6 +325,34 @@ const makeStyles = (colors: ThemeColors) =>
     pickText: { flex: 1 },
     pickName: { fontSize: 14, fontWeight: '800', color: colors.onSurface },
     pickMeta: { fontSize: 11, color: colors.mutedGray, marginTop: 3 },
+    pickerEmpty: {
+      alignItems: 'center',
+      paddingVertical: 28,
+      gap: 10,
+    },
+    pickerEmptyTitle: {
+      fontSize: 15,
+      fontWeight: '800',
+      color: colors.onSurface,
+      textAlign: 'center',
+    },
+    pickerEmptyDesc: {
+      fontSize: 12,
+      color: colors.mutedGray,
+      textAlign: 'center',
+      lineHeight: 18,
+      paddingHorizontal: 8,
+    },
+    pickerEmptyBtn: {
+      marginTop: 6,
+      borderRadius: 10,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+    },
+    pickerEmptyBtnText: {
+      fontSize: 13,
+      fontWeight: '800',
+    },
     rangeNote: {
       fontSize: 11,
       color: colors.mutedGray,
