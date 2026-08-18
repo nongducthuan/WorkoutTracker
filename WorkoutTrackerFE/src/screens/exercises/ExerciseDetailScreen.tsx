@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 import { RootStackParamList } from '../../navigation/types';
 import { useTheme } from '../../context/ThemeContext';
@@ -20,6 +21,26 @@ import {
   ExerciseFormValues,
 } from '../workout-detail/components/ExerciseFormModal';
 import { useExercises } from '../../hooks';
+
+/**
+ * Extracts the YouTube video ID from a full URL or short youtu.be link.
+ * Returns null if the URL is not a recognisable YouTube link.
+ *
+ * Supported formats:
+ *   https://www.youtube.com/watch?v=VIDEO_ID
+ *   https://youtu.be/VIDEO_ID
+ *   https://youtube.com/shorts/VIDEO_ID
+ */
+const extractYoutubeId = (url: string): string | null => {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
+};
 
 type DetailRoute = RouteProp<RootStackParamList, 'ExerciseDetail'>;
 type DetailNav = NativeStackNavigationProp<RootStackParamList>;
@@ -90,11 +111,22 @@ export default function ExerciseDetailScreen() {
           }
         />
 
-        {/* Video placeholder — the catalogue has no media field yet. */}
-        <View style={styles.videoBox}>
-          <Icon name="play-circle" size={34} color={colors.mutedGray} />
-          <Text style={styles.videoText}>{t('exercise_detail.video_placeholder')}</Text>
-        </View>
+        {/* Video section — shows a YouTube player when the exercise has a videoUrl,
+            falls back to the placeholder when it does not. */}
+        {exercise?.videoUrl && extractYoutubeId(exercise.videoUrl) ? (
+          <View style={styles.videoPlayerWrap}>
+            <YoutubePlayer
+              height={200}
+              videoId={extractYoutubeId(exercise.videoUrl)!}
+              play={false}
+            />
+          </View>
+        ) : (
+          <View style={styles.videoBox}>
+            <Icon name="play-circle" size={34} color={colors.mutedGray} />
+            <Text style={styles.videoText}>{t('exercise_detail.video_placeholder')}</Text>
+          </View>
+        )}
 
         <View style={styles.muscleRow}>
           {mapping.primary.map((m) => (
@@ -179,6 +211,11 @@ const makeStyles = (colors: ThemeColors) =>
       marginBottom: 18,
     },
     videoText: { fontSize: 11, color: colors.mutedGray },
+    videoPlayerWrap: {
+      borderRadius: 14,
+      overflow: 'hidden',
+      marginBottom: 18,
+    },
     muscleRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     mapWrap: {
       backgroundColor: colors.card,

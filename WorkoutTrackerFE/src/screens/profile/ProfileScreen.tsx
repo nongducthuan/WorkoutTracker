@@ -68,8 +68,8 @@ export default function ProfileScreen() {
 
   const handleLogout = async () => {
     setLogoutOpen(false);
-    await authApi.logout();
     navigation.reset({ index: 0, routes: [{ name: 'Auth' }] });
+    await authApi.logout();
   };
 
   const styles = makeStyles(colors);

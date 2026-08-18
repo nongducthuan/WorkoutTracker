@@ -4,6 +4,8 @@ export interface Exercise {
   category?: string;
   difficulty?: string;
   description?: string;
+  /** YouTube URL for the exercise demo video. Null when not set. */
+  videoUrl?: string | null;
 }
 
 export interface WorkoutExercise {

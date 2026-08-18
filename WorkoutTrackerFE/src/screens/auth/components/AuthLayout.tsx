@@ -117,7 +117,7 @@ export const AuthFooterLink: React.FC<{
 const makeStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     screen: { flex: 1, backgroundColor: colors.background },
-    content: { flexGrow: 1, justifyContent: 'center', padding: 28, paddingTop: 60 },
+    content: { flexGrow: 1, padding: 28, paddingTop: Platform.OS === 'ios' ? 60 : 80, paddingBottom: 40 },
     backBtn: {
       position: 'absolute',
       top: 12,

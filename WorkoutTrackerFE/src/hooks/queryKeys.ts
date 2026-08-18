@@ -18,4 +18,5 @@ export const queryKeys = {
   session: (id: string) => ['session', id] as const,
   settings: ['user-settings'] as const,
   exerciseHistory: (exerciseId: number) => ['exercise-history', exerciseId] as const,
+  exerciseDetail: (exerciseId: number) => ['exercise-detail', exerciseId] as const,
 };

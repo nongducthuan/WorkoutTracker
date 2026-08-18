@@ -35,7 +35,12 @@ export class ExerciseService {
     };
   }
 
+  async getExerciseById(id: number): Promise<Exercise | null> {
+    return this.exerciseRepository.findById(id);
+  }
+
   async getCategories(): Promise<string[]> {
     return this.exerciseRepository.findCategories();
   }
 }
+

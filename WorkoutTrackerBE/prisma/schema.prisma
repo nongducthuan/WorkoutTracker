@@ -136,6 +136,8 @@ model Exercise {
   description      String            @db.Text
   category         String
   difficulty       Difficulty
+  /// Optional YouTube URL for the exercise demo video.
+  videoUrl         String?           @db.VarChar(512)
   workoutExercises WorkoutExercise[]
   workoutSets      WorkoutSet[]
 

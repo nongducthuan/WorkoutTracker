@@ -105,4 +105,16 @@ export const exercisesApi = {
 
     return items;
   },
+
+  /** Single exercise by id — used by the detail screen. */
+  getById: async (id: number): Promise<Exercise> => {
+    if (isMockMode) {
+      await delay(150);
+      const exercise = mockDb.getExercises().find((e) => e.id === id);
+      if (!exercise) throw new Error(`Exercise ${id} not found`);
+      return exercise as Exercise;
+    }
+    const res = await apiClient.get<Exercise>(`/exercises/${id}`);
+    return res.data;
+  },
 };

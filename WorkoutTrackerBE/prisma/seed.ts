@@ -55,25 +55,26 @@ async function main() {
     description: string;
     category: string;
     difficulty: Difficulty;
+    videoUrl: string | null;
   }[] = [
-    { id: 1, name: 'Barbell Bench Press', description: 'A classic compound lift targeting the chest, shoulders, and triceps.', category: 'Chest', difficulty: Difficulty.Intermediate },
-    { id: 2, name: 'Incline Dumbbell Press', description: 'An upper-chest focused pressing movement using dumbbells.', category: 'Chest', difficulty: Difficulty.Intermediate },
-    { id: 3, name: 'Cable Chest Fly', description: 'An isolation movement targeting the chest muscles with constant cable tension.', category: 'Chest', difficulty: Difficulty.Beginner },
-    { id: 4, name: 'Barbell Back Squat', description: 'A fundamental lower body exercise targeting the quadriceps and glutes.', category: 'Legs', difficulty: Difficulty.Intermediate },
-    { id: 5, name: 'Leg Press', description: 'A machine-based lower body press focusing primarily on the quadriceps.', category: 'Legs', difficulty: Difficulty.Beginner },
-    { id: 6, name: 'Leg Extensions', description: 'An isolation exercise targeting the quadriceps on a machine.', category: 'Legs', difficulty: Difficulty.Beginner },
-    { id: 7, name: 'Conventional Deadlift', description: 'A heavy compound movement that works the entire posterior chain.', category: 'Back', difficulty: Difficulty.Advanced },
-    { id: 8, name: 'Lat Pulldown', description: 'A vertical pulling exercise targeting the latissimus dorsi.', category: 'Back', difficulty: Difficulty.Beginner },
-    { id: 9, name: 'Barbell Row', description: 'A horizontal pulling movement targeting the upper and mid back.', category: 'Back', difficulty: Difficulty.Intermediate },
-    { id: 10, name: 'Overhead Press', description: 'A vertical press targeting the shoulders and upper chest.', category: 'Shoulders', difficulty: Difficulty.Intermediate },
-    { id: 11, name: 'Dumbbell Lateral Raise', description: 'An isolation exercise targeting the lateral deltoids.', category: 'Shoulders', difficulty: Difficulty.Beginner },
-    { id: 12, name: 'Barbell Bicep Curl', description: 'An isolation movement targeting the biceps.', category: 'Arms', difficulty: Difficulty.Beginner },
-    { id: 13, name: 'Tricep Rope Pushdown', description: 'An isolation exercise targeting the lateral and medial heads of the triceps.', category: 'Arms', difficulty: Difficulty.Beginner },
-    { id: 14, name: 'Incline Bench Skull Crushers', description: 'An overhead tricep extension targeting the long head of the triceps.', category: 'Arms', difficulty: Difficulty.Intermediate },
-    { id: 15, name: 'Hanging Leg Raise', description: 'An advanced core exercise targeting the lower abdominals.', category: 'Core', difficulty: Difficulty.Advanced },
-    { id: 16, name: 'Plank', description: 'An isometric core exercise targeting the deep abdominal muscles.', category: 'Core', difficulty: Difficulty.Beginner },
-    { id: 17, name: 'Assault Bike Interval', description: 'High-intensity interval cardiovascular training using an air resistance bike.', category: 'Cardio', difficulty: Difficulty.Intermediate },
-    { id: 18, name: 'Treadmill Run', description: 'Steady-state or interval running on a treadmill.', category: 'Cardio', difficulty: Difficulty.Beginner },
+    { id: 1, name: 'Barbell Bench Press', description: 'A classic compound lift targeting the chest, shoulders, and triceps.', category: 'Chest', difficulty: Difficulty.Intermediate, videoUrl: 'https://www.youtube.com/watch?v=vcBig73ojpE' },
+    { id: 2, name: 'Incline Dumbbell Press', description: 'An upper-chest focused pressing movement using dumbbells.', category: 'Chest', difficulty: Difficulty.Intermediate, videoUrl: 'https://www.youtube.com/watch?v=8iPEnTCCb9E' },
+    { id: 3, name: 'Cable Chest Fly', description: 'An isolation movement targeting the chest muscles with constant cable tension.', category: 'Chest', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=IOL8C_O44p4' },
+    { id: 4, name: 'Barbell Back Squat', description: 'A fundamental lower body exercise targeting the quadriceps and glutes.', category: 'Legs', difficulty: Difficulty.Intermediate, videoUrl: 'https://www.youtube.com/watch?v=bEv6CCgLz9A' },
+    { id: 5, name: 'Leg Press', description: 'A machine-based lower body press focusing primarily on the quadriceps.', category: 'Legs', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=yZmx_5r3yoc' },
+    { id: 6, name: 'Leg Extensions', description: 'An isolation exercise targeting the quadriceps on a machine.', category: 'Legs', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=m0FOpMEgero' },
+    { id: 7, name: 'Conventional Deadlift', description: 'A heavy compound movement that works the entire posterior chain.', category: 'Back', difficulty: Difficulty.Advanced, videoUrl: 'https://www.youtube.com/watch?v=wYreqqoogz0' },
+    { id: 8, name: 'Lat Pulldown', description: 'A vertical pulling exercise targeting the latissimus dorsi.', category: 'Back', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=Salxy761Tsw' },
+    { id: 9, name: 'Barbell Row', description: 'A horizontal pulling movement targeting the upper and mid back.', category: 'Back', difficulty: Difficulty.Intermediate, videoUrl: 'https://www.youtube.com/watch?v=RQU8wZPgd94' },
+    { id: 10, name: 'Overhead Press', description: 'A vertical press targeting the shoulders and upper chest.', category: 'Shoulders', difficulty: Difficulty.Intermediate, videoUrl: 'https://www.youtube.com/watch?v=2yjwXTZQDDI' },
+    { id: 11, name: 'Dumbbell Lateral Raise', description: 'An isolation exercise targeting the lateral deltoids.', category: 'Shoulders', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=3VcKaXatLD0' },
+    { id: 12, name: 'Barbell Bicep Curl', description: 'An isolation movement targeting the biceps.', category: 'Arms', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo' },
+    { id: 13, name: 'Tricep Rope Pushdown', description: 'An isolation exercise targeting the lateral and medial heads of the triceps.', category: 'Arms', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=-1G9nK8k5G0' },
+    { id: 14, name: 'Incline Bench Skull Crushers', description: 'An overhead tricep extension targeting the long head of the triceps.', category: 'Arms', difficulty: Difficulty.Intermediate, videoUrl: 'https://www.youtube.com/watch?v=qjXOC_Sh_4g' },
+    { id: 15, name: 'Hanging Leg Raise', description: 'An advanced core exercise targeting the lower abdominals.', category: 'Core', difficulty: Difficulty.Advanced, videoUrl: 'https://www.youtube.com/watch?v=hdng3Nm1x_g' },
+    { id: 16, name: 'Plank', description: 'An isometric core exercise targeting the deep abdominal muscles.', category: 'Core', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=pvIjsG5Svck' },
+    { id: 17, name: 'Assault Bike Interval', description: 'High-intensity interval cardiovascular training using an air resistance bike.', category: 'Cardio', difficulty: Difficulty.Intermediate, videoUrl: 'https://www.youtube.com/watch?v=l_a6aRpe3lA' },
+    { id: 18, name: 'Treadmill Run', description: 'Steady-state or interval running on a treadmill.', category: 'Cardio', difficulty: Difficulty.Beginner, videoUrl: 'https://www.youtube.com/watch?v=84Vf_Lq-Rz0' },
   ];
 
   await prisma.exercise.createMany({ data: exercisesData });

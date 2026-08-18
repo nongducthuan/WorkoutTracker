@@ -80,10 +80,17 @@ export const useExercises = () => {
 };
 
 export const useExercise = (exerciseId?: number) => {
-  const { exercises, isLoading, isError } = useExercises();
+  const query = useQuery({
+    queryKey: queryKeys.exerciseDetail(exerciseId!),
+    queryFn: () => exercisesApi.getById(exerciseId!),
+    enabled: !!exerciseId,
+    // Exercise catalogue data is stable — no need to re-fetch on every visit.
+    staleTime: 30 * 60_000,
+  });
+
   return {
-    exercise: exercises.find((e) => e.id === exerciseId),
-    isLoading,
-    isError,
+    exercise: query.data,
+    isLoading: query.isLoading,
+    isError: query.isError,
   };
 };
